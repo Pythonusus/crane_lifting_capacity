@@ -1,0 +1,79 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "FastAPI backend for the crane_lifting_capacity application"
+readme = "README.md"
+authors = [{ name = "Petr Malafeev", email = "malafeevpa@yandex.ru" }]
+
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.115.12",
+    "jinja2>=3.1.6",
+    "pydantic>=2.11.3",
+    "python-dotenv>=1.1.0",
+    "uvicorn>=0.34.1",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "ruff>=0.11.8",
+]
+
+[project.urls]
+repository = "https://github.com/Pythonusus/crane_lifting_capacity.git"
+
+[tool.ruff]
+line-length = 80
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "*.pyc",
+    "tests/*",
+    "__init__.py",
+    "asgi.py",
+    "wsgi.py",
+    "*/migrations/*",
+]
+
+[tool.ruff.lint]
+preview = true
+select = ["A", "E", "F", "W", "I", "C90", "RET"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"] # ignore unused imports for __init__.py
+
+[tool.ruff.format]
+quote-style = "preserve"
+
+[tool.pytest.ini_options]
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+addopts = [
+    "--cov=app",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-report=term-missing",
+    "--no-cov-on-fail",
+]
+
+[tool.coverage.run]
+data_file = "coverage/.coverage"
+source = ["app"]
+omit = [
+    "*/venv/*",
+    "*/__init__.py",
+    "*/migrations/*",
+    "*/tests/*",
+    "*/tests.py",
+    "test_*.py",
+    "*_tests.py"
+]
+
+[tool.coverage.html]
+directory = "coverage/htmlcov"
+
+[tool.coverage.xml]
+output = "coverage/coverage.xml"

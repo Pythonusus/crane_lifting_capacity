@@ -1,0 +1,47 @@
+name: GitHub CI
+
+on:
+  - push
+  - pull_request
+  - workflow_dispatch
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          make install-backend-dev
+          make install-frontend-dev
+
+      - name: Run linters
+        run: |
+          make lint-backend
+          make lint-frontend
+
+      - name: Run tests and generate coverage reports
+        run: |
+          make test-backend-coverage
+          make test-frontend-coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./backend/coverage/coverage.xml,./frontend/coverage/lcov.info
+          flags: backend,frontend
+          name: ${{ github.repository }}-${{ github.run_id }}
+          fail_ci_if_error: true
+          verbose: true
