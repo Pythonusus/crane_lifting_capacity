@@ -36,12 +36,16 @@ jobs:
           make test-backend-coverage
           make test-frontend-coverage
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+      - name: Upload frontend coverage to QLTY
+        uses: qltysh/qlty-action/coverage@v1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./backend/coverage/coverage.xml,./frontend/coverage/lcov.info
-          flags: backend,frontend
-          name: ${{ github.repository }}-${{ github.run_id }}
-          fail_ci_if_error: true
-          verbose: true
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: frontend/coverage/lcov.info
+          tag: frontend
+
+      - name: Upload backend coverage to QLTY
+        uses: qltysh/qlty-action/coverage@v1
+        with:
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: backend/coverage/coverage.xml
+          tag: backend
