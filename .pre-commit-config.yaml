@@ -1,18 +1,32 @@
 repos:
   - repo: local
     hooks:
-      - id: ruff
+      - id: backend-linter
         name: Run backend linter
         entry: make lint-backend
         language: system
         types: [python]
         pass_filenames: false
 
-      - id: pytest
+      - id: backend-tests
         name: Run backend tests
         entry: make test-backend
         language: system
         types: [python]
+        pass_filenames: false
+
+      - id: frontend-linter
+        name: Run frontend linter
+        entry: make lint-frontend
+        language: system
+        types: [javascript]
+        pass_filenames: false
+
+      - id: frontend-tests
+        name: Run frontend tests
+        entry: make test-frontend
+        language: system
+        types: [javascript]
         pass_filenames: false
 
   - repo: https://github.com/pre-commit/pre-commit-hooks

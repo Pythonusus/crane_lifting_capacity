@@ -51,8 +51,16 @@ quote-style = "preserve"
 
 [tool.pytest.ini_options]
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
+addopts = [
+    "--cov=app",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-report=term-missing",
+    "--no-cov-on-fail",
+]
 
 [tool.coverage.run]
+data_file = "coverage/.coverage"
 source = ["app"]
 omit = [
     "*/venv/*",
@@ -63,3 +71,9 @@ omit = [
     "test_*.py",
     "*_tests.py"
 ]
+
+[tool.coverage.html]
+directory = "coverage/htmlcov"
+
+[tool.coverage.xml]
+output = "coverage/coverage.xml"

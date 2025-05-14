@@ -32,6 +32,7 @@ export default [
       '*.sw?',
       '.DS_Store',
       '**/*.css',
+      '*/coverage/**',
       'coverage/**',
       'public/**',
       'storybook-static/**',

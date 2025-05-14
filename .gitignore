@@ -1,15 +1,78 @@
-# Editor settings
-.vscode/
+# ===== COMMON =====
+
+# Editor directories and files
+*.vscode/
 .idea/
+.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-.DS_Store
 
 # Environment files
 .env
+
+# Git
+*.git/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+*.tmp
+*.temp
+
+# Coverage files
+*coverage/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+nosetests.xml
+*.cover
+*.py,cover
+
+
+# ===== BACKEND =====
+
+# Python-related
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.cache/
+.hypothesis/
+.nox/
+.pytest_cache/
+.ruff_cache/
+.tox/
+cover/
+
+# Python packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Python virtual environments
 .venv
 env/
 venv/
@@ -17,17 +80,21 @@ ENV/
 env.bak/
 venv.bak/
 
-# Logs
-logs
-*.log
+# IPython
+profile_default/
+ipython_config.py
 
-# Build outputs
+
+# ===== FRONTEND =====
+
+# JavaScript/Node.js
+node_modules/
 dist/
-build/
-dist
-dist-ssr
+dist-ssr/
 *.local
 *.local-ssr
-
-# Git
-*.git/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
