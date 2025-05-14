@@ -2,7 +2,7 @@
 
 # Калькулятор грузоподъемности подъемных кранов
 
-### Статус поддерживаемости, тестов и покрытия тестами:
-[![Maintainability](https://qlty.sh/badges/c493d67d-5074-4bb2-b116-28d949fc4ec4/maintainability.svg)](https://qlty.sh/gh/Pythonusus/projects/crane_lifting_capacity)
-[![Code Coverage](https://qlty.sh/badges/c493d67d-5074-4bb2-b116-28d949fc4ec4/coverage.svg)](https://qlty.sh/gh/Pythonusus/projects/crane_lifting_capacity)
+### Статус линтера и тестов:
+[![Actions Status](https://github.com/Pythonusus/crane_lifting_capacity/actions/workflows/github-ci.yaml/badge.svg)](https://github.com/Pythonusus/crane_lifting_capacity/actions)
+[![Code Coverage](https://codecov.io/gh/Pythonusus/crane_lifting_capacity/graph/badge.svg?token=TM8Z7XG1AB)](https://codecov.io/gh/Pythonusus/crane_lifting_capacity)
 </div>
