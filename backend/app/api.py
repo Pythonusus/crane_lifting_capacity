@@ -1,9 +1,17 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 import app.settings as settings
+from app.schemas.calc_requests import (
+    PayloadCalcRequest,
+    SafetyFactorCalcRequest,
+)
+from app.services.lifting_capacity import (
+    calc_payload_from_safety_factor,
+    calc_safety_factor_from_payload,
+)
 
 app = FastAPI(
     title=settings.APP_TITLE,
@@ -44,3 +52,27 @@ def healthcheck():
         "status_code": 200,
         "message": f"{settings.APP_TITLE} app is up and running!",
     }
+
+
+@app.post("/process")
+def process(
+    payload_request: PayloadCalcRequest | None = None,
+    safety_request: SafetyFactorCalcRequest | None = None,
+):
+    """
+    Process lifting capacity calculation requests.
+    Supports both single and batch calculations for:
+    - Payload calculation (given safety factor)
+    - Safety factor calculation (given payload)
+    """
+    if payload_request:
+        return calc_payload_from_safety_factor(payload_request)
+
+    if safety_request:
+        return calc_safety_factor_from_payload(safety_request)
+
+    raise HTTPException(
+        status_code=400,
+        detail="Either payload or safety factor calculation request \
+                must be provided",
+    )
