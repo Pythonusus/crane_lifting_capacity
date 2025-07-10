@@ -6,6 +6,7 @@ from sqlalchemy import (
     Integer,
     LargeBinary,
     String,
+    UniqueConstraint,
 )
 from sqlalchemy.orm import deferred, relationship
 
@@ -22,7 +23,7 @@ class CraneDbModel(Base):
     __tablename__ = "cranes"
 
     id = Column(Integer, primary_key=True)
-    model = Column(String, nullable=False, unique=True)
+    model = Column(String, nullable=False)
     manufacturer = Column(String, nullable=False)
     chassis_type = Column(String, nullable=False)
     pricebook = Column(String, nullable=False)
@@ -31,20 +32,30 @@ class CraneDbModel(Base):
     labor_cost = Column(Float, nullable=False)
     max_lifting_capacity = Column(Float, nullable=False)
     lc_table = deferred(Column(JSON, nullable=False))
+
+    # Lazy loaded by default
     attachments = relationship(
         "CraneBinaryAttachment", back_populates="crane"
-    )  # lazy loaded by default
+    )
+
+    # Manufacturer + model combination is unique
+    __table_args__ = (
+        UniqueConstraint('manufacturer', 'model', name='uq_manufacturer_model'),
+    )
 
     @property
-    def display_name(self) -> str:
+    def name(self) -> str:
         return f"{self.manufacturer} {self.model}"
 
     @property
     def price_per_hour(self) -> float:
         return self.base_price + self.labor_cost
 
+    def __str__(self) -> str:
+        return self.name
+
     def __repr__(self) -> str:
-        return self.display_name
+        return self.name
 
 
 class CraneBinaryAttachment(Base):
