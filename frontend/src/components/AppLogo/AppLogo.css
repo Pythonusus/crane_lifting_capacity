@@ -1,0 +1,38 @@
+/* App Logo Component Styles */
+
+.app-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.app-logo {
+  height: 3em;
+  width: auto;
+  margin: 0.75em;
+}
+
+.app-title {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+@media (max-width: 991px) {
+  .app-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .app-title {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+}
+
+.title-line {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+}

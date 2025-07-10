@@ -1,10 +1,11 @@
 import React from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
-import { Container, Header } from 'semantic-ui-react'
+import { Grid, Header } from 'semantic-ui-react'
 
-import 'semantic-ui-css/semantic.min.css'
 import '@/src/App.css'
+import 'semantic-ui-css/semantic.min.css'
 
+import AppLogo from '@/src/components/AppLogo'
 import Navbar from '@/src/components/Navbar'
 import About from '@/src/pages/About'
 import CalcHistory from '@/src/pages/CalcHistory'
@@ -16,10 +17,19 @@ function App() {
   return (
     /* Router container to handle the routing */
     <Router>
-      {/* Main layout container */}
-      <Container>
-        <Header as='header'>
+      <div className='app-container'>
+        {/* Full width header */}
+        <Header as='header' fixed='top' className='custom-header'>
+          <Grid>
+            <Grid.Row verticalAlign='middle'>
+              <Grid.Column computer={4} tablet={16} mobile={16}>
+                <AppLogo />
+              </Grid.Column>
+              <Grid.Column computer={12} tablet={16} mobile={16}>
           <Navbar />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Header>
 
         {/* Routes available in the app */}
