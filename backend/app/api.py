@@ -1,13 +1,17 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
 
 import app.settings as settings
+from app.db.queries import get_cranes_by_filters, get_manufacturers_from_db
+from app.db.session import get_db
 from app.schemas.calc_requests import (
     PayloadCalcRequest,
     SafetyFactorCalcRequest,
 )
+from app.schemas.cranes import ChassisTypesResponse, Crane, CraneFilterRequest
 from app.services.lifting_capacity import (
     calc_payload_from_safety_factor,
     calc_safety_factor_from_payload,
@@ -76,3 +80,34 @@ def process(
         detail="Either payload or safety factor calculation request \
                 must be provided",
     )
+
+
+@app.post("/cranes")
+def filter_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
+    """
+    Filter cranes based on the provided filters.
+    If no filters are provided, return all cranes.
+
+    Args:
+        filters: Dictionary containing filter criteria.
+
+    Returns:
+        List of cranes.
+    """
+    crane_models = get_cranes_by_filters(db, filters)
+    # Convert database models to Pydantic models for proper serialization
+    cranes = [Crane.model_validate(crane) for crane in crane_models]
+    return {"cranes": cranes}
+
+
+@app.get("/chassis-types")
+def get_chassis_types():
+    """Get all available chassis types"""
+    return ChassisTypesResponse()
+
+
+@app.get("/manufacturers")
+def get_manufacturers(db: Session = Depends(get_db)):
+    """Get all available manufacturers"""
+    manufacturers = get_manufacturers_from_db(db)
+    return {"manufacturers": manufacturers}
