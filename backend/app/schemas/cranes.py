@@ -66,5 +66,17 @@ class Crane(BaseModel):
 
     def __repr__(self) -> str:
         return self.name
+
     class Config:
         from_attributes = True
+
+
+class CraneFilterRequest(BaseModel):
+    """Filter criteria for cranes"""
+
+    name: Optional[str] = None
+    manufacturer: Optional[str] = None
+    chassis_type: Optional[ChassisType] = None
+    min_max_lc: Optional[float] = Field(None, gt=0)
+    max_max_lc: Optional[float] = Field(None, gt=0)
+    sortBy: Optional[str] = None
