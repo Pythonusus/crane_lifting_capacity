@@ -50,7 +50,7 @@ def extract_crane_metadata_from_xlsx(
     Cell layout:
     A1: "Модель"             B1: model
     A2: "Производитель"      B2: manufacturer
-    A3: "Тип"                B3: chassis_type
+    A3: "Тип шасси"          B3: chassis_type
     A4: "Сборник"            B4: pricebook
     A5: "Код ресурса"        B5: resource_code
 
@@ -296,8 +296,11 @@ def write_cranes_to_db(crane_data_list: List[Crane], db_url: str) -> None:
                         {crane_data.manufacturer} \
                         {crane_data.model}"
                     )
+                    existing.manufacturer = crane_data.manufacturer
+                    existing.chassis_type = crane_data.chassis_type
                     existing.lc_table = crane_data.lc_table
-                    existing.price_per_hour = crane_data.price_per_hour
+                    existing.base_price = crane_data.base_price
+                    existing.labor_cost = crane_data.labor_cost
                     existing.pricebook = crane_data.pricebook
                     existing.resource_code = crane_data.resource_code
                 else:
