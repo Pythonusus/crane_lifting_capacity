@@ -1,0 +1,14 @@
+/* Loading state */
+.loading-container {
+  text-align: center;
+  padding: 50px;
+}
+
+.loading-header {
+  margin-top: 20px;
+}
+
+/* Table header styling */
+.cranes-table-header th {
+  background-color: #71c5fd !important;
+}
