@@ -50,12 +50,17 @@ class Crane(BaseModel):
         return lc_table
 
     @property
-    def display_name(self) -> str:
+    def name(self) -> str:
         return f"{self.manufacturer} {self.model}"
 
     @property
     def price_per_hour(self) -> float:
         return self.base_price + self.labor_cost
 
+    def __str__(self) -> str:
+        return self.name
+
+    def __repr__(self) -> str:
+        return self.name
     class Config:
         from_attributes = True
