@@ -1,0 +1,21 @@
+.home-container {
+  overflow-y: auto;
+  padding-bottom: 2em;
+}
+
+.home-sidebar {
+  position: fixed;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.home-main-content {
+  margin-left: 290px;
+  margin-right: 10px;
+}
+
+@media (max-width: 991px) {
+  .home-main-content {
+    margin-left: 220px;
+  }
+}
