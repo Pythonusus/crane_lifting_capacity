@@ -5,11 +5,15 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class ChassisType(str, Enum):
-    TRUCK_MOUNTED = "truck_mounted"
-    MOBILE = "mobile"
-    CRAWLER = "crawler"
-    RAILWAY = "railway"
-    TOWER = "tower"
+    TRUCK_MOUNTED = "Автомобильный"
+    MOBILE = "Спецшасси автомобильного типа"
+    CRAWLER = "Гусеничный"
+    RAILWAY = "Железнодорожный"
+    TOWER = "Башенный"
+
+
+class ChassisTypesResponse(BaseModel):
+    chassisTypes: list[str] = [chassy_type.value for chassy_type in ChassisType]
 
 
 class CraneBinaryAttachment(BaseModel):
