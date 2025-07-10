@@ -26,21 +26,20 @@ function App() {
                 <AppLogo />
               </Grid.Column>
               <Grid.Column computer={12} tablet={16} mobile={16}>
-          <Navbar />
+                <Navbar />
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </Header>
 
-        {/* Routes available in the app */}
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/cranes/:id' element={<CraneDetail />} />
-          <Route path='/comparison_table' element={<ComparisonTable />} />
-          <Route path='/calc_history' element={<CalcHistory />} />
+          <Route path='/compare' element={<ComparisonTable />} />
+          <Route path='/history' element={<CalcHistory />} />
           <Route path='/about' element={<About />} />
         </Routes>
-      </Container>
+      </div>
     </Router>
   )
 }
