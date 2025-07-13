@@ -71,9 +71,7 @@ const CranesList = ({ cranes = [], loading = false, error = null }) => {
                   <Popup
                     content='Перейти к расчету крана'
                     trigger={
-                      <Link to={`/cranes/${crane.id}`}>
-                        {crane.manufacturer} {crane.model}
-                      </Link>
+                      <Link to={`/cranes/${crane.id}`}>{crane.name}</Link>
                     }
                   />
                 </TableCell>
@@ -82,11 +80,9 @@ const CranesList = ({ cranes = [], loading = false, error = null }) => {
                   {crane.resource_code}
                 </TableCell>
                 <TableCell className='hide-on-tablet'>
-                  {crane.base_price && crane.labor_cost
-                    ? (crane.base_price + crane.labor_cost).toLocaleString()
-                    : '-'}
+                  {crane.price_per_hour.toLocaleString()}
                 </TableCell>
-                <TableCell>{crane.max_lifting_capacity || '-'}</TableCell>
+                <TableCell>{crane.max_lifting_capacity}</TableCell>
               </TableRow>
             ))}
           </TableBody>
