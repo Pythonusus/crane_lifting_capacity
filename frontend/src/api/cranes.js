@@ -97,3 +97,21 @@ export const fetchManufacturers = async () => {
   const data = await response.json()
   return data.manufacturers || []
 }
+
+/**
+ * Fetches a single crane by ID from the backend
+ * @param {number} craneId - ID of the crane to fetch
+ * @returns {Promise<Object>} The crane object
+ */
+export const fetchCraneById = async (craneId) => {
+  const response = await fetch(`/cranes/${craneId}`)
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      throw new Error('Crane not found')
+    }
+    throw new Error('Failed to fetch crane')
+  }
+
+  return await response.json()
+}
