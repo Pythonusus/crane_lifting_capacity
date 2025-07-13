@@ -31,6 +31,7 @@ class CraneDbModel(Base):
     base_price = Column(Float, nullable=False)
     labor_cost = Column(Float, nullable=False)
     max_lifting_capacity = Column(Float, nullable=False)
+    lc_table_radiuses = Column(JSON, nullable=False)
     lc_table = deferred(Column(JSON, nullable=False))
 
     # Lazy loaded by default
@@ -49,7 +50,11 @@ class CraneDbModel(Base):
 
     @property
     def price_per_hour(self) -> float:
-        return self.base_price + self.labor_cost
+        return round(self.base_price + self.labor_cost, 2)
+
+    @property
+    def lc_table_boom_lengths(self) -> list[float]:
+        return list(self.lc_table.keys())
 
     def __str__(self) -> str:
         return self.name

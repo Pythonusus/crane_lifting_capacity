@@ -39,12 +39,13 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 
 def extract_crane_metadata_from_xlsx(
     df: pd.DataFrame,
-) -> Tuple[str, str, ChassisType, str, str, float]:
+) -> Tuple[str, str, ChassisType, str, str, float, float, float, List[str]]:
     """
     Extract crane information from specific cells in the Excel file.
     Returns: (
         model, manufacturer, chassis_type,
-        pricebook, resource_code, price_per_hour
+        pricebook, resource_code, base_price, labor_cost,
+        max_lifting_capacity, lc_table_radiuses
     )
 
     Cell layout:
@@ -60,7 +61,8 @@ def extract_crane_metadata_from_xlsx(
     D4: labor_cost
     D5: "Максимальная грузоподъемность" G5: max_lifting_capacity
 
-    B8: Lifting capacity table starts here
+    B8: "Вылет, м" (table header)
+    B9+: radiuses (until empty cell)
     """
     print("\nExtracting crane metadata:")
     # Extract and normalize text data by stripping whitespace
@@ -87,6 +89,22 @@ def extract_crane_metadata_from_xlsx(
 
     print(f"Max Lifting Capacity: {max_lifting_capacity}")
 
+    # Parse radiuses starting from B9 until empty cell
+    lc_table_radiuses = []
+    row_idx = 8  # B9 in 0-based indexing
+    while row_idx < df.shape[0]:
+        radius_value = df.iloc[row_idx, 1]  # Column B
+        if pd.isna(radius_value) or radius_value == '':
+            break
+        try:
+            radius = str(radius_value).strip()
+            lc_table_radiuses.append(radius)
+        except (ValueError, TypeError):
+            break
+        row_idx += 1
+
+    print(f"Found radiuses: {lc_table_radiuses}")
+
     return (
         model,
         manufacturer,
@@ -96,12 +114,13 @@ def extract_crane_metadata_from_xlsx(
         base_price,
         labor_cost,
         max_lifting_capacity,
+        lc_table_radiuses,
     )
 
 
 def extract_lc_table_from_xlsx(
     df: pd.DataFrame,
-) -> Dict[str, Dict[float, float]]:  # Dict[boom_length, Dict[radius, capacity]]
+) -> Dict[str, Dict[str, float]]:  # Dict[boom_length, Dict[radius, capacity]]
     """
     Parse the lifting capacity table from an Excel DataFrame.
 
@@ -134,7 +153,7 @@ def extract_lc_table_from_xlsx(
     print("\nExtracting lifting capacity table:")
 
     # Fixed positions
-    TABLE_START_ROW = 7  # B8 in 0-based indexing
+    TABLE_START_ROW = 7  # 8th row in 0-based indexing
     TABLE_START_COL = 1  # B column in 0-based indexing
 
     # Get boom lengths from the header row (C8 onwards)
@@ -154,7 +173,7 @@ def extract_lc_table_from_xlsx(
 
     # Initialize the lifting capacity table dictionary
     # Structure: Dict[boom_length, Dict[radius, capacity]]
-    lc_table: Dict[str, Dict[float, float]] = {
+    lc_table: Dict[str, Dict[str, float]] = {
         boom_length: {} for boom_length in boom_lengths
     }
 
@@ -166,7 +185,7 @@ def extract_lc_table_from_xlsx(
             radius = df.iloc[row_idx, TABLE_START_COL]
             if pd.isna(radius) or radius == '':
                 break
-            radius = float(radius)
+            radius = str(radius).strip()
 
             # Process each boom length column
             for col_idx, boom_length in enumerate(boom_lengths):
@@ -231,6 +250,7 @@ def extract_data_from_excel_files(data_dir: str) -> List[Crane]:
                         base_price,
                         labor_cost,
                         max_lifting_capacity,
+                        lc_table_radiuses,
                     ) = extract_crane_metadata_from_xlsx(df)
 
                     lc_table = extract_lc_table_from_xlsx(df)
@@ -245,6 +265,7 @@ def extract_data_from_excel_files(data_dir: str) -> List[Crane]:
                         base_price=base_price,
                         labor_cost=labor_cost,
                         max_lifting_capacity=max_lifting_capacity,
+                        lc_table_radiuses=lc_table_radiuses,
                         lc_table=lc_table,
                     )
 
@@ -280,6 +301,7 @@ def write_cranes_to_db(crane_data_list: List[Crane], db_url: str) -> None:
                     base_price=crane_data.base_price,
                     labor_cost=crane_data.labor_cost,
                     max_lifting_capacity=crane_data.max_lifting_capacity,
+                    lc_table_radiuses=crane_data.lc_table_radiuses,
                     lc_table=crane_data.lc_table,
                 )
 
@@ -298,6 +320,7 @@ def write_cranes_to_db(crane_data_list: List[Crane], db_url: str) -> None:
                     )
                     existing.manufacturer = crane_data.manufacturer
                     existing.chassis_type = crane_data.chassis_type
+                    existing.lc_table_radiuses = crane_data.lc_table_radiuses
                     existing.lc_table = crane_data.lc_table
                     existing.base_price = crane_data.base_price
                     existing.labor_cost = crane_data.labor_cost

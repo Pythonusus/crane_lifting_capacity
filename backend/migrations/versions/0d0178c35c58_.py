@@ -1,8 +1,8 @@
 """
 
-Revision ID: 59d1d459f3dc
+Revision ID: 0d0178c35c58
 Revises: 
-Create Date: 2025-06-30 23:40:41.637255
+Create Date: 2025-07-13 21:20:16.202341
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '59d1d459f3dc'
+revision: str = '0d0178c35c58'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -31,9 +31,10 @@ def upgrade() -> None:
     sa.Column('base_price', sa.Float(), nullable=False),
     sa.Column('labor_cost', sa.Float(), nullable=False),
     sa.Column('max_lifting_capacity', sa.Float(), nullable=False),
+    sa.Column('lc_table_radiuses', sa.JSON(), nullable=False),
     sa.Column('lc_table', sa.JSON(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('model')
+    sa.UniqueConstraint('manufacturer', 'model', name='uq_manufacturer_model')
     )
     op.create_table('crane_binary_attachments',
     sa.Column('id', sa.Integer(), nullable=False),

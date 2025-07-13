@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, computed_field, field_validator
 
 
 class ChassisType(str, Enum):
@@ -37,7 +37,8 @@ class Crane(BaseModel):
     base_price: float = Field(gt=0)
     labor_cost: float = Field(gt=0)
     max_lifting_capacity: float = Field(gt=0)
-    lc_table: Dict[str, Dict[float, float]]
+    lc_table_radiuses: List[str]
+    lc_table: Dict[str, Dict[str, float]]
     attachments: Optional[List[CraneBinaryAttachment]] = None
     blueprint_dwg: Optional[bytes] = None
     lc_table_xls: Optional[bytes] = None
@@ -45,21 +46,25 @@ class Crane(BaseModel):
 
     @field_validator('lc_table')
     def validate_lc_table(cls, lc_table):
-        for _, radius_capacity in lc_table.items():
+        for radius_capacity in lc_table.values():
             for radius, capacity in radius_capacity.items():
-                if radius <= 0:
+                if float(radius) <= 0:
                     raise ValueError("Radius must be positive")
                 if capacity <= 0:
                     raise ValueError("Capacity must be positive")
         return lc_table
 
-    @property
+    @computed_field
     def name(self) -> str:
         return f"{self.manufacturer} {self.model}"
 
-    @property
+    @computed_field
     def price_per_hour(self) -> float:
-        return self.base_price + self.labor_cost
+        return round(self.base_price + self.labor_cost, 2)
+
+    @computed_field
+    def lc_table_boom_lengths(self) -> list[float]:
+        return list(self.lc_table.keys())
 
     def __str__(self) -> str:
         return self.name
