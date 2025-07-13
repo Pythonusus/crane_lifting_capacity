@@ -5,7 +5,11 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 import app.settings as settings
-from app.db.queries import get_cranes_by_filters, get_manufacturers_from_db
+from app.db.queries import (
+    get_crane_by_id,
+    get_cranes_by_filters,
+    get_manufacturers_from_db,
+)
 from app.db.session import get_db
 from app.schemas.calc_requests import (
     PayloadCalcRequest,
@@ -98,6 +102,24 @@ def filter_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
     # Convert database models to Pydantic models for proper serialization
     cranes = [Crane.model_validate(crane) for crane in crane_models]
     return {"cranes": cranes}
+
+
+@app.get("/cranes/{crane_id}")
+def get_crane(crane_id: int, db: Session = Depends(get_db)):
+    """
+    Get a single crane by ID.
+
+    Args:
+        crane_id: ID of the crane to retrieve.
+
+    Returns:
+        The crane object.
+    """
+    crane_db_model = get_crane_by_id(db, crane_id)
+    if not crane_db_model:
+        raise HTTPException(status_code=404, detail="Crane not found")
+
+    return Crane.model_validate(crane_db_model)
 
 
 @app.get("/chassis-types")
