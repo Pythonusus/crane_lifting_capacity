@@ -1,0 +1,175 @@
+import { useEffect, useState } from 'react'
+
+import {
+  calculatePayload,
+  calculateSafetyFactor,
+  createPayloadBaseRequest,
+  createSafetyFactorBaseRequest,
+} from '@/src/api/calcRequests'
+import {
+  isFormValid,
+  validatePayloadCalcForm,
+  validateSafetyFactorCalcForm,
+} from '@/src/utilities/validateCalcForm'
+
+// Timeout for auto-closing popups
+const popupTimeout = 5000
+
+/**
+ * Custom hook for managing crane calculation form state and logic
+ *
+ * Handles form data, validation, API calls, and calculation mode switching.
+ * Provides all necessary state and handlers for the calculation form.
+ *
+ * @param {Object} crane - Crane data object
+ * @returns {Object} Form state and handlers
+ * @returns {boolean} returns.isChecked - Current calculation mode (true = safety factor, false = payload)
+ * @returns {Function} returns.setIsChecked - Function to change calculation mode (receives boolean)
+ * @returns {Object} returns.formData - Current form field values
+ * @returns {string} returns.formData.boomLength - Selected boom length configuration
+ * @returns {string} returns.formData.boomRadius - Boom radius value
+ * @returns {string} returns.formData.equipmentWeight - Equipment weight value (optional)
+ * @returns {string} returns.formData.payload - Payload value (when calculating by payload)
+ * @returns {string} returns.formData.safetyFactor - Safety factor value (when calculating by safety factor)
+ * @returns {Object} returns.errors - Error messages for popups
+ * @returns {Object} returns.validationErrors - Validation errors for field styling
+ * @returns {boolean} returns.isSubmitting - Loading state during calculation
+ * @returns {Object|null} returns.calculationResult - API calculation result
+ * @returns {Function} returns.handleInputChange - Handler for form field changes (field: string, value: string)
+ * @returns {Function} returns.handleSubmit - Handler for form submission (event: Event)
+ * @returns {Function} returns.handleClearForm - Handler to reset form (no parameters)
+ */
+const useCalculationForm = (crane) => {
+  const [isChecked, setIsChecked] = useState(false)
+  const [formData, setFormData] = useState({
+    boomLength: '',
+    boomRadius: '',
+    equipmentWeight: '',
+    payload: '',
+    safetyFactor: '',
+  })
+  const [errors, setErrors] = useState({})
+  const [validationErrors, setValidationErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  // Store separate results for each calculation mode
+  const [payloadCalculationResult, setPayloadCalculationResult] = useState(null)
+  const [safetyFactorCalculationResult, setSafetyFactorCalculationResult] =
+    useState(null)
+
+  // Auto-close popups after 5 seconds, but keep field styling
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      const timer = setTimeout(() => {
+        setErrors({}) // Clear popups
+        // Keep validationErrors for field styling
+      }, popupTimeout)
+
+      return () => clearTimeout(timer)
+    }
+  }, [errors])
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+    // Clear both popup and field styling when user starts typing
+    // eslint-disable-next-line security/detect-object-injection
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: '' }))
+    }
+    // eslint-disable-next-line security/detect-object-injection
+    if (validationErrors[field]) {
+      setValidationErrors((prev) => ({ ...prev, [field]: '' }))
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    // Use the appropriate validation function based on calculation mode
+    const validationErrors = isChecked
+      ? validatePayloadCalcForm(formData, crane)
+      : validateSafetyFactorCalcForm(formData, crane)
+
+    setErrors(validationErrors) // For popups
+    setValidationErrors(validationErrors) // For field styling
+
+    if (!isFormValid(validationErrors)) {
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      let result
+
+      if (isChecked) {
+        // Calculate payload using safety factor
+        const baseRequest = createPayloadBaseRequest(
+          crane.name,
+          formData.boomLength,
+          formData.boomRadius,
+          formData.equipmentWeight
+            ? Number.parseFloat(formData.equipmentWeight)
+            : 0,
+          formData.safetyFactor ? Number.parseFloat(formData.safetyFactor) : 1,
+        )
+        result = await calculatePayload(baseRequest)
+        setPayloadCalculationResult(result)
+      } else {
+        // Calculate safety factor using payload
+        const baseRequest = createSafetyFactorBaseRequest(
+          crane.name,
+          formData.boomLength,
+          formData.boomRadius,
+          formData.equipmentWeight
+            ? Number.parseFloat(formData.equipmentWeight)
+            : 0,
+          Number.parseFloat(formData.payload),
+        )
+        result = await calculateSafetyFactor(baseRequest)
+        setSafetyFactorCalculationResult(result)
+      }
+    } catch (error) {
+      console.error('Calculation error:', error)
+      setErrors((prev) => ({
+        ...prev,
+        general: 'Ошибка при выполнении расчета',
+      }))
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleClearForm = () => {
+    setFormData({
+      boomLength: '',
+      boomRadius: '',
+      equipmentWeight: '',
+      payload: '',
+      safetyFactor: '',
+    })
+    setErrors({})
+    setValidationErrors({})
+    setPayloadCalculationResult(null)
+    setSafetyFactorCalculationResult(null)
+  }
+
+  // Return the appropriate result based on current mode
+  const calculationResult = isChecked
+    ? payloadCalculationResult
+    : safetyFactorCalculationResult
+
+  return {
+    isChecked,
+    setIsChecked,
+    formData,
+    errors,
+    validationErrors,
+    isSubmitting,
+    calculationResult,
+    handleInputChange,
+    handleSubmit,
+    handleClearForm,
+  }
+}
+
+export default useCalculationForm
