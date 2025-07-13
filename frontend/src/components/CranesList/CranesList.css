@@ -10,5 +10,5 @@
 
 /* Table header styling */
 .cranes-table-header th {
-  background-color: #71c5fd !important;
+  background-color: var(--accent-yellow) !important;
 }
