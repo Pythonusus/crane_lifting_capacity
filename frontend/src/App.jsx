@@ -21,9 +21,9 @@ function App() {
         {/* Full width header */}
         <Header as='header' fixed='top' className='custom-header'>
           <div className='header-content'>
-                <AppLogo />
+            <AppLogo />
             <div className='navbar-section'>
-                <Navbar />
+              <Navbar />
             </div>
           </div>
         </Header>
