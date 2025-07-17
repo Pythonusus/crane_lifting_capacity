@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
-import { Grid, Header } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 
 import '@/src/App.css'
 import 'semantic-ui-css/semantic.min.css'
@@ -20,16 +20,12 @@ function App() {
       <div className='app-container'>
         {/* Full width header */}
         <Header as='header' fixed='top' className='custom-header'>
-          <Grid>
-            <Grid.Row verticalAlign='middle'>
-              <Grid.Column computer={4} tablet={16} mobile={16}>
+          <div className='header-content'>
                 <AppLogo />
-              </Grid.Column>
-              <Grid.Column computer={12} tablet={16} mobile={16}>
+            <div className='navbar-section'>
                 <Navbar />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+            </div>
+          </div>
         </Header>
 
         <Routes>
