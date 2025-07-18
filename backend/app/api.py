@@ -66,6 +66,7 @@ def healthcheck():
 def process(
     payload_request: PayloadCalcRequest | None = None,
     safety_request: SafetyFactorCalcRequest | None = None,
+    db: Session = Depends(get_db),
 ):
     """
     Process lifting capacity calculation requests.
@@ -74,15 +75,14 @@ def process(
     - Safety factor calculation (given payload)
     """
     if payload_request:
-        return calc_payload_from_safety_factor(payload_request)
+        return calc_payload_from_safety_factor(db, payload_request)
 
     if safety_request:
-        return calc_safety_factor_from_payload(safety_request)
+        return calc_safety_factor_from_payload(db, safety_request)
 
     raise HTTPException(
         status_code=400,
-        detail="Either payload or safety factor calculation request \
-                must be provided",
+        detail="Either payload or safety factor calc request must be provided",
     )
 
 

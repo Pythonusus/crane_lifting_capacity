@@ -15,7 +15,7 @@ class PayloadCalcRequestBase(LcCalcRequestBase):
     Calculate max available payload for given
     equipment weight and safety factor.
     """
-    equipment_weight: float = Field(gt=0)  # in tonns
+    equipment_weight: float = Field(ge=0)  # in tonns
     safety_factor: float = Field(gt=0)
 
 
@@ -23,7 +23,7 @@ class SafetyFactorCalcRequestBase(LcCalcRequestBase):
     """
     Calculate safety factor for given equipment weight and payload.
     """
-    equipment_weight: float = Field(gt=0)  # in tonns
+    equipment_weight: float = Field(ge=0)  # in tonns
     payload: float = Field(gt=0)  # in tonns
 
 

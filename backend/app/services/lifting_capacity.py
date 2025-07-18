@@ -1,3 +1,5 @@
+from sqlalchemy.orm import Session
+
 from app.db.queries import get_crane_by_id
 from app.schemas.calc_requests import (
     LcCalcRequestBase,
@@ -15,12 +17,12 @@ from app.settings import MIN_SAFETY_FACTOR
 from utils.math import get_nearest_greater, get_nearest_lesser, interpolate_1d
 
 
-def calc_lc_base(request: LcCalcRequestBase) -> LcCalcResponseBase:
+def calc_lc_base(db: Session, request: LcCalcRequestBase) -> LcCalcResponseBase:
     """
     Calculate the lifting capacity of a crane
     based on the boom length and radius.
     """
-    crane = get_crane_by_id(request.crane_id)
+    crane = get_crane_by_id(db, request.crane_id)
     lc_table = crane.lc_table.get(request.boom_len)
     if lc_table is None:
         raise ValueError(
@@ -49,20 +51,22 @@ def calc_lc_base(request: LcCalcRequestBase) -> LcCalcResponseBase:
     return LcCalcResponseBase(request=request, lifting_capacity=lc)
 
 
-def calc_payload_from_safety_factor(request: PayloadCalcRequest):
+def calc_payload_from_safety_factor(db: Session, request: PayloadCalcRequest):
     responses = []
     for req in request.base_requests:
-        lc = calc_lc_base(req)
+        lc = calc_lc_base(db, req)
         payload = lc / req.safety_factor - req.equipment_weight
         responses.append(PayloadCalcResponseBase(request=req, payload=payload))
 
     return PayloadCalcResponse(request=request, responses=responses)
 
 
-def calc_safety_factor_from_payload(request: SafetyFactorCalcRequest):
+def calc_safety_factor_from_payload(
+    db: Session, request: SafetyFactorCalcRequest
+):
     responses = []
     for req in request.base_requests:
-        lc = calc_lc_base(req)
+        lc = calc_lc_base(db, req)
         safety_factor = lc / (req.payload + req.equipment_weight)
         satisfactory = safety_factor >= MIN_SAFETY_FACTOR
         responses.append(
