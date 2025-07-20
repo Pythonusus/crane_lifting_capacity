@@ -37,7 +37,6 @@ exclude = [
     ".venv",
     "__pycache__",
     "*.pyc",
-    "tests/*",
     "__init__.py",
     "asgi.py",
     "wsgi.py",
