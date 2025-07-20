@@ -25,7 +25,7 @@ const Home = () => {
 
   // Filter state object containing all current filter values
   const [filters, setFilters] = useState({
-    name: '', // Search by crane name/model
+    model: '', // Search by crane model
     chassis_type: '', // Filter by chassis type (mobile, tower, etc.)
     manufacturer: '', // Filter by manufacturer
     min_max_lc: '', // Minimum lifting capacity filter
@@ -83,7 +83,7 @@ const Home = () => {
    */
   const handleClearFilters = () => {
     setFilters({
-      name: '',
+      model: '',
       chassis_type: '',
       manufacturer: '',
       min_max_lc: '',

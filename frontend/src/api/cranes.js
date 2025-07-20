@@ -12,7 +12,7 @@
  *
  * Filter by multiple criteria
  * fetchFilteredCranes({
- *   name: 'LR1100',
+ *   model: 'LR1100',
  *   chassis_type: 'mobile',
  *   manufacturer: 'Liebherr',
  *   min_max_lc: 100,
@@ -22,10 +22,12 @@
 export const fetchFilteredCranes = async (filters = {}) => {
   // Clean up filters: convert empty strings to null and remove sortBy
   const cleanedFilters = {
-    name:
-      filters.name === '' || filters.name === null || filters.name === undefined
+    model:
+      filters.model === '' ||
+      filters.model === null ||
+      filters.model === undefined
         ? null
-        : filters.name,
+        : filters.model,
     manufacturer:
       filters.manufacturer === '' ||
       filters.manufacturer === null ||

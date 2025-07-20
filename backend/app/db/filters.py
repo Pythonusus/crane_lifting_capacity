@@ -4,18 +4,30 @@ from app.db.models import CraneDbModel
 from app.schemas.cranes import ChassisType
 
 
-def filter_cranes_by_name(queryset: Query, name: str) -> Query:
+def filter_cranes_by_model(queryset: Query, model: str) -> Query:
     """
-    Filter a queryset of cranes by model name using substring matching.
+    Filter a queryset of cranes by model using substring matching.
 
     Args:
         query (Query): SQLAlchemy query object containing cranes
-        name (str): Substring to search for in crane models (case-insensitive)
+        model (str): Substring to search for in crane models (case-insensitive)
 
     Returns:
         Query: SQLAlchemy query object containing filtered cranes
     """
-    return queryset.filter(CraneDbModel.model.ilike(f"%{name}%"))
+    # Get all cranes and filter in Python for better Russian character support
+    # Heavy and slow approach, but the only way to make russian named models
+    # to be searched case-insensitive.
+    # Refactor if filtering becomes to slow with db grow.
+    all_cranes = queryset.all()
+    filtered_cranes = [
+        crane for crane in all_cranes
+        if model.lower() in crane.model.lower()
+    ]
+
+    # Return a new query with the filtered IDs
+    crane_ids = [crane.id for crane in filtered_cranes]
+    return queryset.filter(CraneDbModel.id.in_(crane_ids))
 
 
 def filter_cranes_by_chassis_type(

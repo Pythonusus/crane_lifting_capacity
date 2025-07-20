@@ -79,7 +79,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
   }, [])
 
   const handleSearchChange = (e, { value }) => {
-    onFiltersChange((prev) => ({ ...prev, name: value }))
+    onFiltersChange((prev) => ({ ...prev, model: value }))
   }
 
   const handleChassisTypeChange = (e, { value }) => {
@@ -144,7 +144,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
                 icon='search'
                 iconPosition='left'
                 placeholder='Искать'
-                value={filters.name || ''}
+                value={filters.model || ''}
                 onChange={handleSearchChange}
               />
             }
@@ -228,7 +228,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
             labelPosition='center'
             onClick={onClearFilters}
             disabled={
-              (!filters.name || filters.name === '') &&
+              (!filters.model || filters.model === '') &&
               (!filters.chassis_type || filters.chassis_type === '') &&
               (!filters.manufacturer || filters.manufacturer === '') &&
               (!filters.min_max_lc || filters.min_max_lc === '') &&

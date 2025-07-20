@@ -6,7 +6,7 @@ from app.db.filters import (
     filter_cranes_by_chassis_type,
     filter_cranes_by_manufacturer,
     filter_cranes_by_max_lifting_capacity,
-    filter_cranes_by_name,
+    filter_cranes_by_model,
 )
 from app.db.models import CraneDbModel
 from app.schemas.cranes import CraneFilterRequest
@@ -63,8 +63,8 @@ def get_cranes_by_filters(
     """
     queryset = db.query(CraneDbModel)
 
-    if filters.name:
-        queryset = filter_cranes_by_name(queryset, filters.name)
+    if filters.model:
+        queryset = filter_cranes_by_model(queryset, filters.model)
     if filters.manufacturer:
         queryset = filter_cranes_by_manufacturer(queryset, filters.manufacturer)
     if filters.chassis_type:

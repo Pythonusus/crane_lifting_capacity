@@ -76,7 +76,7 @@ class Crane(BaseModel):
 class CraneFilterRequest(BaseModel):
     """Filter criteria for cranes"""
 
-    name: Optional[str] = None
+    model: Optional[str] = None
     manufacturer: Optional[str] = None
     chassis_type: Optional[ChassisType] = None
     min_max_lc: Optional[float] = Field(None, gt=0)
