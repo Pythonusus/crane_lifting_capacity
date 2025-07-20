@@ -36,7 +36,7 @@ class CraneDbModel(Base):
 
     # Lazy loaded by default
     attachments = relationship(
-        "CraneBinaryAttachment", back_populates="crane"
+        "CraneBinaryAttachmentDbModel", back_populates="crane"
     )
 
     # Manufacturer + model combination is unique
@@ -63,7 +63,7 @@ class CraneDbModel(Base):
         return self.name
 
 
-class CraneBinaryAttachment(Base):
+class CraneBinaryAttachmentDbModel(Base):
     """Represents a single binary attachment in the database."""
 
     __tablename__ = "crane_binary_attachments"

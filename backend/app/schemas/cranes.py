@@ -40,9 +40,6 @@ class Crane(BaseModel):
     lc_table_radiuses: List[str]
     lc_table: Dict[str, Dict[str, float]]
     attachments: Optional[List[CraneBinaryAttachment]] = None
-    blueprint_dwg: Optional[bytes] = None
-    lc_table_xls: Optional[bytes] = None
-    lc_table_png: Optional[bytes] = None
 
     @field_validator('lc_table')
     def validate_lc_table(cls, lc_table):

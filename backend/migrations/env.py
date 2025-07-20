@@ -4,7 +4,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 # Import all models to register them with Base's metadata
-from app.db.models import CraneBinaryAttachment, CraneDbModel  # noqa
+from app.db.models import CraneBinaryAttachmentDbModel, CraneDbModel  # noqa
 from app.db.session import Base
 from app.settings import DATABASE_URL
 
