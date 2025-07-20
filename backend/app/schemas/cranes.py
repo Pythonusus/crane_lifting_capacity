@@ -67,7 +67,7 @@ class Crane(BaseModel):
         return round(self.base_price + self.labor_cost, 2)
 
     @computed_field
-    def lc_table_boom_lengths(self) -> list[float]:
+    def lc_table_boom_lengths(self) -> list[str]:
         return list(self.lc_table.keys())
 
     def __str__(self) -> str:

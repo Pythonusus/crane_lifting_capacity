@@ -29,23 +29,31 @@ def calc_lc_base(db: Session, request: LcCalcRequestBase) -> LcCalcResponseBase:
             f"No lifting capacity data found for boom length {request.boom_len}"
         )
 
+    # Create a mapping from float values to original string keys.
+    # This is necessary because keys are strings, but we need to use them
+    # as floats for finding nearest values. And then we need to convert them
+    # back to strings to use as keys in lc_table.
+    lc_table_keys_float_to_str_map = {float(k): k for k in lc_table.keys()}
+    lc_table_keys_floats = list(lc_table_keys_float_to_str_map.keys())
+
     radius = request.radius
     if lc_table.get(radius) is not None:
         return LcCalcResponseBase(
             request=request, lifting_capacity=lc_table.get(radius)
         )
 
-    nearest_lesser = get_nearest_lesser(radius, lc_table.keys())
-    nearest_greater = get_nearest_greater(radius, lc_table.keys())
+    nearest_lesser = get_nearest_lesser(float(radius), lc_table_keys_floats)
+    nearest_greater = get_nearest_greater(float(radius), lc_table_keys_floats)
 
     if nearest_lesser is None or nearest_greater is None:
         raise ValueError(f"No lifting capacity data found for radius {radius}")
 
-    lc_less = lc_table.get(nearest_lesser)
-    lc_greater = lc_table.get(nearest_greater)
+    # Use the original string keys from the mapping
+    lc_less = lc_table.get(lc_table_keys_float_to_str_map[nearest_lesser])
+    lc_greater = lc_table.get(lc_table_keys_float_to_str_map[nearest_greater])
 
     lc = interpolate_1d(
-        radius, nearest_lesser, lc_less, nearest_greater, lc_greater
+        float(radius), nearest_lesser, lc_less, nearest_greater, lc_greater
     )
 
     return LcCalcResponseBase(request=request, lifting_capacity=lc)
@@ -54,11 +62,15 @@ def calc_lc_base(db: Session, request: LcCalcRequestBase) -> LcCalcResponseBase:
 def calc_payload_from_safety_factor(db: Session, request: PayloadCalcRequest):
     responses = []
     for req in request.base_requests:
-        lc = calc_lc_base(db, req)
+        lc = calc_lc_base(db, req).lifting_capacity
         payload = lc / req.safety_factor - req.equipment_weight
-        responses.append(PayloadCalcResponseBase(request=req, payload=payload))
+        responses.append(
+            PayloadCalcResponseBase(
+                request=req, lifting_capacity=lc, payload=payload
+            )
+        )
 
-    return PayloadCalcResponse(request=request, responses=responses)
+    return PayloadCalcResponse(request=request, base_responses=responses)
 
 
 def calc_safety_factor_from_payload(
@@ -66,15 +78,16 @@ def calc_safety_factor_from_payload(
 ):
     responses = []
     for req in request.base_requests:
-        lc = calc_lc_base(db, req)
+        lc = calc_lc_base(db, req).lifting_capacity
         safety_factor = lc / (req.payload + req.equipment_weight)
         satisfactory = safety_factor >= MIN_SAFETY_FACTOR
         responses.append(
             SafetyFactorCalcResponseBase(
                 request=req,
+                lifting_capacity=lc,
                 safety_factor=safety_factor,
                 satisfactory=satisfactory,
             )
         )
 
-    return SafetyFactorCalcResponse(request=request, responses=responses)
+    return SafetyFactorCalcResponse(request=request, base_responses=responses)
