@@ -42,6 +42,18 @@ migrate:
 populate-db:
 	cd backend && uv run python manage.py populate-db
 
+# Dump cranes data to JSON files in cranes_dump directory
+dump-cranes:
+	cd backend && uv run python manage.py dump-cranes
+
+# Print cranes summary only (no JSON files)
+show-cranes-summary:
+	cd backend && uv run python manage.py dump-cranes --summary-only
+
+# Dump cranes data to custom directory
+dump-cranes-custom:
+	cd backend && uv run python manage.py dump-cranes --output-dir "$(dir)"
+
 # Run pytest on backend app with verbose test output
 test-backend:
 	cd backend && uv run pytest -vv
@@ -112,7 +124,8 @@ start-frontend-dev:
 
 .PHONY: pre-commit-install pre-commit \
         install-backend-dev install-backend-prod lint-backend format-backend test-backend \
-        start-backend-dev start-backend populate-db \
+        start-backend-dev start-backend populate-db dump-cranes dump-cranes-with-attachments \
+        dump-cranes-summary dump-cranes-custom \
         install-frontend-dev install-frontend-prod build-frontend lint-frontend \
         format-frontend test-frontend test-frontend-watch test-frontend-coverage \
         preview-frontend start-frontend-dev
