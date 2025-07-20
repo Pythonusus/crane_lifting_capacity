@@ -1,7 +1,13 @@
 from enum import Enum
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel, Field, computed_field, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    computed_field,
+    field_validator,
+)
 
 
 class ChassisType(str, Enum):
@@ -17,17 +23,18 @@ class ChassisTypesResponse(BaseModel):
 
 
 class CraneBinaryAttachment(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     crane_id: int
     filename: str
     content_type: str
     data: bytes
 
-    class Config:
-        from_attributes = True
-
 
 class Crane(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: Optional[int] = None
     model: str
     manufacturer: str
@@ -68,9 +75,6 @@ class Crane(BaseModel):
 
     def __repr__(self) -> str:
         return self.name
-
-    class Config:
-        from_attributes = True
 
 
 class CraneFilterRequest(BaseModel):
