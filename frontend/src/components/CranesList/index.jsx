@@ -66,12 +66,14 @@ const CranesList = ({ cranes = [], loading = false, error = null }) => {
 
           <TableBody>
             {cranes.map((crane) => (
-              <TableRow key={crane.id}>
+              <TableRow key={crane.name}>
                 <TableCell>
                   <Popup
                     content='Перейти к расчету крана'
                     trigger={
-                      <Link to={`/cranes/${crane.id}`}>{crane.name}</Link>
+                      <Link to={`/cranes/${encodeURIComponent(crane.name)}`}>
+                        {crane.name}
+                      </Link>
                     }
                   />
                 </TableCell>

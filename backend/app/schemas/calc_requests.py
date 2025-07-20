@@ -5,7 +5,7 @@ class LcCalcRequestBase(BaseModel):
     """
     Calculate crane lifting capacity for given crane, boom length and radius.
     """
-    crane_id: int
+    crane_name: str
     boom_len: str
     radius: float = Field(gt=0)  # in meters
 

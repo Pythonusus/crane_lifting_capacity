@@ -1,6 +1,6 @@
 /**
  * Create a base payload calculation request
- * @param {number} craneId - ID of the crane
+ * @param {string} craneName - Name of the crane
  * @param {string} boomLen - Boom length configuration
  * @param {number} radius - Radius in meters
  * @param {number} equipmentWeight - Weight of equipment in tons
@@ -8,13 +8,13 @@
  * @returns {Object} Base payload request object
  */
 export const createPayloadBaseRequest = (
-  craneId,
+  craneName,
   boomLen,
   radius,
   equipmentWeight,
   safetyFactor,
 ) => ({
-  crane_id: craneId,
+  crane_name: craneName,
   boom_len: boomLen,
   radius: Number.parseFloat(radius),
   equipment_weight: Number.parseFloat(equipmentWeight),
@@ -23,7 +23,7 @@ export const createPayloadBaseRequest = (
 
 /**
  * Create a base safety factor calculation request
- * @param {number} craneId - ID of the crane
+ * @param {string} craneName - Name of the crane
  * @param {string} boomLen - Boom length configuration
  * @param {number} radius - Radius in meters
  * @param {number} equipmentWeight - Weight of equipment in tons
@@ -31,13 +31,13 @@ export const createPayloadBaseRequest = (
  * @returns {Object} Base safety factor request object
  */
 export const createSafetyFactorBaseRequest = (
-  craneId,
+  craneName,
   boomLen,
   radius,
   equipmentWeight,
   payload,
 ) => ({
-  crane_id: craneId,
+  crane_name: craneName,
   boom_len: boomLen,
   radius: Number.parseFloat(radius),
   equipment_weight: Number.parseFloat(equipmentWeight),

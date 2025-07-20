@@ -26,6 +26,34 @@ def get_crane_by_id(db: Session, crane_id: int) -> CraneDbModel | None:
     return db.query(CraneDbModel).filter(CraneDbModel.id == crane_id).first()
 
 
+def get_crane_by_name(db: Session, crane_name: str) -> CraneDbModel | None:
+    """
+    Retrieve a crane from the database by its name (manufacturer + model).
+
+    Args:
+        db (Session): SQLAlchemy database session
+        crane_name (str): Name of the crane (format: "Manufacturer Model")
+
+    Returns:
+        Crane | None: The crane object if found, None otherwise
+    """
+    # Split the name into manufacturer and model
+    parts = crane_name.split(' ', 1)
+
+    if len(parts) != 2:
+        return None
+
+    manufacturer, model = parts
+    return (
+        db.query(CraneDbModel)
+        .filter(
+            CraneDbModel.manufacturer == manufacturer,
+            CraneDbModel.model == model,
+        )
+        .first()
+    )
+
+
 def get_cranes_by_filters(
     db: Session, filters: CraneFilterRequest
 ) -> List[CraneDbModel]:

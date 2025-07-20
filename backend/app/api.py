@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 import app.settings as settings
 from app.db.queries import (
     get_crane_by_id,
+    get_crane_by_name,
     get_cranes_by_filters,
     get_manufacturers_from_db,
 )
@@ -116,6 +117,24 @@ def get_crane(crane_id: int, db: Session = Depends(get_db)):
         The crane object.
     """
     crane_db_model = get_crane_by_id(db, crane_id)
+    if not crane_db_model:
+        raise HTTPException(status_code=404, detail="Crane not found")
+
+    return Crane.model_validate(crane_db_model)
+
+
+@app.get("/cranes/name/{crane_name}")
+def get_crane_by_name_endpoint(crane_name: str, db: Session = Depends(get_db)):
+    """
+    Get a single crane by name.
+
+    Args:
+        crane_name: Name of the crane to retrieve.
+
+    Returns:
+        The crane object.
+    """
+    crane_db_model = get_crane_by_name(db, crane_name)
     if not crane_db_model:
         raise HTTPException(status_code=404, detail="Crane not found")
 
