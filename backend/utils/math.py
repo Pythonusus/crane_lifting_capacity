@@ -1,19 +1,25 @@
 def get_nearest_lesser(
-    x: float | int, xs: list[float | int]
+    target: float | int, num_list: list[float | int]
 ) -> float | int | None:
     """
-    Get the nearest lesser value from a list of values.
+    Get the nearest lesser value from a list of numbers.
     """
-    return max(xs, key=lambda x: x if x < x else float("-inf"))
+    lesser_nums = [val for val in num_list if val < target]
+    if not lesser_nums:
+        return None
+    return max(lesser_nums)
 
 
 def get_nearest_greater(
-    x: float | int, xs: list[float | int]
+    target: float | int, num_list: list[float | int]
 ) -> float | int | None:
     """
-    Get the nearest greater value from a list of values.
+    Get the nearest greater to target value from a list of numbers.
     """
-    return min(xs, key=lambda x: x if x > x else float("inf"))
+    greater_nums = [val for val in num_list if val > target]
+    if not greater_nums:
+        return None
+    return min(greater_nums)
 
 
 def interpolate_1d(
