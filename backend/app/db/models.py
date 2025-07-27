@@ -23,15 +23,15 @@ class CraneDbModel(Base):
     __tablename__ = "cranes"
 
     id = Column(Integer, primary_key=True)
-    model = Column(String, nullable=False)
-    manufacturer = Column(String, nullable=False)
-    chassis_type = Column(String, nullable=False)
-    pricebook = Column(String, nullable=False)
-    resource_code = Column(String, nullable=False)
-    base_price = Column(Float, nullable=False)
-    labor_cost = Column(Float, nullable=False)
-    max_lifting_capacity = Column(Float, nullable=False)
-    lc_table_radiuses = Column(JSON, nullable=False)
+    model = deferred(Column(String, nullable=False))
+    manufacturer = deferred(Column(String, nullable=False))
+    chassis_type = deferred(Column(String, nullable=False))
+    pricebook = deferred(Column(String, nullable=False))
+    resource_code = deferred(Column(String, nullable=False))
+    base_price = deferred(Column(Float, nullable=False))
+    labor_cost = deferred(Column(Float, nullable=False))
+    max_lifting_capacity = deferred(Column(Float, nullable=False))
+    lc_table_radiuses = deferred(Column(JSON, nullable=False))
     lc_table = deferred(Column(JSON, nullable=False))
 
     # Lazy loaded by default
