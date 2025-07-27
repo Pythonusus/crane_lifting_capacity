@@ -34,4 +34,4 @@ CORS_HEADERS = ["*"]
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Safety Factor Settings
-MIN_SAFETY_FACTOR = os.getenv("MIN_SAFETY_FACTOR")
+MIN_SAFETY_FACTOR = float(os.getenv("MIN_SAFETY_FACTOR"))
