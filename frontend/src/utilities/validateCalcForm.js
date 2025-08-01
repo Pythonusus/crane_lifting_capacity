@@ -84,12 +84,12 @@ export const validateRequiredField = (value, fieldName) => {
 }
 
 /**
- * Validates the payload calculation form
+ * Validates common fields for both calculation forms
  * @param {Object} formData - The form data object
  * @param {Object} crane - The crane object containing radius data
  * @returns {Object} Object containing validation errors
  */
-export const validatePayloadCalcForm = (formData, crane) => {
+const validateCommonFields = (formData, crane) => {
   const errors = {}
 
   // Boom length validation
@@ -124,6 +124,18 @@ export const validatePayloadCalcForm = (formData, crane) => {
     errors.equipmentWeight = equipmentWeightError
   }
 
+  return errors
+}
+
+/**
+ * Validates the payload calculation form
+ * @param {Object} formData - The form data object
+ * @param {Object} crane - The crane object containing radius data
+ * @returns {Object} Object containing validation errors
+ */
+export const validatePayloadCalcForm = (formData, crane) => {
+  const errors = validateCommonFields(formData, crane)
+
   // Safety factor validation (required for payload calculation)
   const safetyFactorError = validatePositiveNumber(
     formData.safetyFactor,
@@ -143,39 +155,7 @@ export const validatePayloadCalcForm = (formData, crane) => {
  * @returns {Object} Object containing validation errors
  */
 export const validateSafetyFactorCalcForm = (formData, crane) => {
-  const errors = {}
-
-  // Boom length validation
-  if (!formData.boomLength) {
-    errors.boomLength = 'Выберите конфигурацию стрелы'
-  }
-
-  // Boom radius validation
-  const radiusTable = crane.lc_table[formData.boomLength]
-  const radiusKeys = Object.keys(radiusTable)
-    .map(Number)
-    .sort((a, b) => a - b)
-  const radiusMin = radiusKeys.at(0)
-  const radiusMax = radiusKeys.at(-1)
-
-  const boomRadiusError = validateNumberInRange(
-    formData.boomRadius,
-    radiusMin,
-    radiusMax,
-    'Вылет стрелы',
-  )
-  if (boomRadiusError) {
-    errors.boomRadius = boomRadiusError
-  }
-
-  // Equipment weight validation
-  const equipmentWeightError = validateOptionalNonNegativeNumber(
-    formData.equipmentWeight,
-    'Вес строповочного оборудования',
-  )
-  if (equipmentWeightError) {
-    errors.equipmentWeight = equipmentWeightError
-  }
+  const errors = validateCommonFields(formData, crane)
 
   // Load weight validation (required for safety factor calculation)
   const payloadError = validatePositiveNumber(formData.payload, 'Вес груза')
