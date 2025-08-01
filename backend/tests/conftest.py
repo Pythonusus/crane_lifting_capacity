@@ -36,8 +36,12 @@ def db_session(engine):  # Fix dependency
 
 
 @pytest.fixture
-def client() -> Generator[TestClient, None, None]:
+def client(monkeypatch) -> Generator[TestClient, None, None]:
     """Create a test client for the FastAPI app."""
+
+    monkeypatch.setenv("DATABASE_URL", "sqlite:///./test.db")
+    monkeypatch.setenv("MIN_SAFETY_FACTOR", "1.0")
+
     with TestClient(app) as c:
         yield c
 
