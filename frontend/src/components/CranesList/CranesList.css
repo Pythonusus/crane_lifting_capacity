@@ -8,6 +8,10 @@
   margin-top: 20px;
 }
 
+.main-header {
+  height: 52px;
+}
+
 /* Table header styling */
 .cranes-table-header th {
   background-color: var(--accent-yellow) !important;

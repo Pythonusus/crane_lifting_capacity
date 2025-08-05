@@ -1,6 +1,6 @@
 .home-container {
   overflow-y: auto;
-  padding-bottom: 2em;
+  padding-bottom: 2rem;
 }
 
 .home-sidebar {
@@ -10,12 +10,12 @@
 }
 
 .home-main-content {
-  margin-left: 290px;
-  margin-right: 10px;
+  margin-left: 280px;
+  margin-right: 1rem;
 }
 
 @media (max-width: 991px) {
   .home-main-content {
-    margin-left: 220px;
+    margin-left: 210px;
   }
 }
