@@ -16,7 +16,7 @@ export const createPayloadBaseRequest = (
 ) => ({
   crane_name: craneName,
   boom_len: boomLen,
-  radius: radius, // Send as string, no need to parse
+  radius: radius,
   equipment_weight: Number.parseFloat(equipmentWeight),
   safety_factor: Number.parseFloat(safetyFactor),
 })
@@ -65,7 +65,7 @@ export const calculatePayload = async (...baseRequests) => {
   })
 
   if (!response.ok) {
-    throw new Error('Failed to calculate payload')
+    throw new Error('Ошибка в расчете полезного груза')
   }
 
   return await response.json()
