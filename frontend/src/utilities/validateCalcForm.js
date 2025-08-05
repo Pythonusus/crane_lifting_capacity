@@ -128,6 +128,21 @@ const validateCommonFields = (formData, crane) => {
 }
 
 /**
+ * Validates that a value is a positive number (optional field)
+ * @param {string} value - The value to validate
+ * @param {string} fieldName - The name of the field for error messages
+ * @returns {string} Error message or empty string if valid
+ */
+const validateOptionalPositiveNumber = (value, fieldName) => {
+  if (!value) return ''
+  const num = Number.parseFloat(value)
+  if (Number.isNaN(num) || num <= 0) {
+    return `${fieldName} должен быть положительным числом`
+  }
+  return ''
+}
+
+/**
  * Validates the payload calculation form
  * @param {Object} formData - The form data object
  * @param {Object} crane - The crane object containing radius data
@@ -137,7 +152,7 @@ export const validatePayloadCalcForm = (formData, crane) => {
   const errors = validateCommonFields(formData, crane)
 
   // Safety factor validation (required for payload calculation)
-  const safetyFactorError = validatePositiveNumber(
+  const safetyFactorError = validateOptionalPositiveNumber(
     formData.safetyFactor,
     'Коэффициент запаса',
   )
