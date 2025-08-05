@@ -1,4 +1,6 @@
 @import '/src/styles/fonts.css';
+@import '/src/styles/utility-classes.css';
+@import '/src/styles/responsive.css';
 
 /* Custom CSS Variables */
 :root {
@@ -17,41 +19,4 @@ body {
   padding: 0;
   min-height: 100vh;
   overflow: hidden;
-}
-
-/* Responsive behavior for tablet */
-@media (max-width: 991px) {
-  .hide-on-tablet {
-    display: none !important;
-  }
-
-  .resize-text-on-tablet {
-    font-size: 0.75em !important;
-  }
-}
-
-/* Responsive behavior for mobile */
-@media (max-width: 600px) {
-  .hide-on-mobile {
-    display: none !important;
-  }
-
-  .resize-text-on-mobile {
-    font-size: 0.75em !important;
-  }
-
-  .flex-column-on-mobile {
-    flex-direction: column !important;
-  }
-}
-
-/* Utility class for centering content both vertically and horizontally */
-.center-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.m-top {
-  margin-top: 0.5em !important;
 }

@@ -1,0 +1,34 @@
+/* Utility class for centering content both vertically and horizontally */
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.m-top {
+  margin-top: 0.5em !important;
+}
+
+.font-size-1 {
+  font-size: 22px !important;
+}
+
+.font-size-2 {
+  font-size: 19px !important;
+}
+
+.font-size-3 {
+  font-size: 17px !important;
+}
+
+.font-size-4 {
+  font-size: 15px !important;
+}
+
+.fw-bold {
+  font-weight: bold !important;
+}
+
+.fw-normal {
+  font-weight: normal !important;
+}
