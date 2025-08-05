@@ -38,7 +38,7 @@ def get_crane_by_name(db: Session, crane_name: str) -> CraneDbModel | None:
         Crane | None: The crane object if found, None otherwise
     """
     # Split the name into manufacturer and model
-    parts = crane_name.split(' ', 1)
+    parts = crane_name.split('_', 1)
 
     if len(parts) != 2:
         return None

@@ -11,7 +11,7 @@ def test_get_nearest_lesser(cranes_test_data):
     # Get all radiuses for boom length 36.0 and convert them to floats
     num_list = [
         float(radius)
-        for radius in cranes_test_data["Takraf РДК250"]["lc_table"][
+        for radius in cranes_test_data["Takraf_РДК250"]["lc_table"][
             "32.5"
         ].keys()
     ]
@@ -25,7 +25,7 @@ def test_get_nearest_greater(cranes_test_data):
     # Get all radiuses for boom length 36.0 and convert them to floats
     num_list = [
         float(radius)
-        for radius in cranes_test_data["Liebherr LR1100"]["lc_table"][
+        for radius in cranes_test_data["Liebherr_LR1100"]["lc_table"][
             "50.0"
         ].keys()
     ]

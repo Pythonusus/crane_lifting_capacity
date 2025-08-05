@@ -19,19 +19,11 @@ export default defineConfig({
   server: {
     proxy: {
       // Proxy API requests to backend in dev mode
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
       '/process': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
-      '/cranes': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
-      '/chassis-types': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
-      '/manufacturers': {
         target: 'http://localhost:8000',
         changeOrigin: true,
       },

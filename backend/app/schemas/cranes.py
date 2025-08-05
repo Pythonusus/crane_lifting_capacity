@@ -60,7 +60,7 @@ class Crane(BaseModel):
 
     @computed_field
     def name(self) -> str:
-        return f"{self.manufacturer} {self.model}"
+        return f"{self.manufacturer}_{self.model}"
 
     @computed_field
     def price_per_hour(self) -> float:

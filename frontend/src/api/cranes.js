@@ -54,7 +54,7 @@ export const fetchFilteredCranes = async (filters = {}) => {
         : filters.max_max_lc,
   }
 
-  const response = await fetch('/cranes', {
+  const response = await fetch('/api/cranes', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export const fetchFilteredCranes = async (filters = {}) => {
  * @returns {Promise<string[]>} List of available chassis types
  */
 export const fetchChassisTypes = async () => {
-  const response = await fetch('/chassis-types')
+  const response = await fetch('/api/chassis-types')
 
   if (!response.ok) {
     throw new Error('Failed to fetch chassis types')
@@ -90,7 +90,7 @@ export const fetchChassisTypes = async () => {
  * @returns {Promise<string[]>} List of available manufacturers
  */
 export const fetchManufacturers = async () => {
-  const response = await fetch('/manufacturers')
+  const response = await fetch('/api/manufacturers')
 
   if (!response.ok) {
     throw new Error('Failed to fetch manufacturers')
@@ -101,30 +101,12 @@ export const fetchManufacturers = async () => {
 }
 
 /**
- * Fetches a single crane by ID from the backend
- * @param {number} craneId - ID of the crane to fetch
- * @returns {Promise<Object>} The crane object
- */
-export const fetchCraneById = async (craneId) => {
-  const response = await fetch(`/cranes/${craneId}`)
-
-  if (!response.ok) {
-    if (response.status === 404) {
-      throw new Error('Crane not found')
-    }
-    throw new Error('Failed to fetch crane')
-  }
-
-  return await response.json()
-}
-
-/**
  * Fetches a single crane by name from the backend
  * @param {string} craneName - Name of the crane to fetch (format: "Manufacturer Model")
  * @returns {Promise<Object>} The crane object
  */
 export const fetchCraneByName = async (craneName) => {
-  const response = await fetch(`/cranes/name/${encodeURIComponent(craneName)}`)
+  const response = await fetch(`/api/cranes/${encodeURIComponent(craneName)}`)
 
   if (!response.ok) {
     if (response.status === 404) {

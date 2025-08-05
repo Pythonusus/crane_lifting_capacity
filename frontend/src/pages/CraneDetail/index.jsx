@@ -21,7 +21,9 @@ const CraneDetail = () => {
       setError(null)
 
       try {
-        const craneData = await fetchCraneByName(name)
+        // Decode the name parameter since React Router automatically decodes it
+        const decodedName = decodeURIComponent(name)
+        const craneData = await fetchCraneByName(decodedName)
         setCrane(craneData)
       } catch (error_) {
         setError('Не удалось загрузить кран')
@@ -49,7 +51,9 @@ const CraneDetail = () => {
   return (
     <main className='crane-detail-main-content'>
       <div className='crane-detail-header'>
-        <Header as='h1'>{crane.name}</Header>
+        <Header as='h1'>
+          {crane.manufacturer} {crane.model}
+        </Header>
       </div>
       <CraneDataView crane={crane} />
       <CraneCalcView crane={crane} />

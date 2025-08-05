@@ -46,7 +46,7 @@ class CraneDbModel(Base):
 
     @property
     def name(self) -> str:
-        return f"{self.manufacturer} {self.model}"
+        return f"{self.manufacturer}_{self.model}"
 
     @property
     def price_per_hour(self) -> float:

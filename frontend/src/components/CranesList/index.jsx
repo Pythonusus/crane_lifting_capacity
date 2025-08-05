@@ -72,7 +72,7 @@ const CranesList = ({ cranes = [], loading = false, error = null }) => {
                     content='Перейти к расчету крана'
                     trigger={
                       <Link to={`/cranes/${encodeURIComponent(crane.name)}`}>
-                        {crane.name}
+                        {crane.manufacturer} {crane.model}
                       </Link>
                     }
                   />
