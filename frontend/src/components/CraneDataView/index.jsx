@@ -1,5 +1,7 @@
 import React from 'react'
 import { Header, Table } from 'semantic-ui-react'
+
+import ImageGallery from '@/src/components/ImageGallery'
 import './CraneDataView.css'
 
 const CraneView = ({ crane }) => {
@@ -98,6 +100,7 @@ const CraneView = ({ crane }) => {
             </Table.Row>
           </Table.Body>
         </Table>
+        <ImageGallery attachments={crane.attachments} />
       </div>
 
       <div className='table-scrollable-container'>
