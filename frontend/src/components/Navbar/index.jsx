@@ -6,8 +6,8 @@ import './Navbar.css'
 const Navbar = () => (
   <Menu as='nav' className='custom-navbar' pointing secondary>
     <Menu.Item as={NavLink} exact to='/'>
-      <Icon name='cog' size='large' />
-      <span className='font-size-4 hide-on-tablet'>Выбрать кран</span>
+      <Icon name='search' size='large' />
+      <span className='font-size-4 hide-on-tablet'>Найти кран</span>
     </Menu.Item>
     <Menu.Item as={NavLink} to='/compare'>
       <Icon name='table' size='large' />
