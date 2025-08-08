@@ -139,3 +139,11 @@ def get_manufacturers(db: Session = Depends(get_db)):
     """Get all available manufacturers"""
     manufacturers = get_manufacturers_from_db(db)
     return {"manufacturers": manufacturers}
+
+
+@app.get("/api/attachments/{attachment_id}")
+def serve_attachment_by_id(attachment_id: int, db: Session = Depends(get_db)):
+    """
+    Serve a crane attachment by its ID.
+    """
+    return serve_attachment(attachment_id, db)
