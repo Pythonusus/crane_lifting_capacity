@@ -13,8 +13,9 @@
 }
 
 .image-item {
-  width: 65px;
-  height: 80px;
+  max-width: 65px;
+  min-height: 50px;
+  max-height: 80px;
   overflow: hidden;
   border-radius: 4px;
 }

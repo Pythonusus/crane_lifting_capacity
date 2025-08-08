@@ -29,12 +29,12 @@ const CraneCalcView = ({ crane }) => {
   } = useCalculationForm(crane)
 
   return (
-    <div className='crane-calc-view-container'>
+    <div className='calc-view-container'>
       <hr className='calc-view-divider' />
       <Header
         as='h2'
         textAlign='center'
-        className='calc-view-header font-size-2'
+        className='calc-view-header font-size-3'
       >
         Расcчитать грузоподъемность крана
       </Header>

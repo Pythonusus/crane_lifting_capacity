@@ -48,7 +48,7 @@ const ValidatedFormField = ({
   }
 
   return (
-    <FormField error={!!validationError}>
+    <FormField error={!!validationError} className='mb-5'>
       <label htmlFor={`${field}-${type}`}>
         {label}
         <Popup

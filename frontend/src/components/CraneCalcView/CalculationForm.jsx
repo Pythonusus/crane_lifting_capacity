@@ -48,10 +48,10 @@ const CalculationForm = ({
 
   return (
     <div className='calc-input-form'>
-      <Header as='h3' textAlign='center' className='font-size-3'>
+      <Header as='h3' textAlign='center' className='font-size-4'>
         Введите исходные данные
       </Header>
-      <Form onSubmit={onSubmit}>
+      <Form size='small' onSubmit={onSubmit}>
         <FormField className='calc-method-form-field'>
           <label className='custom-form-label'>
             <Checkbox
@@ -59,9 +59,9 @@ const CalculationForm = ({
               checked={isChecked}
               onChange={(e, { checked }) => onModeChange(checked)}
             />
-            <div className='calc-method-container'>
-              <span className='calc-method-label'>Режим расчета: </span>
-              {isChecked ? 'по коэффициенту запаса' : 'по заданному грузу'}
+            <div className='calc-method-container font-size-5'>
+              <span className='calc-method-label'>Режим расчета:</span>
+              {isChecked ? ' по коэффициенту запаса' : ' по заданному грузу'}
             </div>
           </label>
         </FormField>
@@ -80,6 +80,7 @@ const CalculationForm = ({
               placeholder='Выберите конфигурацию стрелы'
               fluid
               selection
+              className='fw-normal'
               options={boomLengthOptions}
               value={formData.boomLength}
               onChange={(e, { value }) => onInputChange('boomLength', value)}
@@ -135,6 +136,7 @@ const CalculationForm = ({
             className='custom-button'
             color='blue'
             fluid
+            size='tiny'
             loading={isSubmitting}
             disabled={isSubmitting}
           >
@@ -145,6 +147,7 @@ const CalculationForm = ({
             className='custom-button'
             color='grey'
             fluid
+            size='tiny'
             onClick={onClear}
             disabled={isSubmitting}
           >

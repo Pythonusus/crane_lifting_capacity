@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Header } from 'semantic-ui-react'
 
 import { fetchCraneByName } from '@/src/api/cranes'
 import CraneCalcView from '@/src/components/CraneCalcView'
@@ -50,11 +49,6 @@ const CraneDetail = () => {
 
   return (
     <main className='crane-detail-main-content'>
-      <div className='crane-detail-header'>
-        <Header as='h1'>
-          {crane.manufacturer} {crane.model}
-        </Header>
-      </div>
       <CraneDataView crane={crane} />
       <CraneCalcView crane={crane} />
     </main>

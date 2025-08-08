@@ -40,7 +40,7 @@ const CalculationResults = ({ calculationResult, isChecked }) => {
       return baseResponse.safety_factor.toFixed(2)
     }
     return (
-      <span className='calc-result-value-placeholder'>
+      <span className='calc-result-value-placeholder font-size-5'>
         Выполните расчет для получения результатов
       </span>
     )
@@ -48,19 +48,19 @@ const CalculationResults = ({ calculationResult, isChecked }) => {
 
   return (
     <div className='calc-result-view-container'>
-      <Header as='h3' textAlign='center' className='font-size-3'>
+      <Header as='h3' textAlign='center' className='font-size-4'>
         Результаты расчета грузоподъемности
       </Header>
       <Container className='calc-result-cards-container'>
         <div className='calc-result-card'>
-          <div className='calc-result-label'>
+          <div className='calc-result-label font-size-5 fw-bold'>
             Грузоподъемность на данном вылете, т
           </div>
-          <div className='calc-result-value font-size-4 fw-bold'>
+          <div className='calc-result-value font-size-5 fw-bold'>
             {calculationResult ? (
               calculationResult.base_responses[0].lifting_capacity.toFixed(2)
             ) : (
-              <span className='calc-result-value-placeholder'>
+              <span className='calc-result-value-placeholder font-size-5'>
                 Выполните расчет для получения результатов
               </span>
             )}
@@ -68,23 +68,29 @@ const CalculationResults = ({ calculationResult, isChecked }) => {
         </div>
         {isChecked ? (
           <div className='calc-result-card'>
-            <div className='calc-result-label'>Допустимый вес груза, т</div>
-            <div className='calc-result-value font-size-4 fw-bold'>
+            <div className='calc-result-label font-size-5 fw-bold'>
+              Допустимый вес груза, т
+            </div>
+            <div className='calc-result-value font-size-5 fw-bold'>
               {renderResultValue()}
             </div>
           </div>
         ) : (
           <>
             <div className='calc-result-card'>
-              <div className='calc-result-label'>Запас грузоподъемности, т</div>
-              <div className='calc-result-value font-size-4 fw-bold'>
+              <div className='calc-result-label font-size-5 fw-bold'>
+                Запас грузоподъемности, т
+              </div>
+              <div className='calc-result-value font-size-5 fw-bold'>
                 {calculationResult &&
                 calculationResult.base_responses[0].request.payload ? (
-                  calculationResult.base_responses[0].lifting_capacity -
-                  calculationResult.base_responses[0].request.payload -
-                  calculationResult.base_responses[0].request.equipment_weight
+                  (
+                    calculationResult.base_responses[0].lifting_capacity -
+                    calculationResult.base_responses[0].request.payload -
+                    calculationResult.base_responses[0].request.equipment_weight
+                  ).toFixed(2)
                 ) : (
-                  <span className='calc-result-value-placeholder'>
+                  <span className='calc-result-value-placeholder font-size-5'>
                     Выполните расчет для получения результатов
                   </span>
                 )}
@@ -92,8 +98,10 @@ const CalculationResults = ({ calculationResult, isChecked }) => {
             </div>
 
             <div className='calc-result-card'>
-              <div className='calc-result-label'>Коэффициент запаса</div>
-              <div className='calc-result-value font-size-4 fw-bold'>
+              <div className='calc-result-label font-size-5 fw-bold'>
+                Коэффициент запаса
+              </div>
+              <div className='calc-result-value font-size-5 fw-bold'>
                 {renderResultValue()}
               </div>
             </div>

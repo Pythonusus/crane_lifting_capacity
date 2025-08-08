@@ -27,12 +27,19 @@ const CraneView = ({ crane }) => {
   return (
     <div className='crane-data-view-container'>
       <div className='crane-metadata-container'>
-        <Table compact celled striped unstackable size='small'>
+        <Table
+          compact
+          celled
+          striped
+          unstackable
+          size='small'
+          className='metadata-table mb-5'
+        >
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell colSpan='2' className='table-main-header'>
-                <Header as='h2' textAlign='center' className='font-size-3'>
-                  Характеристики крана
+                <Header as='h1' textAlign='center' className='font-size-4'>
+                  Характеристики крана {crane.manufacturer} {crane.model}
                 </Header>
               </Table.HeaderCell>
             </Table.Row>
@@ -79,23 +86,21 @@ const CraneView = ({ crane }) => {
                 <b>Доступные загрузки:</b>
               </Table.Cell>
               <Table.Cell>
-                <div className='attachments-container'>
-                  {crane.attachments
-                    .filter((attachment) => !attachment.is_inline)
-                    .map((attachment) => (
-                      <div key={attachment.id} className='attachment-item'>
-                        <a
-                          href={`/api/attachments/${attachment.id}`}
-                          className='attachment-link'
-                          target='_blank'
-                          rel='noopener noreferrer'
-                        >
-                          <i className='file icon'></i>
-                          {attachment.filename}
-                        </a>
-                      </div>
-                    ))}
-                </div>
+                {crane.attachments
+                  .filter((attachment) => !attachment.is_inline)
+                  .map((attachment) => (
+                    <div key={attachment.id} className='font-size-6'>
+                      <a
+                        href={`/api/attachments/${attachment.id}`}
+                        className='attachment-link'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
+                        <i className='file alternate icon'></i>
+                        {attachment.filename}
+                      </a>
+                    </div>
+                  ))}
               </Table.Cell>
             </Table.Row>
           </Table.Body>
@@ -118,23 +123,23 @@ const CraneView = ({ crane }) => {
                 colSpan={crane.lc_table_boom_lengths.length + 1}
                 className='table-main-header'
               >
-                <Header as='h2' textAlign='center' className='font-size-3'>
+                <Header as='h2' textAlign='center' className='font-size-4'>
                   Таблица грузоподъемности (т)
                 </Header>
               </Table.HeaderCell>
             </Table.Row>
             <Table.Row>
-              <Table.HeaderCell className='sticky-left'></Table.HeaderCell>
+              <Table.HeaderCell className='custom-header-cell sticky-left'></Table.HeaderCell>
               <Table.HeaderCell
                 colSpan={crane.lc_table_boom_lengths.length}
                 textAlign='center'
-                className='font-size-4'
+                className='custom-header-cell font-size-5'
               >
                 Конфигурация стрелы
               </Table.HeaderCell>
             </Table.Row>
             <Table.Row textAlign='center'>
-              <Table.HeaderCell className='sticky-left'>
+              <Table.HeaderCell className='custom-header-cell sticky-left font-size-5'>
                 Вылет, м
               </Table.HeaderCell>
               {crane.lc_table_boom_lengths.map((boomLength) => (
