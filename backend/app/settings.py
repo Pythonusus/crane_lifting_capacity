@@ -33,5 +33,14 @@ CORS_HEADERS = ["*"]
 # Database Settings
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+# Supported image content types
+SUPPORTED_IMAGE_CONTENT_TYPES = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "image/svg+xml",
+]
+
 # Safety Factor Settings
 MIN_SAFETY_FACTOR = float(os.getenv("MIN_SAFETY_FACTOR"))

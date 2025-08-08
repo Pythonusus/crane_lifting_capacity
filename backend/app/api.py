@@ -15,7 +15,13 @@ from app.schemas.calc_requests import (
     PayloadCalcRequest,
     SafetyFactorCalcRequest,
 )
-from app.schemas.cranes import ChassisTypesResponse, Crane, CraneFilterRequest
+from app.schemas.cranes import (
+    ChassisTypesResponse,
+    Crane,
+    CraneFilterRequest,
+    CraneListItem,
+)
+from app.services.crane_attachments import serve_attachment
 from app.services.lifting_capacity import (
     calc_payload_from_safety_factor,
     calc_safety_factor_from_payload,
@@ -98,9 +104,9 @@ def filter_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
     Returns:
         List of cranes.
     """
-    crane_models = get_cranes_by_filters(db, filters)
-    # Convert database models to Pydantic models for proper serialization
-    cranes = [Crane.model_validate(crane) for crane in crane_models]
+    crane_models = get_cranes_db_models_by_filters(db, filters)
+    # Convert db models to simplified Pydantic models for better performance
+    cranes = [CraneListItem.model_validate(crane) for crane in crane_models]
     return {"cranes": cranes}
 
 

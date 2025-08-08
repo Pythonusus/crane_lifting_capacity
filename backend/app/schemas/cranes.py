@@ -9,6 +9,8 @@ from pydantic import (
     field_validator,
 )
 
+from app.settings import SUPPORTED_IMAGE_CONTENT_TYPES
+
 
 class ChassisType(str, Enum):
     TRUCK_MOUNTED = "Автомобильный"
@@ -22,17 +24,50 @@ class ChassisTypesResponse(BaseModel):
     chassisTypes: list[str] = [chassy_type.value for chassy_type in ChassisType]
 
 
-class CraneBinaryAttachment(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+class CraneMetadataAttachment(BaseModel):
+    """Attachment metadata for API responses (without binary data)"""
+    model_config = ConfigDict(
+        from_attributes=True,
+    )
 
-    id: int
-    crane_id: int
+    id: Optional[int] = None
     filename: str
     content_type: str
+
+    @computed_field
+    def is_inline(self) -> bool:
+        return self.content_type in SUPPORTED_IMAGE_CONTENT_TYPES
+
+
+class CraneBinaryAttachment(CraneMetadataAttachment):
+    """Full attachment model with binary data (for internal backend usage)"""
     data: bytes
 
 
+class CraneListItem(BaseModel):
+    """Simplified crane model for list views (better performance)"""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: Optional[int] = None
+    model: str
+    manufacturer: str
+    chassis_type: ChassisType
+    resource_code: str
+    base_price: float = Field(gt=0)
+    labor_cost: float = Field(gt=0)
+    max_lifting_capacity: float = Field(gt=0)
+
+    @computed_field
+    def name(self) -> str:
+        return f"{self.manufacturer}_{self.model}"
+
+    @computed_field
+    def price_per_hour(self) -> float:
+        return round(self.base_price + self.labor_cost, 2)
+
+
 class Crane(BaseModel):
+    """Full crane model for detail views"""
     model_config = ConfigDict(from_attributes=True)
 
     id: Optional[int] = None
@@ -46,7 +81,7 @@ class Crane(BaseModel):
     max_lifting_capacity: float = Field(gt=0)
     lc_table_radiuses: List[str]
     lc_table: Dict[str, Dict[str, float]]
-    attachments: Optional[List[CraneBinaryAttachment]] = None
+    attachments: Optional[List[CraneMetadataAttachment]] = None
 
     @field_validator('lc_table')
     def validate_lc_table(cls, lc_table):
