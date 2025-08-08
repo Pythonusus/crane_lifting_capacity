@@ -16,16 +16,6 @@ import './CranesFilterSidebar.css'
 const getSortByOptions = () => {
   return [
     {
-      key: 'maxCapacityAsc',
-      text: 'Макс г/п ↑',
-      value: 'maxCapacityAsc',
-    },
-    {
-      key: 'maxCapacityDesc',
-      text: 'Макс г/п ↓',
-      value: 'maxCapacityDesc',
-    },
-    {
       key: 'displayNameAsc',
       text: 'Название крана (А-Я)',
       value: 'displayNameAsc',
@@ -35,6 +25,17 @@ const getSortByOptions = () => {
       text: 'Название крана (Я-А)',
       value: 'displayNameDesc',
     },
+    {
+      key: 'maxCapacityAsc',
+      text: 'Макс г/п ↑',
+      value: 'maxCapacityAsc',
+    },
+    {
+      key: 'maxCapacityDesc',
+      text: 'Макс г/п ↓',
+      value: 'maxCapacityDesc',
+    },
+
     {
       key: 'pricePerHourAsc',
       text: 'Стоимость маш.-ч ↑',

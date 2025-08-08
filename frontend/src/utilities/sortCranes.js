@@ -9,18 +9,6 @@ const sortCranes = (cranes, sortBy) => {
   const sortedCranes = [...cranes]
 
   switch (sortBy) {
-    // Sort by maximum lifting capacity in ascending order (lowest to highest)
-    case 'maxCapacityAsc': {
-      return sortedCranes.sort(
-        (a, b) => a.max_lifting_capacity - b.max_lifting_capacity,
-      )
-    }
-    // Sort by maximum lifting capacity in descending order (highest to lowest)
-    case 'maxCapacityDesc': {
-      return sortedCranes.sort(
-        (a, b) => b.max_lifting_capacity - a.max_lifting_capacity,
-      )
-    }
     // Sort by manufacturer + model name in ascending order (A-Z)
     case 'displayNameAsc': {
       return sortedCranes.sort((a, b) => {
@@ -36,6 +24,18 @@ const sortCranes = (cranes, sortBy) => {
         const displayNameB = `${b.manufacturer} ${b.model}`
         return displayNameB.localeCompare(displayNameA)
       })
+    }
+    // Sort by maximum lifting capacity in ascending order (lowest to highest)
+    case 'maxCapacityAsc': {
+      return sortedCranes.sort(
+        (a, b) => a.max_lifting_capacity - b.max_lifting_capacity,
+      )
+    }
+    // Sort by maximum lifting capacity in descending order (highest to lowest)
+    case 'maxCapacityDesc': {
+      return sortedCranes.sort(
+        (a, b) => b.max_lifting_capacity - a.max_lifting_capacity,
+      )
     }
     // Sort by price per hour in ascending order (cheapest first)
     case 'pricePerHourAsc': {

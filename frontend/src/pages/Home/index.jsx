@@ -30,7 +30,7 @@ const Home = () => {
     manufacturer: '', // Filter by manufacturer
     min_max_lc: '', // Minimum lifting capacity filter
     max_max_lc: '', // Maximum lifting capacity filter
-    sortBy: 'maxCapacityAsc', // Current sort criteria (default: capacity ascending)
+    sortBy: 'displayNameAsc', // Current sort criteria (default: Name ascending)
   })
 
   /**
@@ -88,7 +88,7 @@ const Home = () => {
       manufacturer: '',
       min_max_lc: '',
       max_max_lc: '',
-      sortBy: 'maxCapacityAsc',
+      sortBy: 'displayNameAsc',
     })
   }
 
