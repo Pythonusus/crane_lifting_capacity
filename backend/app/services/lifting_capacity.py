@@ -1,3 +1,8 @@
+"""
+This module contains the functions for calculating the lifting capacity
+and payload of a crane.
+"""
+
 from sqlalchemy.orm import Session
 
 from app.db.queries import get_crane_by_name
@@ -60,6 +65,10 @@ def calc_lc_base(db: Session, request: LcCalcRequestBase) -> LcCalcResponseBase:
 
 
 def calc_payload_from_safety_factor(db: Session, request: PayloadCalcRequest):
+    """
+    Calculate the payload of a crane
+    based on the lifting capacity and safety factor.
+    """
     responses = []
     for req in request.base_requests:
         lc = calc_lc_base(db, req).lifting_capacity
@@ -76,6 +85,10 @@ def calc_payload_from_safety_factor(db: Session, request: PayloadCalcRequest):
 def calc_safety_factor_from_payload(
     db: Session, request: SafetyFactorCalcRequest
 ):
+    """
+    Calculate the safety factor of a crane
+    based on the lifting capacity and payload.
+    """
     responses = []
     for req in request.base_requests:
         lc = calc_lc_base(db, req).lifting_capacity
