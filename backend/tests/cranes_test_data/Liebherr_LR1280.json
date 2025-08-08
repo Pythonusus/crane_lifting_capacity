@@ -4,8 +4,8 @@
   "manufacturer": "Liebherr",
   "chassis_type": "Гусеничный",
   "pricebook": "ФСЭМ-2022",
-  "resource_code": "91.05.06-024",
-  "base_price": 9274.82,
+  "resource_code": "91.05.06-028",
+  "base_price": 13950.52,
   "labor_cost": 1147.38,
   "max_lifting_capacity": 280.0,
   "lc_table_radiuses": [
@@ -341,9 +341,25 @@
       "75": 1.5
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Liebherr_LR1280.dwg",
+      "content_type": "image/vnd.dwg",
+      "data_size_bytes": 806080
+    },
+    {
+      "filename": "Liebherr_LR1280.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 235800
+    },
+    {
+      "filename": "Liebherr_LR1280.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 14442
+    }
+  ],
   "name": "Liebherr_LR1280",
-  "price_per_hour": 10422.2,
+  "price_per_hour": 15097.9,
   "lc_table_boom_lengths": [
     "20.0",
     "25.7",

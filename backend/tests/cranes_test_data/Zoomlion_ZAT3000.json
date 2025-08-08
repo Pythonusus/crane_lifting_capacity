@@ -371,7 +371,13 @@
       "70": 3.2
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Zoomlion_ZAT3000.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 15537
+    }
+  ],
   "name": "Zoomlion_ZAT3000",
   "price_per_hour": 15792.01,
   "lc_table_boom_lengths": [

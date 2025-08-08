@@ -269,7 +269,23 @@
       "54": 2.2
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Zoomlion_ZTC1000.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 178872
+    },
+    {
+      "filename": "Zoomlion_ZTC1000.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 14755
+    },
+    {
+      "filename": "Zoomlion_ZTC1000.dwg",
+      "content_type": "image/vnd.dwg",
+      "data_size_bytes": 715968
+    }
+  ],
   "name": "Zoomlion_ZTC1000",
   "price_per_hour": 9013.93,
   "lc_table_boom_lengths": [

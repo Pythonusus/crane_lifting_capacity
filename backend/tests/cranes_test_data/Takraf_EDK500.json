@@ -130,7 +130,23 @@
       "28.7": 1.0
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Takraf_EDK500.dwg",
+      "content_type": "image/vnd.dwg",
+      "data_size_bytes": 2338183
+    },
+    {
+      "filename": "Takraf_EDK500.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 106543
+    },
+    {
+      "filename": "Takraf_EDK500.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 12200
+    }
+  ],
   "name": "Takraf_EDK500",
   "price_per_hour": 6866.99,
   "lc_table_boom_lengths": [

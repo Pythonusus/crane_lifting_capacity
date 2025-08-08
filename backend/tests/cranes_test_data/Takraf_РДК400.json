@@ -98,7 +98,18 @@
       "23": 2.2
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Takraf_РДК400.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 94384
+    },
+    {
+      "filename": "Takraf_РДК400.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 12239
+    }
+  ],
   "name": "Takraf_РДК400",
   "price_per_hour": 2402.24,
   "lc_table_boom_lengths": [

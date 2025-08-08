@@ -89,7 +89,23 @@
       "34": 1.9
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "ЧМЗ_ДЭК631.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 141775
+    },
+    {
+      "filename": "ЧМЗ_ДЭК631.dwg",
+      "content_type": "image/vnd.dwg",
+      "data_size_bytes": 375520
+    },
+    {
+      "filename": "ЧМЗ_ДЭК631.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 12285
+    }
+  ],
   "name": "ЧМЗ_ДЭК631",
   "price_per_hour": 3971.6,
   "lc_table_boom_lengths": [

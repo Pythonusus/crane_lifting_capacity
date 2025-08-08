@@ -124,7 +124,23 @@
       "20.5": 1.1
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Takraf_РДК250.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 12484
+    },
+    {
+      "filename": "Takraf_РДК250.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 115799
+    },
+    {
+      "filename": "Takraf_РДК250.dwg",
+      "content_type": "image/vnd.dwg",
+      "data_size_bytes": 843362
+    }
+  ],
   "name": "Takraf_РДК250",
   "price_per_hour": 2155.23,
   "lc_table_boom_lengths": [

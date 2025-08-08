@@ -333,7 +333,23 @@
       "64": 2.0
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Zoomlion_ZAT2000.dwg",
+      "content_type": "image/vnd.dwg",
+      "data_size_bytes": 883360
+    },
+    {
+      "filename": "Zoomlion_ZAT2000.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 15297
+    },
+    {
+      "filename": "Zoomlion_ZAT2000.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 130232
+    }
+  ],
   "name": "Zoomlion_ZAT2000",
   "price_per_hour": 11087.3,
   "lc_table_boom_lengths": [

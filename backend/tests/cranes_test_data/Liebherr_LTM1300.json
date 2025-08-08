@@ -431,7 +431,23 @@
       "74": 1.9
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Liebherr_LTM1300.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 203201
+    },
+    {
+      "filename": "Liebherr_LTM1300.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 16256
+    },
+    {
+      "filename": "Liebherr_LTM1300.dwg",
+      "content_type": "image/vnd.dwg",
+      "data_size_bytes": 1548320
+    }
+  ],
   "name": "Liebherr_LTM1300",
   "price_per_hour": 15792.01,
   "lc_table_boom_lengths": [

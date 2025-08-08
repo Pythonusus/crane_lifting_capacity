@@ -251,7 +251,23 @@
       "46": 2.1
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Liebherr_LR1100.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 199117
+    },
+    {
+      "filename": "Liebherr_LR1100.dwg",
+      "content_type": "image/vnd.dwg",
+      "data_size_bytes": 475122
+    },
+    {
+      "filename": "Liebherr_LR1100.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 13468
+    }
+  ],
   "name": "Liebherr_LR1100",
   "price_per_hour": 5786.54,
   "lc_table_boom_lengths": [

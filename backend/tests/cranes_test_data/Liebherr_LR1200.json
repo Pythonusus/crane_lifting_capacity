@@ -219,7 +219,23 @@
       "70": 2.2
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Liebherr_LR1200.dwg",
+      "content_type": "image/vnd.dwg",
+      "data_size_bytes": 1662112
+    },
+    {
+      "filename": "Liebherr_LR1200.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 13296
+    },
+    {
+      "filename": "Liebherr_LR1200.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 140214
+    }
+  ],
   "name": "Liebherr_LR1200",
   "price_per_hour": 10422.2,
   "lc_table_boom_lengths": [

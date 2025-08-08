@@ -355,7 +355,23 @@
       "66": 1.6
     }
   },
-  "attachments": [],
+  "attachments": [
+    {
+      "filename": "Liebherr_LTM1200.dwg",
+      "content_type": "image/vnd.dwg",
+      "data_size_bytes": 829376
+    },
+    {
+      "filename": "Liebherr_LTM1200.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 16102
+    },
+    {
+      "filename": "Liebherr_LTM1200.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 166059
+    }
+  ],
   "name": "Liebherr_LTM1200",
   "price_per_hour": 11087.3,
   "lc_table_boom_lengths": [
