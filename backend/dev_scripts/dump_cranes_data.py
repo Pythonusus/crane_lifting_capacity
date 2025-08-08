@@ -1,5 +1,60 @@
 """
 Script for dumping crane data from database to JSON format.
+
+This script exports all crane data from the database to individual JSON files.
+Each crane is saved as a separate file named {manufacturer}_{model}.json.
+
+Features:
+    - Exports complete crane data including lifting capacity tables
+    - Handles attachments as metadata only (filename, content_type, size)
+    - Creates organized output directory structure
+    - Provides detailed logging of export process
+    - Supports custom database URLs and output directories
+
+Output Format:
+    Each JSON file contains:
+    - Basic crane information (model, manufacturer, chassis_type, etc.)
+    - Pricing information (base_price, labor_cost, price_per_hour)
+    - Lifting capacity data (max_lifting_capacity, lc_table, lc_table_radiuses)
+    - Attachment metadata (filename, content_type, data_size_bytes)
+
+Example Output:
+    {
+      "id": 1,
+      "model": "LTM1100",
+      "manufacturer": "Liebherr",
+      "chassis_type": "mobile",
+      "base_price": 45000.0,
+      "labor_cost": 12000.0,
+      "max_lifting_capacity": 100.0,
+      "lc_table": {"10.0": {"3.0": 80.0, "4.0": 65.0}},
+      "attachments": [
+        {
+          "filename": "manual.pdf",
+          "content_type": "application/pdf",
+          "data_size_bytes": 2048576
+        }
+      ]
+    }
+
+Usage:
+    # Export to default directory
+    python manage.py dump-cranes
+
+    # Export to custom directory
+    python manage.py dump-cranes --output-dir /path/to/output
+
+    # Use custom database URL
+    python manage.py dump-cranes --database-url postgresql://user:pass@localhost/cranes
+
+Environment Variables:
+    - DATABASE_URL: Default database connection URL
+
+Error Handling:
+    - Validates database connection before export
+    - Handles missing environment variables gracefully
+    - Provides detailed error messages for database issues
+    - Creates output directories automatically
 """
 
 import json
@@ -10,7 +65,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.db.models import CraneDbModel
+from app.db.models import CraneBinaryAttachmentDbModel, CraneDbModel
 from app.schemas.cranes import Crane
 
 load_dotenv()
@@ -22,11 +77,17 @@ def dump_cranes_to_json(
 ) -> None:
     """
     Dump all cranes from database to separate JSON files.
+    Attachments are dumped as metadata only (without binary data).
 
     Args:
         database_url: (if not provided, will use DATABASE_URL from .env)
         output_dir: Output dir path (default is 'cranes_dump' in script dir)
     """
+
+    print(f"\n{'=' * 100}")
+    print("Dumping cranes data to JSON files")
+    print(f"{'=' * 100}\n")
+
     # Use provided database URL or fall back to environment variable
     final_database_url = database_url or os.getenv("DATABASE_URL")
     if not final_database_url:
@@ -54,15 +115,43 @@ def dump_cranes_to_json(
     session = SessionLocal()
 
     try:
-        # Get all cranes
+        # Get all cranes with their attachments
         cranes = session.query(CraneDbModel).all()
         print(f"Found {len(cranes)} cranes in database")
 
         # Convert to JSON files using Pydantic schema
         dumped_count = 0
+        total_attachments = 0
+
         for crane in cranes:
+            # Get attachments for this crane
+            attachments = (
+                session.query(CraneBinaryAttachmentDbModel)
+                .filter(CraneBinaryAttachmentDbModel.crane_id == crane.id)
+                .all()
+            )
+
+            # Create attachment metadata (without binary data)
+            attachment_metadata = []
+            for attachment in attachments:
+                attachment_metadata.append(
+                    {
+                        "filename": attachment.filename,
+                        "content_type": attachment.content_type,
+                        "data_size_bytes": len(attachment.data)
+                        if attachment.data
+                        else 0,
+                    }
+                )
+
             # Use Pydantic schema to convert and validate
             crane_schema = Crane.model_validate(crane)
+
+            # Create a custom dump with attachment metadata
+            crane_dump = crane_schema.model_dump()
+
+            # Replace attachments with metadata only
+            crane_dump["attachments"] = attachment_metadata
 
             # Create filename: manufacturer_model.json
             filename = f"{crane.manufacturer}_{crane.model}.json"
@@ -70,72 +159,21 @@ def dump_cranes_to_json(
             file_path = os.path.join(final_output_dir, filename)
 
             # Write individual crane to JSON file
-            with open(file_path, 'w', encoding='utf-8') as f:
-                json.dump(
-                    crane_schema.model_dump(), f, indent=2, ensure_ascii=False
-                )
+            with open(file_path, "w", encoding="utf-8") as f:
+                json.dump(crane_dump, f, indent=2, ensure_ascii=False)
 
             dumped_count += 1
-            print(f"Dumped: {filename}")
+            total_attachments += len(attachments)
+            print(f"Dumped: {filename} ({len(attachments)} attachments)")
 
         print(
-            f"Successfully dumped {dumped_count} \
-            cranes to {final_output_dir}"
+            f"\nSuccessfully dumped {dumped_count} cranes "
+            f"with {total_attachments} total attachments to {final_output_dir}"
         )
-
-        # Print summary
-        print("\nCrane summary:")
-        for crane in cranes:
-            print(f"-{crane.manufacturer} {crane.model} (ID: {crane.id})")
+        print(f"{'=' * 100}\n")
 
     except Exception as e:
         print(f"Error dumping cranes data: {str(e)}")
-    finally:
-        session.close()
-
-
-def dump_cranes_summary(
-    database_url: Optional[str] = None,
-) -> None:
-    """
-    Print a summary of all cranes in the database.
-
-    Args:
-        database_url: if not provided, will use DATABASE_URL from .env
-    """
-    # Use provided database URL or fall back to environment variable
-    final_database_url = database_url or os.getenv("DATABASE_URL")
-    if not final_database_url:
-        print(
-            "Error: DATABASE_URL must be provided via argument or in .env file"
-        )
-        return
-
-    print(f"Using database URL: {final_database_url}")
-
-    # Create database engine and session
-    engine = create_engine(final_database_url)
-    SessionLocal = sessionmaker(bind=engine)
-    session = SessionLocal()
-
-    try:
-        # Get all cranes
-        cranes = session.query(CraneDbModel).all()
-        print(f"\nFound {len(cranes)} cranes in database:")
-        print("=" * 80)
-
-        for crane in cranes:
-            print(f"ID: {crane.id}")
-            print(f"Name: {crane.name}")
-            print(f"Chassis Type: {crane.chassis_type}")
-            print(f"Max Lifting Capacity: {crane.max_lifting_capacity} tons")
-            print(f"Price per Hour: {crane.price_per_hour}")
-            print(f"Boom Lengths: {crane.lc_table_boom_lengths}")
-            print(f"Radiuses: {crane.lc_table_radiuses}")
-            print("-" * 80)
-
-    except Exception as e:
-        print(f"Error getting crane summary: {str(e)}")
     finally:
         session.close()
 

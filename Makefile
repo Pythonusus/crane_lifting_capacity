@@ -48,7 +48,7 @@ dump-cranes:
 
 # Print cranes summary only (no JSON files)
 show-cranes-summary:
-	cd backend && uv run python manage.py dump-cranes --summary-only
+	cd backend && uv run python manage.py show-cranes-summary
 
 # Dump cranes data to custom directory
 dump-cranes-custom:
