@@ -72,6 +72,30 @@ const CraneView = ({ crane }) => {
               </Table.Cell>
               <Table.Cell>{crane.price_per_hour} руб./маш.-ч</Table.Cell>
             </Table.Row>
+            <Table.Row>
+              <Table.Cell textAlign='top'>
+                <b>Доступные загрузки:</b>
+              </Table.Cell>
+              <Table.Cell>
+                <div className='attachments-container'>
+                  {crane.attachments
+                    .filter((attachment) => !attachment.is_inline)
+                    .map((attachment) => (
+                      <div key={attachment.id} className='attachment-item'>
+                        <a
+                          href={`/api/attachments/${attachment.id}`}
+                          className='attachment-link'
+                          target='_blank'
+                          rel='noopener noreferrer'
+                        >
+                          <i className='file icon'></i>
+                          {attachment.filename}
+                        </a>
+                      </div>
+                    ))}
+                </div>
+              </Table.Cell>
+            </Table.Row>
           </Table.Body>
         </Table>
       </div>
