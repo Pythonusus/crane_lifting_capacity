@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 
 import app.settings as settings
 from app.db.queries import (
-    get_crane_by_name,
-    get_cranes_by_filters,
+    get_crane_db_model_by_name,
+    get_cranes_db_models_by_filters,
     get_manufacturers_from_db,
 )
 from app.db.session import get_db
@@ -93,7 +93,7 @@ def process(
 
 
 @app.post("/api/cranes")
-def filter_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
+def get_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
     """
     Filter cranes based on the provided filters.
     If no filters are provided, return all cranes.
@@ -111,7 +111,7 @@ def filter_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
 
 
 @app.get("/api/cranes/{crane_name}")
-def get_crane_by_name_endpoint(crane_name: str, db: Session = Depends(get_db)):
+def get_crane_by_name(crane_name: str, db: Session = Depends(get_db)):
     """
     Get a single crane by name.
 
@@ -121,7 +121,7 @@ def get_crane_by_name_endpoint(crane_name: str, db: Session = Depends(get_db)):
     Returns:
         The crane object.
     """
-    crane_db_model = get_crane_by_name(db, crane_name)
+    crane_db_model = get_crane_db_model_by_name(db, crane_name)
     if not crane_db_model:
         raise HTTPException(status_code=404, detail="Crane not found")
 

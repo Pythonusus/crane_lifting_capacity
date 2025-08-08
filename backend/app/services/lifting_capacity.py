@@ -5,7 +5,7 @@ and payload of a crane.
 
 from sqlalchemy.orm import Session
 
-from app.db.queries import get_crane_by_name
+from app.db.queries import get_crane_db_model_by_name
 from app.schemas.calc_requests import (
     LcCalcRequestBase,
     PayloadCalcRequest,
@@ -27,7 +27,7 @@ def calc_lc_base(db: Session, request: LcCalcRequestBase) -> LcCalcResponseBase:
     Calculate the lifting capacity of a crane
     based on the boom length and radius.
     """
-    crane = get_crane_by_name(db, request.crane_name)
+    crane = get_crane_db_model_by_name(db, request.crane_name)
     lc_table = crane.lc_table.get(request.boom_len)
     if lc_table is None:
         raise ValueError(
