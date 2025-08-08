@@ -1,3 +1,23 @@
+"""
+This module contains the API endpoints for the
+Crane Lifting Capacity application.
+
+The API provides endpoints for:
+- Crane data management (filtering, retrieval)
+- Lifting capacity calculations (payload and safety factor)
+- Static file serving for frontend
+- Health monitoring
+
+API Structure:
+├── /                    # Frontend application
+├── /healthcheck        # Health monitoring
+├── /process            # Lifting capacity calculations
+├── /api/cranes         # Crane data endpoints
+├── /api/chassis-types  # Chassis type enumeration
+├── /api/manufacturers  # Manufacturer listing
+└── /api/attachments   # Attachment serving
+"""
+
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
