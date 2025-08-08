@@ -15,6 +15,7 @@ def filter_cranes_by_model(queryset: Query, model: str) -> Query:
     Returns:
         Query: SQLAlchemy query object containing filtered cranes
     """
+    # !!!IMPORTANT!!!
     # Get all cranes and filter in Python for better Russian character support
     # Heavy and slow approach, but the only way to make russian named models
     # to be searched case-insensitive.
