@@ -4,11 +4,11 @@
 
 # Install pre-commit hooks
 pre-commit-install:
-	pre-commit install
+	cd backend && uv run pre-commit install
 
 # Run pre-commit hooks
 pre-commit:
-	pre-commit run --all-files
+	cd backend && uv run pre-commit run --all-files
 
 
 # ===== BACKEND =====
