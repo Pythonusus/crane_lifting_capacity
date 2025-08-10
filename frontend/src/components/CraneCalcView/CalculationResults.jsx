@@ -79,6 +79,14 @@ const CalculationResults = ({ calculationResult, isChecked }) => {
           <>
             <div className='calc-result-card'>
               <div className='calc-result-label font-size-5 fw-bold'>
+                Коэффициент запаса
+              </div>
+              <div className='calc-result-value font-size-5 fw-bold'>
+                {renderResultValue()}
+              </div>
+            </div>
+            <div className='calc-result-card'>
+              <div className='calc-result-label font-size-5 fw-bold'>
                 Запас грузоподъемности, т
               </div>
               <div className='calc-result-value font-size-5 fw-bold'>
@@ -94,15 +102,6 @@ const CalculationResults = ({ calculationResult, isChecked }) => {
                     Выполните расчет для получения результатов
                   </span>
                 )}
-              </div>
-            </div>
-
-            <div className='calc-result-card'>
-              <div className='calc-result-label font-size-5 fw-bold'>
-                Коэффициент запаса
-              </div>
-              <div className='calc-result-value font-size-5 fw-bold'>
-                {renderResultValue()}
               </div>
             </div>
           </>
