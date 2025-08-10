@@ -133,7 +133,6 @@ const CalculationForm = ({
         <div className='calc-buttons-container'>
           <Button
             type='submit'
-            className='custom-button'
             color='blue'
             fluid
             size='tiny'
@@ -144,7 +143,6 @@ const CalculationForm = ({
           </Button>
           <Button
             type='button'
-            className='custom-button'
             color='grey'
             fluid
             size='tiny'
