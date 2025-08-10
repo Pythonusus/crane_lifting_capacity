@@ -15,7 +15,7 @@ const addInputContext = (parts, base, crane) => {
   if (req.radius) {
     parts.push(`Вылет стрелы: ${req.radius} м`)
   }
-  if (typeof req.equipment_weight === 'number') {
+  if (typeof req.equipment_weight === 'number' && req.equipment_weight > 0) {
     parts.push(`Вес строп. оборудования: ${req.equipment_weight} т`)
   }
   if (typeof req.payload === 'number') {
@@ -144,19 +144,17 @@ const ResultCopyButton = ({ calculationResult, isChecked, crane }) => {
   }
 
   return (
-    <div className='calc-result-actions'>
-      <Button
-        icon
-        labelPosition='left'
-        size='tiny'
-        color='teal'
-        onClick={handleCopy}
-        disabled={!calculationResult}
-      >
-        <Icon name={copied ? 'check' : 'copy'} />
-        {copied ? 'Скопировано' : 'Копировать результат'}
-      </Button>
-    </div>
+    <Button
+      icon
+      labelPosition='left'
+      size='tiny'
+      color='teal'
+      onClick={handleCopy}
+      disabled={!calculationResult}
+    >
+      <Icon name={copied ? 'check' : 'copy'} />
+      {copied ? 'Скопировано' : 'Копировать результат'}
+    </Button>
   )
 }
 

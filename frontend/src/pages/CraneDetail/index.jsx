@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Container, Header, Icon, Message } from 'semantic-ui-react'
 
 import { fetchCraneByName } from '@/src/api/cranes'
 import CraneCalcView from '@/src/components/CraneCalcView'
@@ -36,15 +37,25 @@ const CraneDetail = () => {
   }, [name])
 
   if (loading) {
-    return <div>Загрузка...</div>
+    return (
+      <Container className='m-top'>
+        <Icon name='spinner' loading size='huge' />
+        <Header as='h2' className='loading-header'>
+          Загружаем кран...
+        </Header>
+      </Container>
+    )
   }
 
   if (error) {
-    return <div>Ошибка: {error}</div>
-  }
-
-  if (!crane) {
-    return <div>Кран не найден</div>
+    return (
+      <Container className='m-top'>
+        <Message negative>
+          <Message.Header>Ошибка</Message.Header>
+          <p>{error}</p>
+        </Message>
+      </Container>
+    )
   }
 
   return (
