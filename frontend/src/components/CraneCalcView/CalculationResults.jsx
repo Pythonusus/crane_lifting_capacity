@@ -2,6 +2,7 @@ import React from 'react'
 import { Container, Header } from 'semantic-ui-react'
 
 import ResultCopyButton from './ResultCopyButton'
+import ResultDownloadButton from './ResultDownloadButton'
 
 /**
  * Component to display crane calculation results
@@ -13,8 +14,14 @@ import ResultCopyButton from './ResultCopyButton'
  * @param {Object|null} props.calculationResult - API calculation result object
  * @param {boolean} props.isChecked - Current calculation mode (determines which result to show)
  * @param {Object} props.crane - Crane data object containing manufacturer and model
+ * @param {Object} props.formData - Form input data for report generation
  */
-const CalculationResults = ({ calculationResult, isChecked, crane }) => {
+const CalculationResults = ({
+  calculationResult,
+  isChecked,
+  crane,
+  formData,
+}) => {
   const renderResultValue = () => {
     if (!calculationResult) {
       return (
@@ -109,11 +116,19 @@ const CalculationResults = ({ calculationResult, isChecked, crane }) => {
             </div>
           </>
         )}
-        <ResultCopyButton
-          calculationResult={calculationResult}
-          isChecked={isChecked}
-          crane={crane}
-        />
+        <div className='calc-result-actions'>
+          <ResultCopyButton
+            calculationResult={calculationResult}
+            isChecked={isChecked}
+            crane={crane}
+          />
+          <ResultDownloadButton
+            calculationResult={calculationResult}
+            isChecked={isChecked}
+            crane={crane}
+            formData={formData}
+          />
+        </div>
       </Container>
     </div>
   )

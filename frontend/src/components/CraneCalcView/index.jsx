@@ -56,6 +56,7 @@ const CraneCalcView = ({ crane }) => {
           calculationResult={calculationResult}
           isChecked={isChecked}
           crane={crane}
+          formData={formData}
         />
       </div>
     </div>
