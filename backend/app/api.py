@@ -80,7 +80,7 @@ def serve_frontend(request: Request):
 
 
 @app.get("/healthcheck")
-def healthcheck():
+def health():
     """Check application status"""
     return {
         "status_code": 200,
