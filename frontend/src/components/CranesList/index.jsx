@@ -66,7 +66,7 @@ const CranesList = ({ cranes = [], loading = false, error = null }) => {
 
           <TableBody>
             {cranes.map((crane) => (
-              <TableRow key={crane.name}>
+              <TableRow key={crane.name} className='table-row-hover'>
                 <TableCell>
                   <Popup
                     content='Перейти к расчету крана'
