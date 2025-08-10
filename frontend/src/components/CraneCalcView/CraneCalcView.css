@@ -21,6 +21,7 @@
 
 .calc-input-form {
   width: 400px;
+  min-height: 315px;
 }
 
 .calc-method-form-field {
@@ -61,6 +62,7 @@
   display: flex !important;
   flex-direction: column;
   gap: 1rem;
+  min-height: 315px;
 }
 
 .calc-result-card {
