@@ -6,6 +6,7 @@ import {
   createPayloadBaseRequest,
   createSafetyFactorBaseRequest,
 } from '@/src/api/calcRequests'
+import useCalculationHistory from '@/src/hooks/useCalculationHistory'
 import {
   isFormValid,
   validatePayloadCalcForm,
@@ -40,6 +41,8 @@ const popupTimeout = 5000
  * @returns {Function} returns.handleClearForm - Handler to reset form (no parameters)
  */
 const useCalculationForm = (crane) => {
+  const { addToHistory } = useCalculationHistory()
+
   const [isChecked, setIsChecked] = useState(false)
   const [formData, setFormData] = useState({
     boomLength: '',
@@ -114,6 +117,21 @@ const useCalculationForm = (crane) => {
         )
         result = await calculatePayload(baseRequest)
         setPayloadCalculationResult(result)
+
+        // Save successful calculation to history
+        addToHistory({
+          manufacturer: crane.manufacturer,
+          model: crane.model,
+          chassisType: crane.chassis_type || 'Unknown',
+          maxLiftingCapacity: crane.max_lifting_capacity || 'Unknown',
+          boomLength: formData.boomLength,
+          calculationMethod: 'payload',
+          radius: formData.boomRadius,
+          equipmentWeight: formData.equipmentWeight || '0',
+          payload: '', // Empty when calculating payload
+          safetyFactor: formData.safetyFactor,
+          result: result,
+        })
       } else {
         // Calculate safety factor using payload
         const baseRequest = createSafetyFactorBaseRequest(
@@ -127,6 +145,21 @@ const useCalculationForm = (crane) => {
         )
         result = await calculateSafetyFactor(baseRequest)
         setSafetyFactorCalculationResult(result)
+
+        // Save successful calculation to history
+        addToHistory({
+          manufacturer: crane.manufacturer,
+          model: crane.model,
+          chassisType: crane.chassis_type || 'Unknown',
+          maxLiftingCapacity: crane.max_lifting_capacity || 'Unknown',
+          boomLength: formData.boomLength,
+          calculationMethod: 'safety_factor',
+          radius: formData.boomRadius,
+          equipmentWeight: formData.equipmentWeight || '0',
+          payload: formData.payload,
+          safetyFactor: '', // Empty when calculating safety factor
+          result: result,
+        })
       }
     } catch (error) {
       console.error('Calculation error:', error)

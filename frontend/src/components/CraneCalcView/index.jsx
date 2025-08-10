@@ -13,8 +13,14 @@ import '@/src/components/CraneCalcView/CraneCalcView.css'
  * with two calculation modes: by payload or by safety factor.
  *
  * @param {Object} crane - Crane data object containing specifications and boom lengths
+ * @param {Object} initialFormData - Optional initial form data for pre-filling
+ * @param {boolean} initialMode - Optional initial calculation mode
  */
-const CraneCalcView = ({ crane }) => {
+const CraneCalcView = ({
+  crane,
+  initialFormData = null,
+  initialMode = false,
+}) => {
   const {
     isChecked,
     setIsChecked,
@@ -26,7 +32,7 @@ const CraneCalcView = ({ crane }) => {
     handleInputChange,
     handleSubmit,
     handleClearForm,
-  } = useCalculationForm(crane)
+  } = useCalculationForm(crane, initialFormData, initialMode)
 
   return (
     <div className='calc-view-container'>

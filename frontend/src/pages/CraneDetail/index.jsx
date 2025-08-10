@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { Container, Header, Icon, Message } from 'semantic-ui-react'
 
 import { fetchCraneByName } from '@/src/api/cranes'
@@ -9,9 +9,14 @@ import './CraneDetail.css'
 
 const CraneDetail = () => {
   const { name } = useParams()
+  const location = useLocation()
   const [crane, setCrane] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  // Extract initial form data from navigation state
+  const initialFormData = location.state?.initialFormData || null
+  const initialMode = location.state?.initialMode || false
 
   useEffect(() => {
     const loadCrane = async () => {
@@ -61,7 +66,11 @@ const CraneDetail = () => {
   return (
     <main className='crane-detail-main-content'>
       <CraneDataView crane={crane} />
-      <CraneCalcView crane={crane} />
+      <CraneCalcView
+        crane={crane}
+        initialFormData={initialFormData}
+        initialMode={initialMode}
+      />
     </main>
   )
 }
