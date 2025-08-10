@@ -89,6 +89,11 @@
   color: rgba(48, 48, 48, 0.7);
 }
 
+.calc-result-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 @media (max-width: 768px) {
   .calc-input-and-result-container {
     flex-direction: column;
