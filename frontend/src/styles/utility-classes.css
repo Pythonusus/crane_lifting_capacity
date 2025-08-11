@@ -4,6 +4,9 @@
   justify-content: center;
   align-items: center;
 }
+.center-text {
+  text-align: center !important;
+}
 
 .m-top {
   margin-top: 0.5em !important;
