@@ -14,14 +14,8 @@ import ResultDownloadButton from './ResultDownloadButton'
  * @param {Object|null} props.calculationResult - API calculation result object
  * @param {boolean} props.isChecked - Current calculation mode (determines which result to show)
  * @param {Object} props.crane - Crane data object containing manufacturer and model
- * @param {Object} props.formData - Form input data for report generation
  */
-const CalculationResults = ({
-  calculationResult,
-  isChecked,
-  crane,
-  formData,
-}) => {
+const CalculationResults = ({ calculationResult, isChecked, crane }) => {
   const renderResultValue = () => {
     if (!calculationResult) {
       return (

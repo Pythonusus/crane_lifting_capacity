@@ -124,12 +124,7 @@ const useCalculationForm = (crane) => {
           model: crane.model,
           chassisType: crane.chassis_type || 'Unknown',
           maxLiftingCapacity: crane.max_lifting_capacity || 'Unknown',
-          boomLength: formData.boomLength,
           calculationMethod: 'payload',
-          radius: formData.boomRadius,
-          equipmentWeight: formData.equipmentWeight || '0',
-          payload: '', // Empty when calculating payload
-          safetyFactor: formData.safetyFactor,
           result: result,
         })
       } else {
@@ -152,12 +147,7 @@ const useCalculationForm = (crane) => {
           model: crane.model,
           chassisType: crane.chassis_type || 'Unknown',
           maxLiftingCapacity: crane.max_lifting_capacity || 'Unknown',
-          boomLength: formData.boomLength,
           calculationMethod: 'safety_factor',
-          radius: formData.boomRadius,
-          equipmentWeight: formData.equipmentWeight || '0',
-          payload: formData.payload,
-          safetyFactor: '', // Empty when calculating safety factor
           result: result,
         })
       }
