@@ -10,14 +10,8 @@ import { generateAndDownloadReport } from '@/src/utilities/reportGenerator'
  * @param {Object|null} props.calculationResult - API calculation result object
  * @param {boolean} props.isChecked - Current calculation mode (determines which result to show)
  * @param {Object} props.crane - Crane data object containing manufacturer and model
- * @param {Object} props.formData - Form input data
  */
-const ResultDownloadButton = ({
-  calculationResult,
-  isChecked,
-  crane,
-  formData,
-}) => {
+const ResultDownloadButton = ({ calculationResult, isChecked, crane }) => {
   const [isGenerating, setIsGenerating] = useState(false)
 
   const handleDownload = async () => {
@@ -25,12 +19,7 @@ const ResultDownloadButton = ({
 
     setIsGenerating(true)
     try {
-      await generateAndDownloadReport(
-        calculationResult,
-        isChecked,
-        crane,
-        formData,
-      )
+      await generateAndDownloadReport(calculationResult, isChecked, crane)
     } catch (error) {
       console.error('Failed to generate report:', error)
       // You could add a toast notification here if you have one

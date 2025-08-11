@@ -125,7 +125,6 @@ const CalculationResults = ({
             calculationResult={calculationResult}
             isChecked={isChecked}
             crane={crane}
-            formData={formData}
           />
         </div>
       </Container>
