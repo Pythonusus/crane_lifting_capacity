@@ -109,7 +109,7 @@ const validateCommonFields = (formData, crane) => {
     formData.boomRadius,
     radiusMin,
     radiusMax,
-    'вылет стрелы',
+    'Вылет стрелы',
   )
   if (boomRadiusError) {
     errors.boomRadius = boomRadiusError
