@@ -41,20 +41,21 @@ const useCalculationHistory = () => {
    * @param {string} calculation.model - Model of the crane
    * @param {string} calculation.chassisType - Chassis type of the crane
    * @param {number} calculation.maxLiftingCapacity - Maximum lifting capacity of the crane
-   * @param {string} calculation.boomLength - Boom length configuration
+   * @param {Object} calculation.result - Calculation result from API (contains request data)
    * @param {string} calculation.calculationMethod - 'payload' or 'safety_factor'
-   * @param {string} calculation.radius - Boom radius
-   * @param {string} calculation.equipmentWeight - Equipment weight
-   * @param {string} calculation.payload - Payload value (when calculating by safety factor)
-   * @param {string} calculation.safetyFactor - Safety factor value (when calculating by payload)
-   * @param {Object} calculation.result - Calculation result from API
-   * @param {Date} calculation.timestamp - When the calculation was performed
    */
   const addToHistory = (calculation) => {
     try {
       const newEntry = {
         id: Date.now(), // Simple ID based on timestamp
-        ...calculation,
+        // Store only crane metadata
+        manufacturer: calculation.manufacturer,
+        model: calculation.model,
+        chassisType: calculation.chassisType,
+        maxLiftingCapacity: calculation.maxLiftingCapacity,
+        // Store calculation method and result (request data is in result)
+        calculationMethod: calculation.calculationMethod,
+        result: calculation.result,
         timestamp: new Date().toISOString(),
       }
 
