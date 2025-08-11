@@ -1,37 +1,18 @@
-.calc-history-container {
-  margin: 1.5rem;
+.calc-history-main-content {
   overflow: auto;
+  display: flex;
+  justify-content: center;
 }
 
-.history-timestamp {
-  white-space: nowrap;
-  font-size: 0.9em;
-}
-
-.history-crane-name {
-  font-weight: bold;
-  color: #2185d0;
-}
-
-.history-method-icon {
-  margin-right: 0.5em;
+.calc-history-container {
+  margin: 1rem;
+  height: fit-content;
 }
 
 .history-result-value {
-  font-weight: bold;
   color: #21ba45;
 }
 
-.history-clear-button {
-  margin-top: 1rem;
-  text-align: right;
-}
-
-.history-clear-button .ui.button {
-  margin: 0;
-}
-
-/* Action buttons styling */
 .history-action-buttons {
   display: flex;
   flex-direction: column;
@@ -40,10 +21,8 @@
 }
 
 .history-action-buttons .ui.button {
-  font-size: 0.7rem !important;
   padding: 0.4em 0.6em !important;
-  min-height: auto !important;
-  white-space: nowrap;
+  font-size: 0.7rem !important;
 }
 
 .history-action-buttons .ui.button .icon {
@@ -51,22 +30,11 @@
   margin-right: 0.3em !important;
 }
 
-/* Cell alignment */
-.history-table .ui.table tbody tr td {
-  text-align: center !important;
-  vertical-align: middle;
+.history-clear-button-container {
+  margin-top: 1rem;
+  text-align: right;
 }
 
-.history-table .history-timestamp {
-  text-align: center !important;
-}
-
-.history-table .history-timestamp span {
-  text-align: center;
-  display: inline-block;
-  width: 100%;
-}
-
-.history-table .history-crane-name {
-  text-align: center !important;
+.history-clear-button {
+  margin: 0 !important;
 }
