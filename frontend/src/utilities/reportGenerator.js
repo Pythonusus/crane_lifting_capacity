@@ -16,13 +16,11 @@ import { saveAs } from 'file-saver'
  * @param {Object} calculationResult - The calculation result object
  * @param {boolean} isChecked - Current calculation mode (true = safety factor, false = payload)
  * @param {Object} crane - Crane data object
- * @param {Object} formData - Form input data
  */
 export const generateAndDownloadReport = async (
   calculationResult,
   isChecked,
   crane,
-  formData,
 ) => {
   if (
     !calculationResult ||
@@ -266,7 +264,7 @@ export const generateAndDownloadReport = async (
                       new Paragraph({
                         children: [
                           new TextRun({
-                            text: `${request.boom_len || formData.boomLength}`,
+                            text: `${request.boom_len}`,
                             size: 22,
                           }),
                         ],
@@ -300,7 +298,7 @@ export const generateAndDownloadReport = async (
                       new Paragraph({
                         children: [
                           new TextRun({
-                            text: `${request.radius || formData.boomRadius} м`,
+                            text: `${request.radius} м`,
                             size: 22,
                           }),
                         ],
