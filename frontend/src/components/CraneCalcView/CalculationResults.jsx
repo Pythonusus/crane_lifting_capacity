@@ -4,6 +4,8 @@ import { Container, Header } from 'semantic-ui-react'
 import ResultCopyButton from './ResultCopyButton'
 import ResultDownloadButton from './ResultDownloadButton'
 
+import { formatCalculationValue } from '@/src/utilities/formatters'
+
 /**
  * Component to display crane calculation results
  *
@@ -30,7 +32,7 @@ const CalculationResults = ({ calculationResult, isChecked, crane }) => {
     if (isChecked) {
       // When calculating by safety factor, show payload
       if (baseResponse.payload) {
-        return baseResponse.payload.toFixed(2)
+        return formatCalculationValue(baseResponse.payload)
       }
       return (
         <span className='calc-result-value-placeholder'>
@@ -41,7 +43,7 @@ const CalculationResults = ({ calculationResult, isChecked, crane }) => {
 
     // When calculating by payload, show safety factor
     if (baseResponse.safety_factor) {
-      return baseResponse.safety_factor.toFixed(2)
+      return formatCalculationValue(baseResponse.safety_factor)
     }
     return (
       <span className='calc-result-value-placeholder font-size-5'>
@@ -62,7 +64,9 @@ const CalculationResults = ({ calculationResult, isChecked, crane }) => {
           </div>
           <div className='calc-result-value font-size-5 fw-bold'>
             {calculationResult ? (
-              calculationResult.base_responses[0].lifting_capacity.toFixed(2)
+              formatCalculationValue(
+                calculationResult.base_responses[0].lifting_capacity,
+              )
             ) : (
               <span className='calc-result-value-placeholder font-size-5'>
                 Выполните расчет для получения результатов
@@ -96,11 +100,12 @@ const CalculationResults = ({ calculationResult, isChecked, crane }) => {
               <div className='calc-result-value font-size-5 fw-bold'>
                 {calculationResult &&
                 calculationResult.base_responses[0].request.payload ? (
-                  (
+                  formatCalculationValue(
                     calculationResult.base_responses[0].lifting_capacity -
-                    calculationResult.base_responses[0].request.payload -
-                    calculationResult.base_responses[0].request.equipment_weight
-                  ).toFixed(2)
+                      calculationResult.base_responses[0].request.payload -
+                      calculationResult.base_responses[0].request
+                        .equipment_weight,
+                  )
                 ) : (
                   <span className='calc-result-value-placeholder font-size-5'>
                     Выполните расчет для получения результатов
