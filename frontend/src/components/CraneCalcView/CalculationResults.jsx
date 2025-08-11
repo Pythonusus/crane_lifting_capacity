@@ -119,7 +119,6 @@ const CalculationResults = ({
         <div className='calc-result-actions'>
           <ResultCopyButton
             calculationResult={calculationResult}
-            isChecked={isChecked}
             crane={crane}
           />
           <ResultDownloadButton
