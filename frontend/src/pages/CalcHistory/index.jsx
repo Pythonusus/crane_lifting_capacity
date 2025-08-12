@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom'
 import {
   Button,
   Header,
   Message,
+  Popup,
   Table,
   TableBody,
   TableCell,
@@ -18,6 +20,28 @@ import {
   formatTimestamp,
 } from '@/src/utilities/formatters'
 import './CalcHistory.css'
+
+// Function to prepare initial form data from history entry
+const prepareInitialFormData = (entry) => {
+  const baseResponse = entry.result.base_responses[0]
+  const request = baseResponse.request
+
+  return {
+    boomLength: request.boom_len,
+    boomRadius: request.radius.toString(),
+    equipmentWeight: request.equipment_weight
+      ? request.equipment_weight.toString()
+      : '',
+    payload:
+      entry.calculationMethod === 'safety_factor'
+        ? request.payload.toString()
+        : '',
+    safetyFactor:
+      entry.calculationMethod === 'payload'
+        ? request.safety_factor.toString()
+        : '',
+  }
+}
 
 const CalcHistory = () => {
   const { history, clearHistory } = useCalculationHistory()
@@ -119,6 +143,12 @@ const CalcHistory = () => {
                     ? formatCalculationValue(baseResponse.payload, 'т')
                     : formatCalculationValue(baseResponse.safety_factor)
 
+                  // Prepare data for navigation
+                  const initialFormData = prepareInitialFormData(entry)
+                  const initialMode = isPayloadMethod
+                  const initialResult = entry.result
+                  const craneName = `${entry.manufacturer}_${entry.model}`
+
                   return (
                     <TableRow key={entry.id} className='table-row-hover'>
                       <TableCell className='history-timestamp hide-on-tablet'>
@@ -129,7 +159,23 @@ const CalcHistory = () => {
                         </span>
                       </TableCell>
                       <TableCell className='fw-bold'>
-                        {entry.manufacturer} {entry.model}
+                        <Popup
+                          content='Перейти к расчету'
+                          size='tiny'
+                          trigger={
+                            <Link
+                              to={`/cranes/${encodeURIComponent(craneName)}`}
+                              state={{
+                                initialFormData,
+                                initialMode,
+                                initialResult,
+                              }}
+                              className='crane-name-link'
+                            >
+                              {entry.manufacturer} {entry.model}
+                            </Link>
+                          }
+                        />
                       </TableCell>
                       <TableCell>{boomLength}</TableCell>
                       <TableCell className='hide-on-tablet'>

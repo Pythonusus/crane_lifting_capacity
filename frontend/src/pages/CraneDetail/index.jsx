@@ -17,6 +17,7 @@ const CraneDetail = () => {
   // Extract initial form data from navigation state
   const initialFormData = location.state?.initialFormData || null
   const initialMode = location.state?.initialMode || false
+  const initialResult = location.state?.initialResult || null
 
   useEffect(() => {
     const loadCrane = async () => {
@@ -70,6 +71,7 @@ const CraneDetail = () => {
         crane={crane}
         initialFormData={initialFormData}
         initialMode={initialMode}
+        initialResult={initialResult}
       />
     </main>
   )

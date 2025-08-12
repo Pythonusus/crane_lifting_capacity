@@ -23,6 +23,9 @@ const popupTimeout = 5000
  * Provides all necessary state and handlers for the calculation form.
  *
  * @param {Object} crane - Crane data object
+ * @param {Object} initialFormData - Optional initial form data for pre-filling
+ * @param {boolean} initialMode - Optional initial calculation mode
+ * @param {Object} initialResult - Optional initial calculation result for pre-filling
  * @returns {Object} Form state and handlers
  * @returns {boolean} returns.isChecked - Current calculation mode (true = safety factor, false = payload)
  * @returns {Function} returns.setIsChecked - Function to change calculation mode (receives boolean)
@@ -40,24 +43,42 @@ const popupTimeout = 5000
  * @returns {Function} returns.handleSubmit - Handler for form submission (event: Event)
  * @returns {Function} returns.handleClearForm - Handler to reset form (no parameters)
  */
-const useCalculationForm = (crane) => {
+const useCalculationForm = (
+  crane,
+  initialFormData = null,
+  initialMode = false,
+  initialResult = null,
+) => {
   const { addToHistory } = useCalculationHistory()
 
-  const [isChecked, setIsChecked] = useState(false)
-  const [formData, setFormData] = useState({
-    boomLength: '',
-    boomRadius: '',
-    equipmentWeight: '',
-    payload: '',
-    safetyFactor: '',
+  const [isChecked, setIsChecked] = useState(initialMode)
+  const [formData, setFormData] = useState(() => {
+    const defaultFormData = {
+      boomLength: '',
+      boomRadius: '',
+      equipmentWeight: '',
+      payload: '',
+      safetyFactor: '',
+    }
+
+    if (initialFormData) {
+      return {
+        ...defaultFormData,
+        ...initialFormData,
+      }
+    }
+
+    return defaultFormData
   })
   const [errors, setErrors] = useState({})
   const [validationErrors, setValidationErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   // Store separate results for each calculation mode
-  const [payloadCalculationResult, setPayloadCalculationResult] = useState(null)
+  const [payloadCalculationResult, setPayloadCalculationResult] = useState(
+    initialMode && initialResult ? initialResult : null,
+  )
   const [safetyFactorCalculationResult, setSafetyFactorCalculationResult] =
-    useState(null)
+    useState(!initialMode && initialResult ? initialResult : null)
 
   // Auto-close popups after 5 seconds, but keep field styling
   useEffect(() => {

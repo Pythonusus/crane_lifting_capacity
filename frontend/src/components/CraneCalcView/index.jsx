@@ -15,11 +15,13 @@ import '@/src/components/CraneCalcView/CraneCalcView.css'
  * @param {Object} crane - Crane data object containing specifications and boom lengths
  * @param {Object} initialFormData - Optional initial form data for pre-filling
  * @param {boolean} initialMode - Optional initial calculation mode
+ * @param {Object} initialResult - Optional initial calculation result for pre-filling
  */
 const CraneCalcView = ({
   crane,
   initialFormData = null,
   initialMode = false,
+  initialResult = null,
 }) => {
   const {
     isChecked,
@@ -32,7 +34,7 @@ const CraneCalcView = ({
     handleInputChange,
     handleSubmit,
     handleClearForm,
-  } = useCalculationForm(crane, initialFormData, initialMode)
+  } = useCalculationForm(crane, initialFormData, initialMode, initialResult)
 
   return (
     <div className='calc-view-container'>

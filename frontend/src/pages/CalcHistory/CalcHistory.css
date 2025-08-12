@@ -9,6 +9,10 @@
   height: fit-content;
 }
 
+.crane-name-link:hover {
+  text-decoration: underline;
+}
+
 .history-result-value {
   color: #21ba45;
 }
