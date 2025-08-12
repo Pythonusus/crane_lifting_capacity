@@ -71,7 +71,10 @@ const CranesList = ({ cranes = [], loading = false, error = null }) => {
                   <Popup
                     content='Перейти к расчету крана'
                     trigger={
-                      <Link to={`/cranes/${encodeURIComponent(crane.name)}`}>
+                      <Link
+                        className='crane-name-link'
+                        to={`/cranes/${encodeURIComponent(crane.name)}`}
+                      >
                         {crane.manufacturer} {crane.model}
                       </Link>
                     }

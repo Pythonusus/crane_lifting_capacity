@@ -14,3 +14,7 @@
 .cranes-table-header th {
   background-color: var(--accent-yellow) !important;
 }
+
+.crane-name-link:hover {
+  text-decoration: underline;
+}
