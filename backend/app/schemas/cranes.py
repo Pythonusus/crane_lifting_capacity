@@ -1,3 +1,7 @@
+"""
+Schemas for crane-related API endpoints
+"""
+
 from enum import Enum
 from typing import Dict, List, Optional
 
@@ -13,6 +17,8 @@ from app.settings import SUPPORTED_IMAGE_CONTENT_TYPES
 
 
 class ChassisType(str, Enum):
+    """Class containing all available chassis types"""
+
     TRUCK_MOUNTED = "Автомобильный"
     MOBILE = "Спецшасси автомобильного типа"
     CRAWLER = "Гусеничный"
@@ -21,11 +27,14 @@ class ChassisType(str, Enum):
 
 
 class ChassisTypesResponse(BaseModel):
+    """Response model for chassis types"""
+
     chassisTypes: list[str] = [chassy_type.value for chassy_type in ChassisType]
 
 
 class CraneMetadataAttachment(BaseModel):
     """Attachment metadata for API responses (without binary data)"""
+
     model_config = ConfigDict(
         from_attributes=True,
     )
@@ -41,11 +50,13 @@ class CraneMetadataAttachment(BaseModel):
 
 class CraneBinaryAttachment(CraneMetadataAttachment):
     """Full attachment model with binary data (for internal backend usage)"""
+
     data: bytes
 
 
 class CraneListItem(BaseModel):
     """Simplified crane model for list views (better performance)"""
+
     model_config = ConfigDict(from_attributes=True)
 
     id: Optional[int] = None
@@ -68,6 +79,7 @@ class CraneListItem(BaseModel):
 
 class Crane(BaseModel):
     """Full crane model for detail views"""
+
     model_config = ConfigDict(from_attributes=True)
 
     id: Optional[int] = None
@@ -121,3 +133,23 @@ class CraneFilterRequest(BaseModel):
     min_max_lc: Optional[float] = Field(None, gt=0)
     max_max_lc: Optional[float] = Field(None, gt=0)
     sortBy: Optional[str] = None
+    # Load-more pagination parameters
+    offset: Optional[int] = Field(
+        0, ge=0, description="Number of items to skip"
+    )
+    limit: Optional[int] = Field(
+        15, ge=1, le=100, description="Number of items to return"
+    )
+
+
+class CraneListResponse(BaseModel):
+    """Response model for load-more crane list"""
+
+    cranes: List[CraneListItem]
+    cranes_count: int = Field(
+        description="Total number of cranes matching filters"
+    )
+    has_more: bool = Field(description="Whether there are more items available")
+    returned_count: int = Field(
+        description="Number of items returned in this response"
+    )

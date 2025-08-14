@@ -42,5 +42,9 @@ SUPPORTED_IMAGE_CONTENT_TYPES = [
     "image/svg+xml",
 ]
 
+# Pagination Settings
+DEFAULT_PAGE_SIZE = 15
+
+
 # Safety Factor Settings
 MIN_SAFETY_FACTOR = float(os.getenv("MIN_SAFETY_FACTOR"))

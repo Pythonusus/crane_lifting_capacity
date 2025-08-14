@@ -3,12 +3,15 @@
  * @module api/cranes
  */
 
+import { DEFAULT_PAGE_SIZE } from '@/src/config'
 import { formatFormValue } from '@/src/utilities/formatters'
 
 /**
- * Fetches filtered cranes from the backend
+ * Fetches filtered cranes from the backend with pagination support
  * @param {Object} [filters={}] - Criteria to filter cranes
- * @returns {Promise<Array>} List of cranes matching the filters
+ * @param {number} [offset=0] - Number of items to skip (for pagination)
+ * @param {number} [limit=DEFAULT_PAGE_SIZE] - Number of items to return
+ * @returns {Promise<Object>} Object containing cranes array and pagination info
  *
  * @example
  * Get all cranes (no filters)
@@ -16,6 +19,9 @@ import { formatFormValue } from '@/src/utilities/formatters'
  *
  * Filter by single criteria
  * fetchFilteredCranes({ chassis_type: 'mobile' })
+ *
+ * Filter with pagination
+ * fetchFilteredCranes({ model: 'LR1100' }, 0, 10)
  *
  * Filter by multiple criteria
  * fetchFilteredCranes({
@@ -26,7 +32,11 @@ import { formatFormValue } from '@/src/utilities/formatters'
  *   max_max_lc: 500,
  * })
  */
-export const fetchFilteredCranes = async (filters = {}) => {
+export const fetchFilteredCranes = async (
+  filters = {},
+  offset = 0,
+  limit = DEFAULT_PAGE_SIZE,
+) => {
   // Clean up filters: convert empty strings to null and remove sortBy
   const cleanedFilters = {
     model: formatFormValue(filters.model),
@@ -34,6 +44,9 @@ export const fetchFilteredCranes = async (filters = {}) => {
     chassis_type: formatFormValue(filters.chassis_type),
     min_max_lc: formatFormValue(filters.min_max_lc),
     max_max_lc: formatFormValue(filters.max_max_lc),
+    // Add pagination parameters
+    offset,
+    limit,
   }
 
   const response = await fetch('/api/cranes', {
@@ -49,7 +62,12 @@ export const fetchFilteredCranes = async (filters = {}) => {
   }
 
   const data = await response.json()
-  return data.cranes || []
+  return {
+    cranes: data.cranes || [],
+    cranes_count: data.cranes_count || 0,
+    has_more: data.has_more || false,
+    returned_count: data.returned_count || 0,
+  }
 }
 
 /**

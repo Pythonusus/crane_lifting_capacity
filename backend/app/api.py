@@ -28,6 +28,7 @@ import app.settings as settings
 from app.db.queries import (
     get_crane_db_model_by_name,
     get_cranes_db_models_by_filters,
+    get_filtered_cranes_count,
     get_manufacturers_from_db,
 )
 from app.db.session import get_db
@@ -40,6 +41,7 @@ from app.schemas.cranes import (
     Crane,
     CraneFilterRequest,
     CraneListItem,
+    CraneListResponse,
 )
 from app.services.crane_attachments import serve_attachment
 from app.services.lifting_capacity import (
@@ -112,22 +114,53 @@ def process(
     )
 
 
-@app.post("/api/cranes")
-def get_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
+@app.post("/api/cranes/count")
+def get_cranes_count(
+    filters: CraneFilterRequest, db: Session = Depends(get_db)
+):
     """
-    Filter cranes based on the provided filters.
-    If no filters are provided, return all cranes.
+    Get the total count of cranes matching the provided filters.
 
     Args:
         filters: Dictionary containing filter criteria.
 
     Returns:
-        List of cranes.
+        Total count of cranes matching the filters.
+    """
+    cranes_count = get_filtered_cranes_count(db, filters)
+    return {"cranes_count": cranes_count}
+
+
+@app.post("/api/cranes")
+def get_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
+    """
+    Filter cranes based on the provided filters with load-more pagination.
+    If no filters are provided, return all cranes.
+
+    Args:
+        filters: Dictionary containing filter criteria and
+                 offset/limit parameters.
+
+    Returns:
+        List of cranes with load-more metadata.
     """
     crane_models = get_cranes_db_models_by_filters(db, filters)
+    cranes_count = get_filtered_cranes_count(db, filters)
+
     # Convert db models to simplified Pydantic models for better performance
     cranes = [CraneListItem.model_validate(crane) for crane in crane_models]
-    return {"cranes": cranes}
+
+    # Calculate load-more metadata
+    offset = filters.offset or 0
+    returned_count = len(cranes)
+    has_more = (offset + returned_count) < cranes_count
+
+    return CraneListResponse(
+        cranes=cranes,
+        cranes_count=cranes_count,
+        has_more=has_more,
+        returned_count=returned_count,
+    )
 
 
 @app.get("/api/cranes/{crane_name}")

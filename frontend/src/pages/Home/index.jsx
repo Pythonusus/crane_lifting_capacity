@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { fetchFilteredCranes } from '@/src/api/cranes'
 import CranesFilterSidebar from '@/src/components/CranesFilterSidebar'
 import CranesList from '@/src/components/CranesList'
+import { DEFAULT_PAGE_SIZE } from '@/src/config'
 import sortCranes from '@/src/utilities/sortCranes'
 import './Home.css'
 
@@ -11,7 +12,7 @@ import './Home.css'
  * Features:
  * - Filter cranes by name, chassis type, manufacturer, and capacity range
  * - Sort cranes by various criteria
- * - Pagination for large datasets
+ * - Load-more pagination for large datasets
  * - Real-time search with debouncing
  * - Responsive hidable sidebar
  */
@@ -22,6 +23,10 @@ const Home = () => {
   const [loading, setLoading] = useState(true)
   // Error state to display error messages if API call fails
   const [error, setError] = useState(null)
+  // Pagination state
+  const [totalCount, setTotalCount] = useState(0)
+  const [hasMore, setHasMore] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false)
 
   // Filter state object containing all current filter values
   const [filters, setFilters] = useState({
@@ -38,20 +43,26 @@ const Home = () => {
    * Handles fetching, sorting, and pagination of crane data
    */
   useEffect(() => {
-    // Async function to load crane data from API
+    // Async function to load crane data from API (reset pagination)
     const loadCranes = async () => {
       setLoading(true) // Show loading spinner
       setError(null) // Clear any previous errors
 
       try {
-        // Fetch filtered crane data from backend API
-        const craneData = await fetchFilteredCranes(filters)
+        // Fetch filtered crane data from backend API with pagination reset
+        const response = await fetchFilteredCranes(
+          filters,
+          0,
+          DEFAULT_PAGE_SIZE,
+        )
 
         // Apply sorting to the fetched data based on current sort criteria
-        const sortedCranes = sortCranes(craneData, filters.sortBy)
+        const sortedCranes = sortCranes(response.cranes, filters.sortBy)
 
-        // Update state with sorted crane data
+        // Update state with sorted crane data and pagination info
         setCranes(sortedCranes)
+        setTotalCount(response.cranes_count)
+        setHasMore(response.has_more)
       } catch (error_) {
         // Handle API errors with user-friendly message
         setError('Не удалось загрузить краны. Пожалуйста, попробуйте снова.')
@@ -92,6 +103,41 @@ const Home = () => {
     })
   }
 
+  /**
+   * Handler for loading more cranes (pagination)
+   * Fetches next batch of cranes and appends to existing list
+   */
+  const handleLoadMore = async () => {
+    if (loadingMore || !hasMore) return
+
+    setLoadingMore(true)
+    setError(null)
+
+    try {
+      // Fetch next batch of cranes using current offset
+      const response = await fetchFilteredCranes(
+        filters,
+        cranes.length,
+        DEFAULT_PAGE_SIZE,
+      )
+
+      // Apply sorting to the new data
+      const sortedNewCranes = sortCranes(response.cranes, filters.sortBy)
+
+      // Append new cranes to existing list
+      setCranes((prevCranes) => [...prevCranes, ...sortedNewCranes])
+      setHasMore(response.has_more)
+      setTotalCount(response.cranes_count)
+    } catch (error_) {
+      setError(
+        'Не удалось загрузить больше кранов. Пожалуйста, попробуйте снова.',
+      )
+      console.error('Ошибка загрузки дополнительных кранов:', error_)
+    } finally {
+      setLoadingMore(false)
+    }
+  }
+
   return (
     <div className='home-container'>
       {/* Sidebar */}
@@ -105,7 +151,15 @@ const Home = () => {
 
       {/* Main Content */}
       <main className='home-main-content'>
-        <CranesList cranes={cranes} loading={loading} error={error} />
+        <CranesList
+          cranes={cranes}
+          loading={loading}
+          error={error}
+          totalCount={totalCount}
+          hasMore={hasMore}
+          loadingMore={loadingMore}
+          onLoadMore={handleLoadMore}
+        />
       </main>
     </div>
   )

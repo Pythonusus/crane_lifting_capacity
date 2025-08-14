@@ -10,6 +10,7 @@ from app.db.filters import (
 )
 from app.db.models import CraneBinaryAttachmentDbModel, CraneDbModel
 from app.schemas.cranes import CraneFilterRequest
+from app.settings import DEFAULT_PAGE_SIZE
 
 
 def get_crane_db_model_by_name(
@@ -42,28 +43,84 @@ def get_crane_db_model_by_name(
     )
 
 
+def _build_filtered_cranes_query(
+    db: Session, filters: CraneFilterRequest | None = None
+):
+    """
+    Helper function to build the base filtered query for cranes.
+
+    Args:
+        db: Database session
+        filters: Filter criteria
+
+    Returns:
+        SQLAlchemy Query object with filters applied
+    """
+    base_query = db.query(CraneDbModel)
+
+    if filters is None:
+        return base_query
+
+    # Apply filters
+    if filters.model:
+        base_query = filter_cranes_by_model(base_query, filters.model)
+    if filters.manufacturer:
+        base_query = filter_cranes_by_manufacturer(
+            base_query, filters.manufacturer
+        )
+    if filters.chassis_type:
+        base_query = filter_cranes_by_chassis_type(
+            base_query, filters.chassis_type
+        )
+    if filters.min_max_lc or filters.max_max_lc:
+        base_query = filter_cranes_by_max_lifting_capacity(
+            base_query, filters.min_max_lc, filters.max_max_lc
+        )
+
+    return base_query
+
+
+def get_filtered_cranes_count(
+    db: Session, filters: CraneFilterRequest | None = None
+) -> int:
+    """
+    Get the total count of cranes matching the given filters.
+
+    Args:
+        db: Database session
+        filters: Filter criteria
+
+    Returns:
+        Total number of cranes matching the filters
+    """
+    base_query = _build_filtered_cranes_query(db, filters)
+    return base_query.count()
+
+
 def get_cranes_db_models_by_filters(
-    db: Session, filters: CraneFilterRequest
+    db: Session, filters: CraneFilterRequest | None = None
 ) -> List[CraneDbModel]:
     """
-    Get a list of cranes by filters.
+    Get a list of cranes matching the given filters
+    with offset-based pagination.
+
+    Args:
+        db: Database session
+        filters: Filter criteria with offset/limit parameters
+
+    Returns:
+        List of CraneDbModel objects
     """
-    # Simplified query to reduce memory usage for list views
-    queryset = db.query(CraneDbModel).options(
-        noload(CraneDbModel.attachments),  # Exclude attachments
+    # Build query with optimizations for list views
+    base_query = _build_filtered_cranes_query(db, filters).options(
+        noload(CraneDbModel.attachments),  # Exclude attachments for performance
     )
 
-    if filters.model:
-        queryset = filter_cranes_by_model(queryset, filters.model)
-    if filters.manufacturer:
-        queryset = filter_cranes_by_manufacturer(queryset, filters.manufacturer)
-    if filters.chassis_type:
-        queryset = filter_cranes_by_chassis_type(queryset, filters.chassis_type)
-    if filters.min_max_lc or filters.max_max_lc:
-        queryset = filter_cranes_by_max_lifting_capacity(
-            queryset, filters.min_max_lc, filters.max_max_lc
-        )
-    return queryset.all()
+    # Apply offset-based pagination
+    offset = filters.offset or 0 if filters else 0
+    limit = filters.limit or DEFAULT_PAGE_SIZE if filters else DEFAULT_PAGE_SIZE
+
+    return base_query.offset(offset).limit(limit).all()
 
 
 def get_manufacturers_from_db(db: Session) -> List[str]:

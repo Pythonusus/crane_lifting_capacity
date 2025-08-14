@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import {
+  Button,
   Container,
   Header,
   Icon,
@@ -17,7 +18,15 @@ import {
 import logo from '@/src/assets/crane_list_icon.png'
 import './CranesList.css'
 
-const CranesList = ({ cranes = [], loading = false, error = null }) => {
+const CranesList = ({
+  cranes = [],
+  loading = false,
+  error = null,
+  totalCount = 0,
+  hasMore = false,
+  loadingMore = false,
+  onLoadMore = null,
+}) => {
   if (loading && cranes.length === 0) {
     return (
       <Container>
@@ -33,6 +42,7 @@ const CranesList = ({ cranes = [], loading = false, error = null }) => {
 
   return (
     <>
+      {/* Cranes list header */}
       <Header as='h1' className='main-header m-top center-content'>
         <img
           src={logo}
@@ -41,7 +51,9 @@ const CranesList = ({ cranes = [], loading = false, error = null }) => {
         />
         <Header.Content className='resize-text-on-tablet'>
           Доступные краны
-          <Header.Subheader>Всего найдено: {cranes.length}</Header.Subheader>
+          <Header.Subheader>
+            Показано: {cranes.length} из {totalCount}
+          </Header.Subheader>
         </Header.Content>
       </Header>
 
@@ -106,6 +118,19 @@ const CranesList = ({ cranes = [], loading = false, error = null }) => {
             изменить критерии поиска.
           </p>
         </Message>
+      )}
+
+      {/* Show More Button */}
+      {hasMore && cranes.length > 0 && (
+        <Button
+          primary
+          size='small'
+          loading={loadingMore}
+          disabled={loadingMore}
+          onClick={onLoadMore}
+        >
+          {loadingMore ? 'Загружаем...' : 'Показать ещё'}
+        </Button>
       )}
     </>
   )
