@@ -18,7 +18,6 @@ from app.schemas.calc_responses import (
     SafetyFactorCalcResponse,
     SafetyFactorCalcResponseBase,
 )
-from app.settings import MIN_SAFETY_FACTOR
 from utils.math import get_nearest_greater, get_nearest_lesser, interpolate_1d
 
 
@@ -93,13 +92,11 @@ def calc_safety_factor_from_payload(
     for req in request.base_requests:
         lc = calc_lc_base(db, req).lifting_capacity
         safety_factor = lc / (req.payload + req.equipment_weight)
-        satisfactory = safety_factor >= MIN_SAFETY_FACTOR
         responses.append(
             SafetyFactorCalcResponseBase(
                 request=req,
                 lifting_capacity=lc,
                 safety_factor=safety_factor,
-                satisfactory=satisfactory,
             )
         )
 

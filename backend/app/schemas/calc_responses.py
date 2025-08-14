@@ -17,7 +17,6 @@ class LcCalcResponseBase(BaseModel):
 class SafetyFactorCalcResponseBase(LcCalcResponseBase):
     request: SafetyFactorCalcRequestBase
     safety_factor: float
-    satisfactory: bool
 
 
 class PayloadCalcResponseBase(LcCalcResponseBase):
