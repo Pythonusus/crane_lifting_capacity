@@ -8,6 +8,14 @@
   text-align: center !important;
 }
 
+.left-text {
+  text-align: left !important;
+}
+
+.right-text {
+  text-align: right !important;
+}
+
 .m-top {
   margin-top: 0.5em !important;
 }
