@@ -8,13 +8,7 @@ from utils.math import (
 
 
 def test_get_nearest_lesser(cranes_test_data):
-    # Get all radiuses for boom length 36.0 and convert them to floats
-    num_list = [
-        float(radius)
-        for radius in cranes_test_data["Takraf_РДК250"]["lc_table"][
-            "32.5"
-        ].keys()
-    ]
+    num_list = [5, 15, 16, 17, 18, 19, 20]
     assert get_nearest_lesser(16, num_list) == 15
     assert get_nearest_lesser(15.5, num_list) == 15
     assert get_nearest_lesser(1, num_list) is None
@@ -22,13 +16,7 @@ def test_get_nearest_lesser(cranes_test_data):
 
 
 def test_get_nearest_greater(cranes_test_data):
-    # Get all radiuses for boom length 36.0 and convert them to floats
-    num_list = [
-        float(radius)
-        for radius in cranes_test_data["Liebherr_LR1100"]["lc_table"][
-            "50.0"
-        ].keys()
-    ]
+    num_list = [10, 12, 14, 16, 18, 20, 50]
     assert get_nearest_greater(10.32, num_list) == 12
     assert get_nearest_greater(16, num_list) == 18
     assert get_nearest_greater(1000, num_list) is None

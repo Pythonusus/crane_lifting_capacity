@@ -1,5 +1,5 @@
 {
-  "id": 14,
+  "id": 31,
   "model": "РДК400",
   "manufacturer": "Takraf",
   "chassis_type": "Гусеничный",
@@ -22,7 +22,7 @@
     "23"
   ],
   "lc_table": {
-    "16.0": {
+    "16.0м": {
       "4": 40.0,
       "6": 30.0,
       "8": 19.0,
@@ -30,7 +30,7 @@
       "12": 10.5,
       "14": 8.5
     },
-    "21.0": {
+    "21.0м": {
       "4": 30.0,
       "6": 23.5,
       "8": 16.7,
@@ -40,7 +40,7 @@
       "16": 6.7,
       "18": 5.5
     },
-    "26.0": {
+    "26.0м": {
       "6": 20.7,
       "8": 15.5,
       "10": 12.2,
@@ -50,7 +50,7 @@
       "18": 5.2,
       "20": 4.4
     },
-    "31.0": {
+    "31.0м": {
       "6": 17.5,
       "8": 14.1,
       "10": 11.2,
@@ -62,7 +62,7 @@
       "22": 3.2,
       "23": 3.0
     },
-    "36.0": {
+    "36.0м": {
       "6": 13.5,
       "8": 11.3,
       "10": 9.4,
@@ -74,7 +74,7 @@
       "22": 2.9,
       "23": 2.5
     },
-    "41.0": {
+    "41.0м": {
       "6": 10.0,
       "8": 8.5,
       "10": 7.2,
@@ -86,7 +86,7 @@
       "22": 2.7,
       "23": 2.4
     },
-    "46.0": {
+    "46.0м": {
       "8": 7.0,
       "10": 6.0,
       "12": 5.2,
@@ -100,25 +100,40 @@
   },
   "attachments": [
     {
-      "filename": "Takraf_РДК400.jpg",
-      "content_type": "image/jpeg",
-      "data_size_bytes": 94384
+      "filename": "Таблица_ГП.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 12265
     },
     {
-      "filename": "Takraf_РДК400.xlsx",
-      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "data_size_bytes": 12239
+      "filename": "Общий_вид_крана.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 141576
+    },
+    {
+      "filename": "Грузовысотные_характеристики.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 103950
+    },
+    {
+      "filename": "Габаритные_размеры.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 68163
+    },
+    {
+      "filename": "Технические_характеристики.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 125544
     }
   ],
   "name": "Takraf_РДК400",
   "price_per_hour": 2402.24,
   "lc_table_boom_lengths": [
-    "16.0",
-    "21.0",
-    "26.0",
-    "31.0",
-    "36.0",
-    "41.0",
-    "46.0"
+    "16.0м",
+    "21.0м",
+    "26.0м",
+    "31.0м",
+    "36.0м",
+    "41.0м",
+    "46.0м"
   ]
 }

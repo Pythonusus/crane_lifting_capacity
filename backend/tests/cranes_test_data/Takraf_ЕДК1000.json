@@ -1,6 +1,6 @@
 {
-  "id": 2,
-  "model": "EDK1000",
+  "id": 33,
+  "model": "ЕДК1000",
   "manufacturer": "Takraf",
   "chassis_type": "Железнодорожный",
   "pricebook": "ФСЭМ-2022",
@@ -369,22 +369,42 @@
   },
   "attachments": [
     {
+      "filename": "Таблица_ГП.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 13462
+    },
+    {
+      "filename": "Общий_вид_крана.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 696266
+    },
+    {
+      "filename": "Таблица_грузоподъемности.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 93528
+    },
+    {
+      "filename": "Высотные_характеристики.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 178452
+    },
+    {
+      "filename": "Техническое_описание.pdf",
+      "content_type": "application/pdf",
+      "data_size_bytes": 483153
+    },
+    {
       "filename": "Takraf_EDK1000.dwg",
       "content_type": "image/vnd.dwg",
       "data_size_bytes": 2427445
     },
     {
-      "filename": "Takraf_EDK1000.jpg",
+      "filename": "Габаритные размеры.jpg",
       "content_type": "image/jpeg",
-      "data_size_bytes": 93528
-    },
-    {
-      "filename": "Takraf_EDK1000.xlsx",
-      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "data_size_bytes": 13525
+      "data_size_bytes": 323697
     }
   ],
-  "name": "Takraf_EDK1000",
+  "name": "Takraf_ЕДК1000",
   "price_per_hour": 12435.21,
   "lc_table_boom_lengths": [
     "Поворотная ±13° с базой 2.55х9.3 + 2 противовеса",

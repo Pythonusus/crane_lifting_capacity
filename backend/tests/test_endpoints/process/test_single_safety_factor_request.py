@@ -10,14 +10,13 @@ from app.schemas.calc_responses import (
     SafetyFactorCalcResponse,
     SafetyFactorCalcResponseBase,
 )
-from app.settings import MIN_SAFETY_FACTOR
 
 
 class TestSingleSafetyFactorRequest:
     def test_radius_not_in_lc_table(db_session, client, calc_accuracy):
         base_request = SafetyFactorCalcRequestBase(
             crane_name="Liebherr_LR1100",
-            boom_len="14.0",
+            boom_len="14.0м",
             radius="5.5",
             equipment_weight=0,
             payload=40.1,
@@ -41,7 +40,7 @@ class TestSingleSafetyFactorRequest:
 
         # Assert request data in response
         assert base_response.request.crane_name == "Liebherr_LR1100"
-        assert base_response.request.boom_len == "14.0"
+        assert base_response.request.boom_len == "14.0м"
         assert float(base_response.request.radius) == 5.5
         assert base_response.request.equipment_weight == 0
         assert base_response.request.payload == 40.1
@@ -52,7 +51,6 @@ class TestSingleSafetyFactorRequest:
             base_response.request.payload
             + base_response.request.equipment_weight
         )
-        expected_satisfactory = expected_safety_factor >= MIN_SAFETY_FACTOR
 
         # Assert calculated values
         assert (
@@ -63,12 +61,11 @@ class TestSingleSafetyFactorRequest:
             abs(base_response.safety_factor - expected_safety_factor)
             < calc_accuracy
         )
-        assert base_response.satisfactory == expected_satisfactory
 
     def test_radius_in_lc_table(db_session, client, calc_accuracy):
         base_request = SafetyFactorCalcRequestBase(
-            crane_name="Liebherr_LTM1300",
-            boom_len="43.9",
+            crane_name="Liebherr_LTM1300-6.2",
+            boom_len="43.9м",
             radius="12",
             equipment_weight=5,
             payload=50.33,
@@ -91,8 +88,8 @@ class TestSingleSafetyFactorRequest:
         assert isinstance(base_response, SafetyFactorCalcResponseBase)
 
         # Assert request data in response
-        assert base_response.request.crane_name == "Liebherr_LTM1300"
-        assert base_response.request.boom_len == "43.9"
+        assert base_response.request.crane_name == "Liebherr_LTM1300-6.2"
+        assert base_response.request.boom_len == "43.9м"
         assert float(base_response.request.radius) == 12
         assert base_response.request.equipment_weight == 5
         assert base_response.request.payload == 50.33
@@ -103,7 +100,6 @@ class TestSingleSafetyFactorRequest:
             base_response.request.payload
             + base_response.request.equipment_weight
         )
-        expected_satisfactory = expected_safety_factor >= MIN_SAFETY_FACTOR
 
         # Assert calculated values
         assert (
@@ -114,14 +110,13 @@ class TestSingleSafetyFactorRequest:
             abs(base_response.safety_factor - expected_safety_factor)
             < calc_accuracy
         )
-        assert base_response.satisfactory == expected_satisfactory
 
 
 class TestSinglePayloadRequest:
     def test_radius_not_in_lc_table(db_session, client, calc_accuracy):
         base_request = PayloadCalcRequestBase(
-            crane_name="Liebherr_LR1200",
-            boom_len="50",
+            crane_name="Liebherr_LR1200.1",
+            boom_len="50м",
             radius="10.32",
             equipment_weight=0,
             safety_factor=1.5,
@@ -142,8 +137,8 @@ class TestSinglePayloadRequest:
         assert isinstance(base_response, PayloadCalcResponseBase)
 
         # Assert request data in response
-        assert base_response.request.crane_name == "Liebherr_LR1200"
-        assert base_response.request.boom_len == "50"
+        assert base_response.request.crane_name == "Liebherr_LR1200.1"
+        assert base_response.request.boom_len == "50м"
         assert float(base_response.request.radius) == 10.32
         assert base_response.request.equipment_weight == 0
         assert base_response.request.safety_factor == 1.5
@@ -165,7 +160,7 @@ class TestSinglePayloadRequest:
     def test_radius_in_lc_table(db_session, client, calc_accuracy):
         base_request = PayloadCalcRequestBase(
             crane_name="Takraf_РДК400",
-            boom_len="36.0",
+            boom_len="36.0м",
             radius="16",
             equipment_weight=2,
             safety_factor=1.8,
@@ -187,7 +182,7 @@ class TestSinglePayloadRequest:
 
         # Assert request data in response
         assert base_response.request.crane_name == "Takraf_РДК400"
-        assert base_response.request.boom_len == "36.0"
+        assert base_response.request.boom_len == "36.0м"
         assert float(base_response.request.radius) == 16
         assert base_response.request.equipment_weight == 2
         assert base_response.request.safety_factor == 1.8

@@ -1,6 +1,6 @@
 {
-  "id": 1,
-  "model": "EDK500",
+  "id": 34,
+  "model": "ЕДК500",
   "manufacturer": "Takraf",
   "chassis_type": "Железнодорожный",
   "pricebook": "ФСЭМ-2022",
@@ -132,22 +132,42 @@
   },
   "attachments": [
     {
+      "filename": "Таблица_ГП.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "data_size_bytes": 12143
+    },
+    {
       "filename": "Takraf_EDK500.dwg",
       "content_type": "image/vnd.dwg",
       "data_size_bytes": 2338183
     },
     {
-      "filename": "Takraf_EDK500.jpg",
+      "filename": "Общий_вид_крана.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 1195337
+    },
+    {
+      "filename": "Таблица_грузоподъемности.jpg",
       "content_type": "image/jpeg",
       "data_size_bytes": 106543
     },
     {
-      "filename": "Takraf_EDK500.xlsx",
-      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "data_size_bytes": 12200
+      "filename": "Техническое_описание.pdf",
+      "content_type": "application/pdf",
+      "data_size_bytes": 468544
+    },
+    {
+      "filename": "Габаритные_размеры.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 105426
+    },
+    {
+      "filename": "Высотные характеристики.jpg",
+      "content_type": "image/jpeg",
+      "data_size_bytes": 218286
     }
   ],
-  "name": "Takraf_EDK500",
+  "name": "Takraf_ЕДК500",
   "price_per_hour": 6866.99,
   "lc_table_boom_lengths": [
     "Норм. стрела, база аутригеров 6.0 м",
