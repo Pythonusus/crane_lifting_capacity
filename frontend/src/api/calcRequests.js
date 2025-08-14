@@ -1,4 +1,9 @@
 /**
+ * API requests for payload and safety factor calculations
+ * @module api/calcRequests
+ */
+
+/**
  * Create a base payload calculation request
  * @param {string} craneName - Name of the crane
  * @param {string} boomLen - Boom length configuration
