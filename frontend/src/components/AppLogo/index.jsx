@@ -1,6 +1,6 @@
 import React from 'react'
 
-import logo from '@/src/assets/react.svg'
+import logo from '@/src/assets/app_logo.png'
 import './AppLogo.css'
 
 const AppLogo = () => {
@@ -9,7 +9,7 @@ const AppLogo = () => {
       <img
         src={logo}
         alt='Crane lifting capacity calculator logo'
-        className='app-logo'
+        className='app-logo '
       />
       <div className='app-title'>
         <span>Калькулятор</span>
