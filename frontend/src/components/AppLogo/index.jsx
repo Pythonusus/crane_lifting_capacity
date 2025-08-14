@@ -1,3 +1,8 @@
+/**
+ * Component containing app logo and app title
+ * @module components/AppLogo
+ */
+
 import React from 'react'
 
 import logo from '@/src/assets/app_logo.png'
