@@ -1,4 +1,11 @@
 /**
+ * API requests for fetching cranes and related data
+ * @module api/cranes
+ */
+
+import { formatFormValue } from '@/src/utilities/formatters'
+
+/**
  * Fetches filtered cranes from the backend
  * @param {Object} [filters={}] - Criteria to filter cranes
  * @returns {Promise<Array>} List of cranes matching the filters
@@ -22,36 +29,11 @@
 export const fetchFilteredCranes = async (filters = {}) => {
   // Clean up filters: convert empty strings to null and remove sortBy
   const cleanedFilters = {
-    model:
-      filters.model === '' ||
-      filters.model === null ||
-      filters.model === undefined
-        ? null
-        : filters.model,
-    manufacturer:
-      filters.manufacturer === '' ||
-      filters.manufacturer === null ||
-      filters.manufacturer === undefined
-        ? null
-        : filters.manufacturer,
-    chassis_type:
-      filters.chassis_type === '' ||
-      filters.chassis_type === null ||
-      filters.chassis_type === undefined
-        ? null
-        : filters.chassis_type,
-    min_max_lc:
-      filters.min_max_lc === '' ||
-      filters.min_max_lc === null ||
-      filters.min_max_lc === undefined
-        ? null
-        : filters.min_max_lc,
-    max_max_lc:
-      filters.max_max_lc === '' ||
-      filters.max_max_lc === null ||
-      filters.max_max_lc === undefined
-        ? null
-        : filters.max_max_lc,
+    model: formatFormValue(filters.model),
+    manufacturer: formatFormValue(filters.manufacturer),
+    chassis_type: formatFormValue(filters.chassis_type),
+    min_max_lc: formatFormValue(filters.min_max_lc),
+    max_max_lc: formatFormValue(filters.max_max_lc),
   }
 
   const response = await fetch('/api/cranes', {
