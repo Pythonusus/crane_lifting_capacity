@@ -11,6 +11,11 @@
   height: 52px;
 }
 
+.crane-list-icon {
+  width: 64px !important;
+  height: 64px !important;
+}
+
 .cranes-table-header th {
   background-color: var(--accent-yellow) !important;
 }
