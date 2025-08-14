@@ -50,3 +50,12 @@ export const formatTimestamp = (timestamp) => {
     formatted: `${dateStr} ${timeStr}`,
   }
 }
+
+/**
+ * Formats form values by converting empty strings, null, and undefined to null
+ * @param {*} value - The form value to format
+ * @returns {*} The original value or null if it was empty/null/undefined
+ */
+export const formatFormValue = (value) => {
+  return value === '' || value === null || value === undefined ? null : value
+}
