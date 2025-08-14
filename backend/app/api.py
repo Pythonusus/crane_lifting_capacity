@@ -15,6 +15,7 @@ API Structure:
 ├── /api/cranes         # Crane data endpoints
 ├── /api/chassis-types  # Chassis type enumeration
 ├── /api/manufacturers  # Manufacturer listing
+├── /api/sort-options   # Sorting options
 └── /api/attachments   # Attachment serving
 """
 
@@ -42,6 +43,7 @@ from app.schemas.cranes import (
     CraneFilterRequest,
     CraneListItem,
     CraneListResponse,
+    SortOptionsResponse,
 )
 from app.services.crane_attachments import serve_attachment
 from app.services.lifting_capacity import (
@@ -192,6 +194,12 @@ def get_manufacturers(db: Session = Depends(get_db)):
     """Get all available manufacturers"""
     manufacturers = get_manufacturers_from_db(db)
     return {"manufacturers": manufacturers}
+
+
+@app.get("/api/sort-options")
+def get_sort_options():
+    """Get all available sorting options"""
+    return SortOptionsResponse()
 
 
 @app.get("/api/attachments/{attachment_id}")

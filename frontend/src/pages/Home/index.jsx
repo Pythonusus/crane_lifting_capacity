@@ -4,14 +4,13 @@ import { fetchFilteredCranes } from '@/src/api/cranes'
 import CranesFilterSidebar from '@/src/components/CranesFilterSidebar'
 import CranesList from '@/src/components/CranesList'
 import { DEFAULT_PAGE_SIZE } from '@/src/config'
-import sortCranes from '@/src/utilities/sortCranes'
 import './Home.css'
 
 /**
  * Main Home component - displays a filterable and sortable list of cranes
  * Features:
  * - Filter cranes by name, chassis type, manufacturer, and capacity range
- * - Sort cranes by various criteria
+ * - Sort cranes by various criteria (handled by backend)
  * - Load-more pagination for large datasets
  * - Real-time search with debouncing
  * - Responsive hidable sidebar
@@ -40,7 +39,7 @@ const Home = () => {
 
   /**
    * Effect hook that runs whenever filters change
-   * Handles fetching, sorting, and pagination of crane data
+   * Handles fetching and pagination of crane data (sorting handled by backend)
    */
   useEffect(() => {
     // Async function to load crane data from API (reset pagination)
@@ -49,18 +48,15 @@ const Home = () => {
       setError(null) // Clear any previous errors
 
       try {
-        // Fetch filtered crane data from backend API with pagination reset
+        // Fetch filtered and sorted crane data from backend API with pagination reset
         const response = await fetchFilteredCranes(
           filters,
           0,
           DEFAULT_PAGE_SIZE,
         )
 
-        // Apply sorting to the fetched data based on current sort criteria
-        const sortedCranes = sortCranes(response.cranes, filters.sortBy)
-
-        // Update state with sorted crane data and pagination info
-        setCranes(sortedCranes)
+        // Update state with crane data (already sorted by backend) and pagination info
+        setCranes(response.cranes)
         setTotalCount(response.cranes_count)
         setHasMore(response.has_more)
       } catch (error_) {
@@ -121,11 +117,8 @@ const Home = () => {
         DEFAULT_PAGE_SIZE,
       )
 
-      // Apply sorting to the new data
-      const sortedNewCranes = sortCranes(response.cranes, filters.sortBy)
-
-      // Append new cranes to existing list
-      setCranes((prevCranes) => [...prevCranes, ...sortedNewCranes])
+      // Append new cranes to existing list (already sorted by backend)
+      setCranes((prevCranes) => [...prevCranes, ...response.cranes])
       setHasMore(response.has_more)
       setTotalCount(response.cranes_count)
     } catch (error_) {

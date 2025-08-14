@@ -37,13 +37,15 @@ export const fetchFilteredCranes = async (
   offset = 0,
   limit = DEFAULT_PAGE_SIZE,
 ) => {
-  // Clean up filters: convert empty strings to null and remove sortBy
+  // Clean up filters: convert empty strings to null
   const cleanedFilters = {
     model: formatFormValue(filters.model),
     manufacturer: formatFormValue(filters.manufacturer),
     chassis_type: formatFormValue(filters.chassis_type),
     min_max_lc: formatFormValue(filters.min_max_lc),
     max_max_lc: formatFormValue(filters.max_max_lc),
+    // Include sorting parameter
+    sortBy: filters.sortBy || 'displayNameAsc',
     // Add pagination parameters
     offset,
     limit,
@@ -98,6 +100,21 @@ export const fetchManufacturers = async () => {
 
   const data = await response.json()
   return data.manufacturers || []
+}
+
+/**
+ * Fetches all available sorting options from the backend
+ * @returns {Promise<Array>} List of available sorting options
+ */
+export const fetchSortOptions = async () => {
+  const response = await fetch('/api/sort-options')
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch sort options')
+  }
+
+  const data = await response.json()
+  return data.sortOptions || []
 }
 
 /**

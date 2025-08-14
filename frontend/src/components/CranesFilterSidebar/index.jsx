@@ -9,49 +9,18 @@ import {
   Segment,
 } from 'semantic-ui-react'
 
-import { fetchChassisTypes, fetchManufacturers } from '@/src/api/cranes'
+import {
+  fetchChassisTypes,
+  fetchManufacturers,
+  fetchSortOptions,
+} from '@/src/api/cranes'
 
 import './CranesFilterSidebar.css'
-
-const getSortByOptions = () => {
-  return [
-    {
-      key: 'displayNameAsc',
-      text: 'Название крана (А-Я)',
-      value: 'displayNameAsc',
-    },
-    {
-      key: 'displayNameDesc',
-      text: 'Название крана (Я-А)',
-      value: 'displayNameDesc',
-    },
-    {
-      key: 'maxCapacityAsc',
-      text: 'Макс г/п ↑',
-      value: 'maxCapacityAsc',
-    },
-    {
-      key: 'maxCapacityDesc',
-      text: 'Макс г/п ↓',
-      value: 'maxCapacityDesc',
-    },
-
-    {
-      key: 'pricePerHourAsc',
-      text: 'Стоимость маш.-ч ↑',
-      value: 'pricePerHourAsc',
-    },
-    {
-      key: 'pricePerHourDesc',
-      text: 'Стоимость маш.-ч ↓',
-      value: 'pricePerHourDesc',
-    },
-  ]
-}
 
 const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
   const [chassisTypes, setChassisTypes] = useState([])
   const [manufacturers, setManufacturers] = useState([])
+  const [sortOptions, setSortOptions] = useState([])
 
   // Fetch chassis types on component mount
   useEffect(() => {
@@ -77,6 +46,19 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
       }
     }
     loadManufacturers()
+  }, [])
+
+  // Fetch sort options on component mount
+  useEffect(() => {
+    const loadSortOptions = async () => {
+      try {
+        const options = await fetchSortOptions()
+        setSortOptions(options)
+      } catch (error_) {
+        console.error('Failed to load sort options:', error_)
+      }
+    }
+    loadSortOptions()
   }, [])
 
   const handleSearchChange = (e, { value }) => {
@@ -215,7 +197,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
             fluid
             selection
             placeholder='Выберите сортировку'
-            options={getSortByOptions()}
+            options={sortOptions}
             value={filters.sortBy}
             onChange={handleSortByChange}
           />

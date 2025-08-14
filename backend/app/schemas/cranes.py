@@ -32,6 +32,47 @@ class ChassisTypesResponse(BaseModel):
     chassisTypes: list[str] = [chassy_type.value for chassy_type in ChassisType]
 
 
+class SortOption(BaseModel):
+    """Single sorting option"""
+
+    key: str
+    text: str
+    value: str
+
+
+class SortOptionsResponse(BaseModel):
+    """Response model for sorting options"""
+
+    sortOptions: List[SortOption] = [
+        SortOption(
+            key="displayNameAsc",
+            text="Название крана (А-Я)",
+            value="displayNameAsc",
+        ),
+        SortOption(
+            key="displayNameDesc",
+            text="Название крана (Я-А)",
+            value="displayNameDesc",
+        ),
+        SortOption(
+            key="maxCapacityAsc", text="Макс г/п ↑", value="maxCapacityAsc"
+        ),
+        SortOption(
+            key="maxCapacityDesc", text="Макс г/п ↓", value="maxCapacityDesc"
+        ),
+        SortOption(
+            key="pricePerHourAsc",
+            text="Стоимость маш.-ч ↑",
+            value="pricePerHourAsc",
+        ),
+        SortOption(
+            key="pricePerHourDesc",
+            text="Стоимость маш.-ч ↓",
+            value="pricePerHourDesc",
+        ),
+    ]
+
+
 class CraneMetadataAttachment(BaseModel):
     """Attachment metadata for API responses (without binary data)"""
 

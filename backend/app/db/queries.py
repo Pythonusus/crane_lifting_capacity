@@ -1,5 +1,6 @@
 from typing import List
 
+from sqlalchemy import asc, desc
 from sqlalchemy.orm import Session, noload
 
 from app.db.filters import (
@@ -41,6 +42,46 @@ def get_crane_db_model_by_name(
         )
         .first()
     )
+
+
+def _apply_sorting_to_cranes_query(query, sort_by: str | None = None):
+    """
+    Apply sorting to cranes query based on sort_by parameter.
+
+    Args:
+        query: SQLAlchemy Query object
+        sort_by: Sort criteria identifier
+
+    Returns:
+        SQLAlchemy Query object with sorting applied
+    """
+    # Define sorting options mapping
+    sorting_options = {
+        'displayNameAsc': [
+            asc(CraneDbModel.manufacturer),
+            asc(CraneDbModel.model),
+        ],
+        'displayNameDesc': [
+            desc(CraneDbModel.manufacturer),
+            desc(CraneDbModel.model),
+        ],
+        'maxCapacityAsc': [asc(CraneDbModel.max_lifting_capacity)],
+        'maxCapacityDesc': [desc(CraneDbModel.max_lifting_capacity)],
+        'pricePerHourAsc': [
+            asc(CraneDbModel.base_price + CraneDbModel.labor_cost)
+        ],
+        'pricePerHourDesc': [
+            desc(CraneDbModel.base_price + CraneDbModel.labor_cost)
+        ],
+    }
+
+    # Default sorting: by display name (manufacturer + model) ascending
+    default_sorting = [asc(CraneDbModel.manufacturer), asc(CraneDbModel.model)]
+
+    # Get sorting criteria or use default
+    sort_criteria = sorting_options.get(sort_by, default_sorting)
+
+    return query.order_by(*sort_criteria)
 
 
 def _build_filtered_cranes_query(
@@ -102,11 +143,11 @@ def get_cranes_db_models_by_filters(
 ) -> List[CraneDbModel]:
     """
     Get a list of cranes matching the given filters
-    with offset-based pagination.
+    with offset-based pagination and sorting.
 
     Args:
         db: Database session
-        filters: Filter criteria with offset/limit parameters
+        filters: Filter criteria with offset/limit parameters and sorting
 
     Returns:
         List of CraneDbModel objects
@@ -116,11 +157,15 @@ def get_cranes_db_models_by_filters(
         noload(CraneDbModel.attachments),  # Exclude attachments for performance
     )
 
+    # Apply sorting
+    sort_by = filters.sortBy if filters else None
+    sorted_query = _apply_sorting_to_cranes_query(base_query, sort_by)
+
     # Apply offset-based pagination
     offset = filters.offset or 0 if filters else 0
     limit = filters.limit or DEFAULT_PAGE_SIZE if filters else DEFAULT_PAGE_SIZE
 
-    return base_query.offset(offset).limit(limit).all()
+    return sorted_query.offset(offset).limit(limit).all()
 
 
 def get_manufacturers_from_db(db: Session) -> List[str]:
