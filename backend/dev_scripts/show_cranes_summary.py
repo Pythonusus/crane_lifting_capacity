@@ -23,7 +23,7 @@ Output Format:
 
 Example Output:
     Found 3 cranes in database:
-    ================================================================================
+    ============================================================================
     ID: 1
     Name: Liebherr_LTM1100
     Chassis Type: mobile
@@ -34,14 +34,15 @@ Example Output:
     Attachments:
       - manual.pdf (application/pdf)
       - spec_sheet.pdf (application/pdf)
-    --------------------------------------------------------------------------------
+    --------------------------------------------------------------------------
 
 Usage:
     # Show summary using default database
     python manage.py show-cranes-summary
 
     # Show summary with custom database URL
-    python manage.py show-cranes-summary --database-url postgresql://user:pass@localhost/cranes
+    python manage.py show-cranes-summary --database-url
+                     postgresql://user:pass@localhost/cranes
 
 Environment Variables:
     - DATABASE_URL: Default database connection URL
@@ -53,13 +54,13 @@ Error Handling:
     - Gracefully handles missing attachments or data
 """
 
-import os
 from typing import Optional
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.db.models import CraneDbModel
+from app.settings import DATABASE_URL
 
 
 def show_cranes_summary(
@@ -69,13 +70,14 @@ def show_cranes_summary(
     Print a summary of all cranes in the database.
 
     Args:
-        database_url: if not provided, will use DATABASE_URL from .env
+        database_url: Database URL (if not provided, will use DATABASE_URL
+                      from settings)
     """
-    # Use provided database URL or fall back to environment variable
-    final_database_url = database_url or os.getenv("DATABASE_URL")
+    # Use provided database URL or fall back to settings
+    final_database_url = database_url or DATABASE_URL
     if not final_database_url:
         print(
-            "Error: DATABASE_URL must be provided via argument or in .env file"
+            "Error: DATABASE_URL must be provided via argument or in settings"
         )
         return
 
@@ -109,3 +111,8 @@ def show_cranes_summary(
         print(f"Error getting crane summary: {str(e)}")
     finally:
         session.close()
+
+
+if __name__ == "__main__":
+    # Allow running directly for testing
+    show_cranes_summary()

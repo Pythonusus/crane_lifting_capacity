@@ -19,22 +19,17 @@ B8: Lifting capacity table starts here
 """
 
 import os
+from pathlib import Path
 from pprint import pprint
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 import pandas as pd
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
 from app.db.models import CraneDbModel
 from app.schemas.cranes import ChassisType, Crane
-
-load_dotenv()
-
-# Configuration
-DATA_DIR = os.getenv("DATA_DIR")
-DATABASE_URL = os.getenv("DATABASE_URL")
+from app.settings import ATTACHMENTS_DIR, DATABASE_URL
 
 
 def extract_crane_metadata_from_xlsx(
@@ -94,7 +89,7 @@ def extract_crane_metadata_from_xlsx(
     row_idx = 8  # B9 in 0-based indexing
     while row_idx < df.shape[0]:
         radius_value = df.iloc[row_idx, 1]  # Column B
-        if pd.isna(radius_value) or radius_value == '':
+        if pd.isna(radius_value) or radius_value == "":
             break
         try:
             radius = str(radius_value).strip()
@@ -160,7 +155,7 @@ def extract_lc_table_from_xlsx(
     boom_lengths = []
     for col in range(TABLE_START_COL + 1, df.shape[1]):
         value = df.iloc[TABLE_START_ROW, col]
-        if pd.isna(value) or value == '':
+        if pd.isna(value) or value == "":
             break
         try:
             # Only strip whitespace, preserve all other characters
@@ -183,7 +178,7 @@ def extract_lc_table_from_xlsx(
         try:
             # Get radius value from column B
             radius = df.iloc[row_idx, TABLE_START_COL]
-            if pd.isna(radius) or radius == '':
+            if pd.isna(radius) or radius == "":
                 break
             radius = str(radius).strip()
 
@@ -193,7 +188,7 @@ def extract_lc_table_from_xlsx(
                 capacity = df.iloc[row_idx, TABLE_START_COL + 1 + col_idx]
 
                 # Skip empty or invalid values
-                if pd.isna(capacity) or capacity in ['-', '', 0]:
+                if pd.isna(capacity) or capacity in ["-", "", 0]:
                     continue
 
                 try:
@@ -214,7 +209,7 @@ def extract_lc_table_from_xlsx(
     return lc_table
 
 
-def extract_data_from_excel_files(data_dir: str) -> List[Crane]:
+def extract_data_from_excel_files(data_dir: Union[str, Path]) -> List[Crane]:
     """
     Process all Excel files in the data directory and its subdirectories
     and return list of crane data.
@@ -230,12 +225,12 @@ def extract_data_from_excel_files(data_dir: str) -> List[Crane]:
     # Walk through all files in data directory
     for root, _, files in os.walk(data_dir):
         for file in files:
-            if file.endswith('.xlsx'):
+            if file.endswith(".xlsx"):
                 file_path = os.path.join(root, file)
                 try:
                     # Read the Excel file once for both operations
                     df = pd.read_excel(
-                        file_path, engine='openpyxl', header=None
+                        file_path, engine="openpyxl", header=None
                     )
 
                     print(f"Processing {file_path}")
@@ -314,9 +309,9 @@ def write_cranes_to_db(crane_data_list: List[Crane], db_url: str) -> None:
 
                 if existing:
                     print(
-                        f"Updating existing crane \
-                        {crane_data.manufacturer} \
-                        {crane_data.model}"
+                        f"Updating existing crane "
+                        f"{crane_data.manufacturer} "
+                        f"{crane_data.model}"
                     )
                     existing.manufacturer = crane_data.manufacturer
                     existing.chassis_type = crane_data.chassis_type
@@ -328,17 +323,17 @@ def write_cranes_to_db(crane_data_list: List[Crane], db_url: str) -> None:
                     existing.resource_code = crane_data.resource_code
                 else:
                     print(
-                        f"Adding new crane \
-                        {crane_data.manufacturer} \
-                        {crane_data.model}"
+                        f"Adding new crane "
+                        f"{crane_data.manufacturer} "
+                        f"{crane_data.model}"
                     )
                     session.add(crane_db)
 
                 session.commit()
                 print(
-                    f"Successfully saved \
-                    {crane_data.manufacturer} \
-                    {crane_data.model}"
+                    f"Successfully saved "
+                    f"{crane_data.manufacturer} "
+                    f"{crane_data.model}"
                 )
 
             except Exception as e:
@@ -347,26 +342,27 @@ def write_cranes_to_db(crane_data_list: List[Crane], db_url: str) -> None:
 
 
 def populate_db_from_excel(
-    data_dir: Optional[str] = None, database_url: Optional[str] = None
+    data_dir: Optional[Union[str, Path]] = None,
+    database_url: Optional[str] = None,
 ) -> None:
     """
     Main entry point for populating the database from Excel files.
     Uses command line arguments if provided,
-    otherwise falls back to environment variables.
+    otherwise falls back to app settings.
 
     Args:
         data_dir: Directory containing Excel files (optional)
         database_url: Database URL (optional)
     """
 
-    # Use provided args if available, otherwise fall back to env vars
-    final_data_dir = data_dir or os.getenv("DATA_DIR")
-    final_database_url = database_url or os.getenv("DATABASE_URL")
+    # Use provided args if available or fall back to default app settings
+    final_data_dir = str(data_dir or ATTACHMENTS_DIR)
+    final_database_url = database_url or DATABASE_URL
 
     if not all([final_data_dir, final_database_url]):
         print(
-            "Error: DATA_DIR and DATABASE_URL must be provided either \
-            via command line or in .env file"
+            "Error: ATTACHMENTS_DIR and DATABASE_URL must be provided either "
+            "via command line or in settings"
         )
         return
 

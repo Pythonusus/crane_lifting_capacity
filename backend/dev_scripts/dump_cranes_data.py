@@ -45,7 +45,8 @@ Usage:
     python manage.py dump-cranes --output-dir /path/to/output
 
     # Use custom database URL
-    python manage.py dump-cranes --database-url postgresql://user:pass@localhost/cranes
+    python manage.py dump-cranes --database-url
+        postgresql://user:pass@localhost/cranes
 
 Environment Variables:
     - DATABASE_URL: Default database connection URL
@@ -58,29 +59,28 @@ Error Handling:
 """
 
 import json
-import os
-from typing import Optional
+from pathlib import Path
+from typing import Optional, Union
 
-from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.db.models import CraneBinaryAttachmentDbModel, CraneDbModel
 from app.schemas.cranes import Crane
-
-load_dotenv()
+from app.settings import DATABASE_URL
 
 
 def dump_cranes_to_json(
     database_url: Optional[str] = None,
-    output_dir: Optional[str] = None,
+    output_dir: Optional[Union[str, Path]] = None,
 ) -> None:
     """
     Dump all cranes from database to separate JSON files.
     Attachments are dumped as metadata only (without binary data).
 
     Args:
-        database_url: (if not provided, will use DATABASE_URL from .env)
+        database_url: Database URL (if not provided, will use DATABASE_URL
+                      from settings)
         output_dir: Output dir path (default is 'cranes_dump' in script dir)
     """
 
@@ -88,26 +88,26 @@ def dump_cranes_to_json(
     print("Dumping cranes data to JSON files")
     print(f"{'=' * 100}\n")
 
-    # Use provided database URL or fall back to environment variable
-    final_database_url = database_url or os.getenv("DATABASE_URL")
+    # Use provided database URL or fall back to settings
+    final_database_url = database_url or DATABASE_URL
     if not final_database_url:
         print(
-            "Error: DATABASE_URL must be provided via argument or in .env file"
+            "Error: DATABASE_URL must be provided via argument or in settings"
         )
         return
 
     # Use provided output directory or default to script directory
     if output_dir is None:
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        final_output_dir = os.path.join(script_dir, "cranes_dump")
+        script_dir = Path(__file__).resolve().parent
+        final_output_dir = script_dir / "cranes_dump"
     else:
-        final_output_dir = output_dir
+        final_output_dir = Path(output_dir)
 
     print(f"Using database URL: {final_database_url}")
     print(f"Output directory: {final_output_dir}")
 
     # Create output directory if it doesn't exist
-    os.makedirs(final_output_dir, exist_ok=True)
+    final_output_dir.mkdir(parents=True, exist_ok=True)
 
     # Create database engine and session
     engine = create_engine(final_database_url)
@@ -138,9 +138,9 @@ def dump_cranes_to_json(
                     {
                         "filename": attachment.filename,
                         "content_type": attachment.content_type,
-                        "data_size_bytes": len(attachment.data)
-                        if attachment.data
-                        else 0,
+                        "data_size_bytes": (
+                            len(attachment.data) if attachment.data else 0
+                        ),
                     }
                 )
 
@@ -156,7 +156,7 @@ def dump_cranes_to_json(
             # Create filename: manufacturer_model.json
             filename = f"{crane.manufacturer}_{crane.model}.json"
 
-            file_path = os.path.join(final_output_dir, filename)
+            file_path = final_output_dir / filename
 
             # Write individual crane to JSON file
             with open(file_path, "w", encoding="utf-8") as f:

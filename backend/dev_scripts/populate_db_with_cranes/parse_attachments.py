@@ -6,59 +6,77 @@ from the file system.
 """
 
 import mimetypes
-import os
-from typing import List
+from pathlib import Path
+from typing import List, Union
 
 from app.schemas.cranes import CraneBinaryAttachment
 
 
-def get_content_type(filename: str) -> str:
-    """Determine the content type based on file extension."""
-    content_type, _ = mimetypes.guess_type(filename)
+def get_content_type(filename: Union[str, Path]) -> str:
+    """
+    Determine the content type based on file extension.
+
+    Args:
+        filename: Filename or Path object to determine content type for
+
+    Returns:
+        MIME content type string
+    """
+    filename_str = str(filename)
+    content_type, _ = mimetypes.guess_type(filename_str)
     if content_type is None:
         # Fallback for unsupported extensions
-        if filename.lower().endswith('.dwg'):
+        if filename_str.lower().endswith('.dwg'):
             return 'application/acad'
-        if filename.lower().endswith('.xlsx'):
+        if filename_str.lower().endswith('.xlsx'):
             return 'application/vnd.ms-excel'
         return 'application/octet-stream'
     return content_type
 
 
-def find_crane_attachments(attachments_dir: str) -> List[CraneBinaryAttachment]:
+def find_crane_attachments(
+    attachments_dir: Union[str, Path]
+) -> List[CraneBinaryAttachment]:
     """
     Find all attachment files for a specific crane.
 
     Args:
         attachments_dir: Directory containing the crane's files
+                         (accepts both str and Path objects)
 
     Returns:
         List of CraneBinaryAttachment objects
     """
     attachments = []
 
-    if not os.path.exists(attachments_dir):
-        print(f"No crane directory found at: {attachments_dir}")
+    # Convert to Path object for consistent handling
+    attachments_path = Path(attachments_dir)
+
+    if not attachments_path.exists():
+        print(f"No crane directory found at: {attachments_path}")
         return attachments
 
     # Process all files in the crane directory
-    for filename in os.listdir(attachments_dir):
-        file_path = os.path.join(attachments_dir, filename)
-
+    for file_path in attachments_path.iterdir():
         # Skip directories
-        if os.path.isdir(file_path):
+        if file_path.is_dir():
             continue
 
-        with open(file_path, 'rb') as f:
-            file_data = f.read()
+        try:
+            with open(file_path, 'rb') as f:
+                file_data = f.read()
 
-            # Create CraneBinaryAttachment object
-            attachment = CraneBinaryAttachment(
-                filename=filename,
-                content_type=get_content_type(filename),
-                data=file_data
-            )
+                # Create CraneBinaryAttachment object
+                attachment = CraneBinaryAttachment(
+                    filename=file_path.name,
+                    content_type=get_content_type(file_path.name),
+                    data=file_data
+                )
 
-            attachments.append(attachment)
+                attachments.append(attachment)
+
+        except (OSError, IOError) as e:
+            print(f"Error reading file {file_path}: {e}")
+            continue
 
     return attachments

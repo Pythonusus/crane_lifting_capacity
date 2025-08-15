@@ -1,10 +1,10 @@
 """
 Command Line Interface Parser for Crane Management Scripts
 
-This module provides the command-line interface for the crane management system.
-It handles argument parsing and routing to appropriate handlers for different
-operations like populating the database, dumping crane data, and showing
-summaries.
+This module provides the command-line interface for the crane management
+system. It handles argument parsing and routing to appropriate handlers for
+different operations like populating the database, dumping crane data, and
+showing summaries.
 
 Available Commands:
     populate-db: Import crane data from Excel files and attachments
@@ -32,7 +32,7 @@ Arguments:
         --database-url: Database connection URL
 
 Environment Variables:
-    - DATA_DIR: Default data directory for populate-db
+    - ATTACHMENTS_DIR: Default data directory for populate-db
     - DATABASE_URL: Default database URL for all commands
 
 Error Handling:
@@ -70,11 +70,12 @@ def create_parser():
     populate_parser.add_argument(
         "--data-dir",
         help="Directory containing cranes data files "
-        "(if not provided, will use DATA_DIR from .env)",
+        "(if not provided, will use ATTACHMENTS_DIR from settings)",
     )
     populate_parser.add_argument(
         "--database-url",
-        help="Database URL (if not provided, will use DATABASE_URL from .env)",
+        help="Database URL (if not provided, will use DATABASE_URL from "
+        "settings)",
     )
 
     # Add dump-cranes command
@@ -89,7 +90,8 @@ def create_parser():
     )
     dump_cranes_parser.add_argument(
         "--database-url",
-        help="Database URL (if not provided, will use DATABASE_URL from .env)",
+        help="Database URL (if not provided, will use DATABASE_URL from "
+        "settings)",
     )
 
     # Add show-cranes-summary command
@@ -99,7 +101,8 @@ def create_parser():
     )
     show_summary_parser.add_argument(
         "--database-url",
-        help="Database URL (if not provided, will use DATABASE_URL from .env)",
+        help="Database URL (if not provided, will use DATABASE_URL from "
+        "settings)",
     )
 
     return parser
@@ -112,9 +115,7 @@ def handle_populate_db(args):
     Args:
         args: Parsed arguments containing data_dir and database_url options
     """
-    populate_db(
-        data_dir=args.data_dir, database_url=args.database_url
-    )
+    populate_db(data_dir=args.data_dir, database_url=args.database_url)
 
 
 def handle_dump_cranes(args):

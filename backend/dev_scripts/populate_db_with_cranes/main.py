@@ -26,7 +26,7 @@ Data Format Requirements:
     Empty values in LC table are marked with '-' or 0
 
     Attachments should be stored in
-        {DATA_DIR}/attachments/{chassis_type}/crane_data_directory
+        {ATTACHMENTS_DIR}/attachments/{chassis_type}/crane_data_directory
 
 Features:
     - Processes multiple Excel files in subdirectories
@@ -53,8 +53,8 @@ Usage:
     python manage.py populate-db --database-url postgresql://user:pass@localhost/cranes
 
 Environment Variables:
-    - DATA_DIR: Default directory containing
-        {DATA_DIR}/attachments/{chassis_type}/crane_data_directory
+    - ATTACHMENTS_DIR: Default directory containing
+        {ATTACHMENTS_DIR}/attachments/{chassis_type}/crane_data_directory
     - DATABASE_URL: Default database connection URL
 
 Error Handling:
@@ -65,43 +65,37 @@ Error Handling:
     - Logs all operations for debugging
 """
 
-import os
-from typing import Optional
+from pathlib import Path
+from typing import Optional, Union
 
-from dotenv import load_dotenv
+from app.settings import ATTACHMENTS_DIR, DATABASE_URL
 
 from .data_extractor import extract_cranes_data
 from .db_operations import write_cranes_to_db
 
-load_dotenv()
-
-# Configuration
-DATA_DIR = os.getenv("DATA_DIR")
-DATABASE_URL = os.getenv("DATABASE_URL")
-
 
 def populate_db(
-    data_dir: Optional[str] = None,
+    data_dir: Optional[Union[str, Path]] = None,
     database_url: Optional[str] = None,
 ) -> None:
     """
     Main entry point for populating the database with cranes data.
     Uses command line arguments if provided,
-    otherwise falls back to environment variables.
+    otherwise falls back to app settings.
 
     Args:
         data_dir: Directory containing cranes data files (optional)
         database_url: Database URL (optional)
     """
 
-    # Use provided args if available, otherwise fall back to env vars
-    final_data_dir = data_dir or os.getenv("DATA_DIR")
-    final_database_url = database_url or os.getenv("DATABASE_URL")
+    # Use provided args if available, otherwise fall back to settings
+    final_data_dir = data_dir or ATTACHMENTS_DIR
+    final_database_url = database_url or DATABASE_URL
 
     if not all([final_data_dir, final_database_url]):
         print(
-            "Error: DATA_DIR and DATABASE_URL must be provided either "
-            "via command line or in .env file"
+            "Error: ATTACHMENTS_DIR and DATABASE_URL must be provided either "
+            "via command line or in settings"
         )
         return
 
@@ -116,3 +110,8 @@ def populate_db(
     print("Successfully extracted cranes data")
 
     write_cranes_to_db(cranes_data_list, final_database_url)
+
+
+if __name__ == "__main__":
+    # Allow running directly for testing
+    populate_db()

@@ -48,16 +48,17 @@ Usage Examples:
 Environment Variables:
     The script uses the following environment variables
     (can be overridden with CLI args):
-    - DATA_DIR: Default directory containing cranes data files for import
+    - ATTACHMENTS_DIR: Default directory containing cranes data files for import
     - DATABASE_URL: Default database connection URL
 
 Examples with Environment Variables:
     # Set environment variables in .env file
-    DATA_DIR=/path/to/data/dir
+    ATTACHMENTS_DIR=/path/to/data/dir
     DATABASE_URL=postgresql://user:pass@localhost/cranes
 
     # Then use simple commands
-    python manage.py populate-db  # Uses DATA_DIR and DATABASE_URL from .env
+    python manage.py populate-db  # Uses ATTACHMENTS_DIR and
+                                  # DATABASE_URL from .env
     python manage.py show-cranes-summary  # Uses DATABASE_URL from .env
     python manage.py dump-cranes  # Uses DATABASE_URL from .env
 
