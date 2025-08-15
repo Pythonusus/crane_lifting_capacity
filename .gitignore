@@ -84,6 +84,9 @@ venv.bak/
 profile_default/
 ipython_config.py
 
+# Attachments
+backend/attachments/
+
 
 # ===== FRONTEND =====
 
