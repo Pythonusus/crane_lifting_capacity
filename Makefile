@@ -122,10 +122,35 @@ preview-frontend:
 start-frontend-dev:
 	cd frontend && npm run dev
 
+
+# ===== DOCKER =====
+
+# Build all services
+docker-build:
+	docker compose build
+
+# Start all services
+docker-start:
+	docker compose up
+
+# Stop all services
+docker-stop:
+	docker compose stop
+
+# Stop and remove all services
+docker-down:
+	docker compose down
+
+# Start sh session inside the container
+# Using sh instead of bash because alpine doesn't have bash by default
+docker-shell:
+	docker compose exec crane-lifting-capacity-production sh
+
 .PHONY: pre-commit-install pre-commit \
         install-backend-dev install-backend-prod lint-backend format-backend test-backend \
         start-backend-dev start-backend populate-db dump-cranes dump-cranes-with-attachments \
         dump-cranes-summary dump-cranes-custom \
         install-frontend-dev install-frontend-prod build-frontend lint-frontend \
         format-frontend test-frontend test-frontend-watch test-frontend-coverage \
-        preview-frontend start-frontend-dev
+        preview-frontend start-frontend-dev \
+				docker-build docker-start docker-stop docker-down docker-shell

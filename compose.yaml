@@ -1,0 +1,24 @@
+services:
+
+  crane-lifting-capacity-production:
+    image: crane-lifting-capacity-production
+
+    build:
+      context: .
+      target: crane-lifting-capacity-production
+
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+
+    # Bind mount data directory
+    # Format: host_path:container_path
+    volumes:
+      - ${DATA_DIR:-./backend/data}:/crane_lifting_capacity/backend/data
+
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+    restart: unless-stopped
