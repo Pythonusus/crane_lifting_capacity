@@ -56,12 +56,12 @@ dump-cranes-custom:
 
 # Run pytest on backend app with verbose test output
 test-backend:
-	cd backend && uv run pytest -vv
+	cd backend && DEVELOPMENT=true uv run pytest -vv
 
 # Run pytest on backend app with coverage report. Generate html and xml reports.
 # Also shows terminal report. No report is generated if tests fail.
 test-backend-coverage:
-	cd backend && uv run pytest \
+	cd backend && DEVELOPMENT=true uv run pytest \
 		--cov=app \
 		--cov-config=pyproject.toml \
 		--cov-report=html \

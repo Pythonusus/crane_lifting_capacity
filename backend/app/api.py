@@ -66,21 +66,21 @@ app.add_middleware(
     allow_headers=settings.CORS_HEADERS,
 )
 
-# Mount frontend static files
-app.mount(
-    "/dist",
-    StaticFiles(directory=settings.FRONTEND_DIST_PATH),
-    name="dist",
-)
+# Mount frontend static files only when not in development mode
+if not settings.DEVELOPMENT:
+    app.mount(
+        "/dist",
+        StaticFiles(directory=settings.FRONTEND_DIST_PATH),
+        name="dist",
+    )
 
-# Set up templates
-templates = Jinja2Templates(directory=settings.FRONTEND_DIST_PATH)
+    # Set up templates
+    templates = Jinja2Templates(directory=settings.FRONTEND_DIST_PATH)
 
-
-@app.get("/")
-def serve_frontend(request: Request):
-    """Serve the frontend app"""
-    return templates.TemplateResponse("index.html", {"request": request})
+    @app.get("/")
+    def serve_frontend(request: Request):
+        """Serve the frontend app"""
+        return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/health")

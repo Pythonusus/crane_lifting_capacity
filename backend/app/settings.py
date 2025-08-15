@@ -37,6 +37,9 @@ ATTACHMENTS_DIR = Path(os.getenv("ATTACHMENTS_DIR") or BASE_DIR / "attachments")
 # Port Settings
 PORT = int(os.getenv("PORT", "8000"))
 
+# Development mode
+DEVELOPMENT = os.getenv("DEVELOPMENT", "false").lower() == "true"
+
 
 # CORS Settings
 # DO NOT PASS CORS SETTINGS FROM ENV VARIABLES
