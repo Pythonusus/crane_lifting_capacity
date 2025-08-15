@@ -20,8 +20,23 @@ APP_VERSION = "0.1.0"
 # Absolute path to backend root directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Frontend dist/build directory
-FRONTEND_DIST_PATH = os.getenv("FRONTEND_DIST_PATH")
+# Frontend dist directory
+FRONTEND_DIST_PATH = (
+    os.getenv("FRONTEND_DIST_PATH") or BASE_DIR.parent / "frontend" / "dist"
+)
+
+# Database Settings
+DATABASE_URL = (
+    os.getenv("DATABASE_URL")
+    or f"sqlite:///{BASE_DIR / 'data' / 'app.db.sqlite3'}"
+)
+
+# Data directory
+ATTACHMENTS_DIR = Path(os.getenv("ATTACHMENTS_DIR") or BASE_DIR / "attachments")
+
+# Port Settings
+PORT = int(os.getenv("PORT", "8000"))
+
 
 # CORS Settings
 # DO NOT PASS CORS SETTINGS FROM ENV VARIABLES
@@ -29,9 +44,6 @@ CORS_ORIGINS = ["*"]
 CORS_CREDENTIALS = True
 CORS_METHODS = ["*"]
 CORS_HEADERS = ["*"]
-
-# Database Settings
-DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Supported image content types
 SUPPORTED_IMAGE_CONTENT_TYPES = [
