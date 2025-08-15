@@ -83,7 +83,7 @@ def serve_frontend(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.get("/healthcheck")
+@app.get("/health")
 def health():
     """Check application status"""
     return {
