@@ -13,7 +13,7 @@ from app.schemas.calc_responses import (
 
 
 class TestSingleSafetyFactorRequest:
-    def test_radius_not_in_lc_table(db_session, client, calc_accuracy):
+    def test_radius_not_in_lc_table(self, client, calc_accuracy):
         base_request = SafetyFactorCalcRequestBase(
             crane_name="Liebherr_LR1100",
             boom_len="14.0м",
@@ -62,7 +62,7 @@ class TestSingleSafetyFactorRequest:
             < calc_accuracy
         )
 
-    def test_radius_in_lc_table(db_session, client, calc_accuracy):
+    def test_radius_in_lc_table(self, client, calc_accuracy):
         base_request = SafetyFactorCalcRequestBase(
             crane_name="Liebherr_LTM1300-6.2",
             boom_len="43.9м",
@@ -113,7 +113,7 @@ class TestSingleSafetyFactorRequest:
 
 
 class TestSinglePayloadRequest:
-    def test_radius_not_in_lc_table(db_session, client, calc_accuracy):
+    def test_radius_not_in_lc_table(self, client, calc_accuracy):
         base_request = PayloadCalcRequestBase(
             crane_name="Liebherr_LR1200.1",
             boom_len="50м",
@@ -157,7 +157,7 @@ class TestSinglePayloadRequest:
         )
         assert abs(base_response.payload - expected_payload) < calc_accuracy
 
-    def test_radius_in_lc_table(db_session, client, calc_accuracy):
+    def test_radius_in_lc_table(self, client, calc_accuracy):
         base_request = PayloadCalcRequestBase(
             crane_name="Takraf_РДК400",
             boom_len="36.0м",

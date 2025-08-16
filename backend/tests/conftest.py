@@ -6,41 +6,13 @@ from typing import Generator
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 from app.api import app
-
-
-@pytest.fixture(scope="session")
-def engine():
-    """
-    Create a test database engine.
-    Engine is created once for the entire test session due to
-    scope="session".
-    """
-    test_db_path = Path(__file__).parent / "test.db"
-    return create_engine(f"sqlite:///{test_db_path}")
-
-
-@pytest.fixture()
-def db_session(engine):  # Fix dependency
-    """Create a fresh database session for each test."""
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    try:
-        yield session
-    finally:
-        session.rollback()  # Rollback any changes made during the test
-        session.close()
 
 
 @pytest.fixture
 def client(monkeypatch) -> Generator[TestClient, None, None]:
     """Create a test client for the FastAPI app."""
-
-    monkeypatch.setenv("DATABASE_URL", "sqlite:///./test.db")
-    monkeypatch.setenv("MIN_SAFETY_FACTOR", "1.0")
 
     with TestClient(app) as c:
         yield c

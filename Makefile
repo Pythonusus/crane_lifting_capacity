@@ -54,14 +54,18 @@ show-cranes-summary:
 dump-cranes-custom:
 	cd backend && uv run python manage.py dump-cranes --output-dir "$(dir)"
 
-# Run pytest on backend app with verbose test output
+# Run pytest on backend app with verbose test output and showing all prints.
+# DEVELOPMENT=true is needed to avoid mounting frontend dist directory.
+# DATABASE_URL is set to use a test database in the tests directory.
 test-backend:
-	cd backend && DEVELOPMENT=true uv run pytest -vv
+	cd backend && DEVELOPMENT=true DATABASE_URL=sqlite:///$(shell pwd)/backend/tests/test.db uv run pytest -v -s
 
 # Run pytest on backend app with coverage report. Generate html and xml reports.
 # Also shows terminal report. No report is generated if tests fail.
+# DEVELOPMENT=true is needed to avoid mounting frontend dist directory.
+# DATABASE_URL is set to use a test database in the tests directory.
 test-backend-coverage:
-	cd backend && DEVELOPMENT=true uv run pytest \
+	cd backend && DEVELOPMENT=true DATABASE_URL=sqlite:///$(shell pwd)/backend/tests/test.db uv run pytest -s \
 		--cov=app \
 		--cov-config=pyproject.toml \
 		--cov-report=html \

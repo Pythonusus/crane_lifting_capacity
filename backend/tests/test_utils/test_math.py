@@ -7,7 +7,7 @@ from utils.math import (
 )
 
 
-def test_get_nearest_lesser(cranes_test_data):
+def test_get_nearest_lesser():
     num_list = [5, 15, 16, 17, 18, 19, 20]
     assert get_nearest_lesser(16, num_list) == 15
     assert get_nearest_lesser(15.5, num_list) == 15
@@ -15,7 +15,7 @@ def test_get_nearest_lesser(cranes_test_data):
     assert get_nearest_lesser(5, num_list) is None
 
 
-def test_get_nearest_greater(cranes_test_data):
+def test_get_nearest_greater():
     num_list = [10, 12, 14, 16, 18, 20, 50]
     assert get_nearest_greater(10.32, num_list) == 12
     assert get_nearest_greater(16, num_list) == 18
