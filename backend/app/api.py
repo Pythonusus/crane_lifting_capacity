@@ -7,16 +7,23 @@ The API provides endpoints for:
 - Lifting capacity calculations (payload and safety factor)
 - Static file serving for frontend
 - Health monitoring
+- Prometheus metrics
+- API documentation
 
 API Structure:
-├── /                    # Frontend application
-├── /healthcheck        # Health monitoring
+├── /                   # Serve frontend
+├── /health             # Health monitoring
 ├── /process            # Lifting capacity calculations
-├── /api/cranes         # Crane data endpoints
+├── /api/cranes/{crane_name}  # Get single crane by name
 ├── /api/chassis-types  # Chassis type enumeration
 ├── /api/manufacturers  # Manufacturer listing
+├── /api/cranes         # Filter and retrieve cranes with pagination
+├── /api/cranes/count   # Get filtered cranes count
 ├── /api/sort-options   # Sorting options
-└── /api/attachments   # Attachment serving
+├── /api/attachments/{attachment_id}  # Serve crane attachments
+├── /docs               # Interactive API documentation (Swagger UI)
+├── /redoc              # Alternative API documentation (ReDoc)
+└── /metrics            # Prometheus metrics endpoint
 """
 
 from contextlib import asynccontextmanager
@@ -80,6 +87,9 @@ app.add_middleware(
     allow_headers=settings.CORS_HEADERS,
 )
 
+# Add Prometheus metrics endpoint
+Instrumentator().instrument(app).expose(app)
+
 # Mount frontend static files only when not in development mode
 if not settings.DEVELOPMENT:
     app.mount(
@@ -130,21 +140,35 @@ def process(
     )
 
 
-@app.post("/api/cranes/count")
-def get_cranes_count(
-    filters: CraneFilterRequest, db: Session = Depends(get_db)
-):
+@app.get("/api/cranes/{crane_name}")
+def get_crane_by_name(crane_name: str, db: Session = Depends(get_db)):
     """
-    Get the total count of cranes matching the provided filters.
+    Get a single crane by name.
 
     Args:
-        filters: Dictionary containing filter criteria.
+        crane_name: Name of the crane to retrieve.
 
     Returns:
-        Total count of cranes matching the filters.
+        The crane object.
     """
-    cranes_count = get_filtered_cranes_count(db, filters)
-    return {"cranes_count": cranes_count}
+    crane_db_model = get_crane_db_model_by_name(db, crane_name)
+    if not crane_db_model:
+        raise HTTPException(status_code=404, detail="Crane not found")
+
+    return Crane.model_validate(crane_db_model)
+
+
+@app.get("/api/chassis-types")
+def get_chassis_types():
+    """Get all available crane chassis types"""
+    return ChassisTypesResponse()
+
+
+@app.get("/api/manufacturers")
+def get_manufacturers(db: Session = Depends(get_db)):
+    """Get all available crane manufacturers"""
+    manufacturers = get_manufacturers_from_db(db)
+    return {"manufacturers": manufacturers}
 
 
 @app.post("/api/cranes")
@@ -179,40 +203,26 @@ def get_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
     )
 
 
-@app.get("/api/cranes/{crane_name}")
-def get_crane_by_name(crane_name: str, db: Session = Depends(get_db)):
+@app.post("/api/cranes/count")
+def get_cranes_count(
+    filters: CraneFilterRequest, db: Session = Depends(get_db)
+):
     """
-    Get a single crane by name.
+    Get the total count of cranes matching the provided filters.
 
     Args:
-        crane_name: Name of the crane to retrieve.
+        filters: Dictionary containing filter criteria.
 
     Returns:
-        The crane object.
+        Total count of cranes matching the filters.
     """
-    crane_db_model = get_crane_db_model_by_name(db, crane_name)
-    if not crane_db_model:
-        raise HTTPException(status_code=404, detail="Crane not found")
-
-    return Crane.model_validate(crane_db_model)
-
-
-@app.get("/api/chassis-types")
-def get_chassis_types():
-    """Get all available chassis types"""
-    return ChassisTypesResponse()
-
-
-@app.get("/api/manufacturers")
-def get_manufacturers(db: Session = Depends(get_db)):
-    """Get all available manufacturers"""
-    manufacturers = get_manufacturers_from_db(db)
-    return {"manufacturers": manufacturers}
+    cranes_count = get_filtered_cranes_count(db, filters)
+    return {"cranes_count": cranes_count}
 
 
 @app.get("/api/sort-options")
 def get_sort_options():
-    """Get all available sorting options"""
+    """Get all available crane sorting options"""
     return SortOptionsResponse()
 
 
@@ -222,7 +232,3 @@ def serve_attachment_by_id(attachment_id: int, db: Session = Depends(get_db)):
     Serve a crane attachment by its ID.
     """
     return serve_attachment(attachment_id, db)
-
-
-# Add Prometheus metrics endpoint
-Instrumentator().instrument(app).expose(app)
