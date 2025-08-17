@@ -7,4 +7,4 @@ from Excel files and their associated attachments.
 
 from .main import populate_db
 
-__all__ = ['main']
+__all__ = ['populate_db']
