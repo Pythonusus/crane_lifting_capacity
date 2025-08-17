@@ -49,9 +49,13 @@ populate-db:
 dump-cranes:
 	cd backend && uv run python manage.py dump-cranes
 
-# Print cranes summary only (no JSON files)
-show-cranes-summary:
+# Print prod cranes summary only (no JSON files)
+show-prod-cranes-summary:
 	cd backend && uv run python manage.py show-cranes-summary
+
+# Print test cranes summary only (no JSON files)
+show-test-cranes-summary:
+	cd backend && uv run python manage.py show-cranes-summary --database-url sqlite:///$(shell pwd)/backend/tests/test.db
 
 # Dump cranes data to custom directory
 dump-cranes-custom:
@@ -157,7 +161,7 @@ docker-shell:
 .PHONY: pre-commit-install pre-commit \
         install-backend-dev install-backend-prod lint-backend format-backend test-backend \
         start-backend-dev start-backend populate-db dump-cranes dump-cranes-with-attachments \
-        dump-cranes-summary dump-cranes-custom \
+        dump-cranes-summary dump-cranes-custom show-prod-cranes-summary show-test-cranes-summary \
         install-frontend-dev install-frontend-prod build-frontend lint-frontend \
         format-frontend test-frontend test-frontend-watch test-frontend-coverage \
         preview-frontend start-frontend-dev \
