@@ -26,6 +26,7 @@ API Structure:
 └── /metrics            # Prometheus metrics endpoint
 """
 
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException, Request
@@ -66,6 +67,7 @@ from app.services.lifting_capacity import (
 async def lifespan(app: FastAPI):
     """Setup logging on startup."""
     from app.logging_config import setup_logging
+
     setup_logging()
     yield
 
@@ -128,12 +130,26 @@ def process(
     - Payload calculation (given safety factor)
     - Safety factor calculation (given payload)
     """
+    logger = logging.getLogger(__name__)
+
+    # Log the request
     if payload_request:
-        return calc_payload_from_safety_factor(db, payload_request)
+        logger.info(
+            f"Processing payload calculation request: {payload_request}"
+        )
+        result = calc_payload_from_safety_factor(db, payload_request)
+        logger.info(f"Payload calculation result: {result}")
+        return result
 
     if safety_request:
-        return calc_safety_factor_from_payload(db, safety_request)
+        logger.info(
+            f"Processing safety factor calculation request: {safety_request}"
+        )
+        result = calc_safety_factor_from_payload(db, safety_request)
+        logger.info(f"Safety factor calculation result: {result}")
+        return result
 
+    logger.error("No valid calculation request provided")
     raise HTTPException(
         status_code=400,
         detail="Either payload or safety factor calc request must be provided",

@@ -23,10 +23,8 @@ class JSONFormatter(logging.Formatter):
         return json.dumps(log_entry, indent=2)
 
 
-# Logging configuration dictionary for uvicorn server
-# This follows Python's dictConfig format:
-# https://docs.python.org/3/library/logging.config.html#dictionary-schema-details
-LOG_CONFIG = {
+# Base logging configuration shared between dev and prod
+BASE_LOG_CONFIG = {
     # Version of the logging configuration schema (always 1)
     "version": 1,
     # Don't disable existing loggers from other parts of the application
@@ -89,24 +87,65 @@ LOG_CONFIG = {
             "formatter": "json",
         },
     },
-    # LOGGERS: Configure specific loggers and connect them to handlers
+}
+
+# Development logging configuration - console only
+DEV_LOG_CONFIG = {
+    **BASE_LOG_CONFIG,
     "loggers": {
         # Main uvicorn logger - handles general server messages
         "uvicorn": {
-            # Send logs to both console (with colors) and file (as JSON)
-            "handlers": ["console", "file"],
-            # Only log INFO level and above (INFO, WARNING, ERROR, CRITICAL)
+            "handlers": ["console"],
             "level": "INFO",
-            # Don't pass logs up to parent loggers (prevents duplication)
             "propagate": False,
         },
         # Uvicorn access logger - handles HTTP request/response logs
         "uvicorn.access": {
-            # Send to special access console format AND to file as JSON
-            "handlers": ["console_access", "file"],
-            # Also INFO level and above
+            "handlers": ["console_access"],
             "level": "INFO",
-            # Don't propagate to prevent duplicate logs
+            "propagate": False,
+        },
+        # API module logger - handles application business logic logs
+        "app.api": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # Root app logger - handles all other app modules
+        "app": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
+
+# Production logging configuration - console + file
+PROD_LOG_CONFIG = {
+    **BASE_LOG_CONFIG,
+    "loggers": {
+        # Main uvicorn logger - handles general server messages
+        "uvicorn": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # Uvicorn access logger - handles HTTP request/response logs
+        "uvicorn.access": {
+            "handlers": ["console_access", "file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # API module logger - handles application business logic logs
+        "app.api": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # Root app logger - handles all other app modules
+        "app": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
             "propagate": False,
         },
     },
@@ -148,8 +187,9 @@ def setup_logging():
     if not settings.DEVELOPMENT:
         # Production mode: setup file logging + console logging
         ensure_logs_directory()
-        logging.config.dictConfig(LOG_CONFIG)
+        logging.config.dictConfig(PROD_LOG_CONFIG)
         log_startup_settings()
     else:
-        # Development mode: only show settings, no file logging
+        # Development mode: only console logging
+        logging.config.dictConfig(DEV_LOG_CONFIG)
         log_startup_settings()
