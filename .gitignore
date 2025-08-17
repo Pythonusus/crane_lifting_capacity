@@ -17,6 +17,7 @@
 *.git/
 
 # Logs
+app_logs/
 logs/
 *.log
 
@@ -85,7 +86,7 @@ profile_default/
 ipython_config.py
 
 # Attachments
-backend/attachments/
+/attachments
 
 
 # ===== FRONTEND =====

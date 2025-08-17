@@ -101,5 +101,6 @@ frontend/jest.setup.js
 **/*.temp
 
 # Application logs
+**/app_logs/
 **/logs/
 **/*.log

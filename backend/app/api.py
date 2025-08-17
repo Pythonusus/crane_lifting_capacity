@@ -19,6 +19,8 @@ API Structure:
 └── /api/attachments   # Attachment serving
 """
 
+from contextlib import asynccontextmanager
+
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -51,18 +53,21 @@ from app.services.lifting_capacity import (
     calc_safety_factor_from_payload,
 )
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Setup logging on startup."""
+    from app.logging_config import setup_logging
+    setup_logging()
+    yield
+
+
 app = FastAPI(
     title=settings.APP_TITLE,
     description=settings.APP_DESCRIPTION,
     version=settings.APP_VERSION,
+    lifespan=lifespan,
 )
-
-
-@app.on_event("startup")
-def startup_event():
-    """Setup logging after app startup."""
-    from app.logging_config import setup_logging
-    setup_logging()
 
 
 # Configure CORS

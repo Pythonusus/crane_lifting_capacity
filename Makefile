@@ -1,5 +1,8 @@
 # All commands are assumed to be run from the root of the project
 
+include .env
+export $(shell sed 's/=.*//' .env)
+
 # ===== COMMON =====
 
 # Install pre-commit hooks
@@ -135,6 +138,7 @@ docker-build:
 
 # Start all services
 docker-start:
+	mkdir -p $${LOGS_DIR:-./app_logs} && chmod 777 $${LOGS_DIR:-./app_logs}
 	docker compose up
 
 # Stop all services

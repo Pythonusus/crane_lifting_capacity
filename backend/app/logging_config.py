@@ -29,21 +29,17 @@ class JSONFormatter(logging.Formatter):
 LOG_CONFIG = {
     # Version of the logging configuration schema (always 1)
     "version": 1,
-
     # Don't disable existing loggers from other parts of the application
     "disable_existing_loggers": False,
-
     # FORMATTERS: Define how log messages should look like
     "formatters": {
         # Default formatter for general server messages (startup, shutdown, etc)
         "default": {
             # Use uvicorn's built-in formatter class
             "()": "uvicorn.logging.DefaultFormatter",
-
             "fmt": "%(levelprefix)s %(message)s",
             "use_colors": None,
         },
-
         # Formatter specifically for HTTP access logs (requests/responses)
         "access": {
             # Use uvicorn's built-in access formatter
@@ -53,13 +49,11 @@ LOG_CONFIG = {
                 '"%(request_line)s" %(status_code)s'
             ),
         },
-
         # Custom JSON formatter for file logging
         "json": {
             "()": JSONFormatter,
         },
     },
-
     # HANDLERS: Define WHERE logs should go (console, file, etc.)
     "handlers": {
         # Handler for general server messages to console
@@ -71,7 +65,6 @@ LOG_CONFIG = {
             # Use the "default" formatter defined above
             "formatter": "default",
         },
-
         # Handler for HTTP access logs to console
         "console_access": {
             # Also a stream handler
@@ -81,7 +74,6 @@ LOG_CONFIG = {
             # Use the "access" formatter for HTTP request format
             "formatter": "access",
         },
-
         # Handler for ALL logs to file (both server and access logs)
         "file": {
             # RotatingFileHandler = creates new files when size limit reached
@@ -97,7 +89,6 @@ LOG_CONFIG = {
             "formatter": "json",
         },
     },
-
     # LOGGERS: Configure specific loggers and connect them to handlers
     "loggers": {
         # Main uvicorn logger - handles general server messages
@@ -109,7 +100,6 @@ LOG_CONFIG = {
             # Don't pass logs up to parent loggers (prevents duplication)
             "propagate": False,
         },
-
         # Uvicorn access logger - handles HTTP request/response logs
         "uvicorn.access": {
             # Send to special access console format AND to file as JSON
@@ -125,8 +115,7 @@ LOG_CONFIG = {
 
 def ensure_logs_directory():
     """Create logs directory if it doesn't exist."""
-    logs_dir = Path("../logs")
-    logs_dir.mkdir(exist_ok=True)
+    Path("../logs").mkdir(exist_ok=True)
 
 
 def get_safe_settings_for_logging():
@@ -138,7 +127,7 @@ def get_safe_settings_for_logging():
         "PORT": settings.PORT,
         "DEVELOPMENT": settings.DEVELOPMENT,
         "SUPPORTED_IMAGE_CONTENT_TYPES": settings.SUPPORTED_IMAGE_CONTENT_TYPES,
-        "DEFAULT_PAGE_SIZE": settings.DEFAULT_PAGE_SIZE,
+        "PAGINATION_SIZE": settings.PAGINATION_SIZE,
         "API_DOCS_URL": f"http://127.0.0.1:{settings.PORT}/docs",
     }
 

@@ -64,10 +64,6 @@ COPY --from=backend-builder /app/backend/ ./backend/
 # Copy frontend dist folder from builder image
 COPY --from=frontend-builder /app/frontend/dist/ ./frontend/dist/
 
-# Directory that will be mounted as a volume via docker-compose
-# Used to access prepopulated sqlite database
-RUN mkdir -p backend/data
-
 # Expose port (can be set with PORT environment variable)
 # Default to 8000
 EXPOSE ${PORT:-8000}
@@ -79,6 +75,13 @@ RUN addgroup -g 1001 -S appgroup && \
 # Change ownership of app directory
 RUN chown -R appuser:appgroup /crane_lifting_capacity
 USER appuser
+
+# Directory that will be mounted as a volume via docker-compose
+# Used to access prepopulated sqlite database
+RUN mkdir -p data
+
+# Create logs directory that will be mounted as a volume with 777 permissions
+RUN mkdir -p logs && chmod 777 logs
 
 # Run production server
 CMD cd backend && uv run main.py
