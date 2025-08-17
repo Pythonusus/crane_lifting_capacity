@@ -25,6 +25,7 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from prometheus_fastapi_instrumentator import Instrumentator
 from sqlalchemy.orm import Session
 
 import app.settings as settings
@@ -221,3 +222,7 @@ def serve_attachment_by_id(attachment_id: int, db: Session = Depends(get_db)):
     Serve a crane attachment by its ID.
     """
     return serve_attachment(attachment_id, db)
+
+
+# Add Prometheus metrics endpoint
+Instrumentator().instrument(app).expose(app)
