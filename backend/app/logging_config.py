@@ -128,7 +128,6 @@ def get_safe_settings_for_logging():
         "DEVELOPMENT": settings.DEVELOPMENT,
         "SUPPORTED_IMAGE_CONTENT_TYPES": settings.SUPPORTED_IMAGE_CONTENT_TYPES,
         "PAGINATION_SIZE": settings.PAGINATION_SIZE,
-        "API_DOCS_URL": f"http://127.0.0.1:{settings.PORT}/docs",
     }
 
 
