@@ -27,6 +27,9 @@ def calc_lc_base(db: Session, request: LcCalcRequestBase) -> LcCalcResponseBase:
     based on the boom length and radius.
     """
     crane = get_crane_db_model_by_name(db, request.crane_name)
+    if not crane:
+        raise ValueError(f"Crane '{request.crane_name}' not found")
+
     lc_table = crane.lc_table.get(request.boom_len)
     if lc_table is None:
         raise ValueError(
@@ -42,10 +45,13 @@ def calc_lc_base(db: Session, request: LcCalcRequestBase) -> LcCalcResponseBase:
 
     radius = request.radius
     if lc_table.get(radius) is not None:
+        # Direct match found
+        lifting_capacity = lc_table.get(radius)
         return LcCalcResponseBase(
-            request=request, lifting_capacity=lc_table.get(radius)
+            request=request, lifting_capacity=lifting_capacity
         )
 
+    # Need interpolation
     nearest_lesser = get_nearest_lesser(float(radius), lc_table_keys_floats)
     nearest_greater = get_nearest_greater(float(radius), lc_table_keys_floats)
 
