@@ -1,10 +1,16 @@
 import uvicorn
 
-from app.settings import PORT
+from app.settings import DEVELOPMENT, PORT
 
 
 def main():
-    uvicorn.run("app.api:app", host="0.0.0.0", port=PORT, reload=True)
+    # Start the FastAPI application with uvicorn
+    uvicorn.run(
+        "app.api:app",
+        host="0.0.0.0",
+        port=PORT,
+        reload=DEVELOPMENT,  # Auto-reload only in development mode
+    )
 
 
 if __name__ == "__main__":
