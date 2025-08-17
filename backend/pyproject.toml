@@ -38,10 +38,11 @@ exclude = [
     ".venv",
     "__pycache__",
     "*.pyc",
-    "__init__.py",
-    "asgi.py",
-    "wsgi.py",
-    "*/migrations/*",
+    "migrations",
+    "migrations/*",
+    "*.egg-info",
+    "build",
+    "dist",
 ]
 
 [tool.ruff.lint]

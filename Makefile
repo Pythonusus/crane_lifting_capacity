@@ -26,11 +26,11 @@ install-backend-prod:
 
 # Run ruff linter on backend app with config from pyproject.toml
 lint-backend:
-	cd backend && uv run ruff check --config pyproject.toml app
+	cd backend && uv run ruff check --config pyproject.toml .
 
 # Format backend app with config from pyproject.toml
 format-backend:
-	cd backend && uv run ruff check --config pyproject.toml --fix app
+	cd backend && uv run ruff check --config pyproject.toml --fix .
 
 # Create a new migration
 # Usage: make create-migration m="Add new column to table"
