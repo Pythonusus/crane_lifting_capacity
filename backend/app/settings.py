@@ -1,8 +1,5 @@
 """
 Settings for the backend application.
-
-FRONTEND_DIST_URL and DATABASE_URL are loaded from environment variables.
-See .env.example for more information.
 """
 
 import os
@@ -14,39 +11,27 @@ load_dotenv()
 
 # APP Settings
 APP_TITLE = "Crane Lifting Capacity"
-APP_DESCRIPTION = "FastAPI backend for the crane_lifting_capacity application"
+APP_DESCRIPTION = "Lifting capacity calculator for cranes"
 APP_VERSION = "0.1.0"
 
-# Absolute path to backend root directory
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Frontend dist directory
-FRONTEND_DIST_PATH = (
-    os.getenv("FRONTEND_DIST_PATH") or BASE_DIR.parent / "frontend" / "dist"
-)
-
-# Database Settings
-DATABASE_URL = (
-    os.getenv("DATABASE_URL")
-    or f"sqlite:///{BASE_DIR / 'data' / 'app.db.sqlite3'}"
-)
-
-# Data directory
-ATTACHMENTS_DIR = Path(os.getenv("ATTACHMENTS_DIR") or BASE_DIR / "attachments")
+# Mode in which the application is running
+# If DEVELOPMENT is not set, it defaults to false
+DEVELOPMENT = os.getenv("DEVELOPMENT", "false").lower() == "true"
 
 # Port Settings
 PORT = int(os.getenv("PORT", "8000"))
 
-# Development mode
-DEVELOPMENT = os.getenv("DEVELOPMENT", "false").lower() == "true"
+# Absolute path to backend root directory
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Absolute path to project root directory
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 # CORS Settings
-# DO NOT PASS CORS SETTINGS FROM ENV VARIABLES
-CORS_ORIGINS = ["*"]
-CORS_CREDENTIALS = True
-CORS_METHODS = ["*"]
-CORS_HEADERS = ["*"]
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
+CORS_CREDENTIALS = os.getenv("CORS_CREDENTIALS", "true").lower() == "true"
+CORS_METHODS = os.getenv("CORS_METHODS", "*").split(",")
+CORS_HEADERS = os.getenv("CORS_HEADERS", "*").split(",")
 
 # Supported image content types
 SUPPORTED_IMAGE_CONTENT_TYPES = [
@@ -58,4 +43,15 @@ SUPPORTED_IMAGE_CONTENT_TYPES = [
 ]
 
 # Pagination Settings
-DEFAULT_PAGE_SIZE = 15
+PAGINATION_SIZE = os.getenv("PAGINATION_SIZE", "15")
+
+# Frontend dist directory (used to mount frontend in production)
+FRONTEND_DIST_PATH = PROJECT_ROOT / "frontend" / "dist"
+
+# Database URL for prepopulated app.db.sqlite3 database
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", f"sqlite:///{PROJECT_ROOT / 'data' / 'app.db.sqlite3'}"
+)
+
+# Directory containing parsable attachments (used by dev_scripts)
+ATTACHMENTS_DIR = PROJECT_ROOT / "attachments"

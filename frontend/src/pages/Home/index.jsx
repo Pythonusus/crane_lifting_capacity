@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { fetchFilteredCranes } from '@/src/api/cranes'
 import CranesFilterSidebar from '@/src/components/CranesFilterSidebar'
 import CranesList from '@/src/components/CranesList'
-import { DEFAULT_PAGE_SIZE } from '@/src/config'
+import { PAGINATION_SIZE } from '@/src/config'
 import './Home.css'
 
 /**
@@ -49,11 +49,7 @@ const Home = () => {
 
       try {
         // Fetch filtered and sorted crane data from backend API with pagination reset
-        const response = await fetchFilteredCranes(
-          filters,
-          0,
-          DEFAULT_PAGE_SIZE,
-        )
+        const response = await fetchFilteredCranes(filters, 0, PAGINATION_SIZE)
 
         // Update state with crane data (already sorted by backend) and pagination info
         setCranes(response.cranes)
@@ -114,7 +110,7 @@ const Home = () => {
       const response = await fetchFilteredCranes(
         filters,
         cranes.length,
-        DEFAULT_PAGE_SIZE,
+        PAGINATION_SIZE,
       )
 
       // Append new cranes to existing list (already sorted by backend)

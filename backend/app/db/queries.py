@@ -11,7 +11,7 @@ from app.db.filters import (
 )
 from app.db.models import CraneBinaryAttachmentDbModel, CraneDbModel
 from app.schemas.cranes import CraneFilterRequest
-from app.settings import DEFAULT_PAGE_SIZE
+from app.settings import PAGINATION_SIZE
 
 
 def get_crane_db_model_by_name(
@@ -163,7 +163,7 @@ def get_cranes_db_models_by_filters(
 
     # Apply offset-based pagination
     offset = filters.offset or 0 if filters else 0
-    limit = filters.limit or DEFAULT_PAGE_SIZE if filters else DEFAULT_PAGE_SIZE
+    limit = filters.limit or PAGINATION_SIZE if filters else PAGINATION_SIZE
 
     return sorted_query.offset(offset).limit(limit).all()
 

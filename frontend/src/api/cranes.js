@@ -3,14 +3,14 @@
  * @module api/cranes
  */
 
-import { DEFAULT_PAGE_SIZE } from '@/src/config'
+import { PAGINATION_SIZE } from '@/src/config'
 import { formatFormValue } from '@/src/utilities/formatters'
 
 /**
  * Fetches filtered cranes from the backend with pagination support
  * @param {Object} [filters={}] - Criteria to filter cranes
  * @param {number} [offset=0] - Number of items to skip (for pagination)
- * @param {number} [limit=DEFAULT_PAGE_SIZE] - Number of items to return
+ * @param {number} [limit=PAGINATION_SIZE] - Number of items to return
  * @returns {Promise<Object>} Object containing cranes array and pagination info
  *
  * @example
@@ -35,7 +35,7 @@ import { formatFormValue } from '@/src/utilities/formatters'
 export const fetchFilteredCranes = async (
   filters = {},
   offset = 0,
-  limit = DEFAULT_PAGE_SIZE,
+  limit = PAGINATION_SIZE,
 ) => {
   // Clean up filters: convert empty strings to null
   const cleanedFilters = {
