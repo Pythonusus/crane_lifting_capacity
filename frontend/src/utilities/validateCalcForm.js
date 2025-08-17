@@ -184,14 +184,14 @@ export const validateSafetyFactorCalcForm = (formData, crane) => {
 /**
  * Validates the entire crane calculation form (legacy function for backward compatibility)
  * @param {Object} formData - The form data object
- * @param {boolean} isChecked - Whether calculation mode is "by safety factor" (true) or "by given load" (false)
+ * @param {string} calculationMode - Calculation mode ('payload' or 'safety_factor')
  * @param {Object} crane - The crane object containing radius data
  * @returns {Object} Object containing validation errors
  */
-export const validateCraneCalcForm = (formData, isChecked, crane) => {
-  // isChecked = true means "by safety factor" (payload calculation)
-  // isChecked = false means "by given load" (safety factor calculation)
-  return isChecked
+export const validateCraneCalcForm = (formData, calculationMode, crane) => {
+  // calculationMode = 'payload' means "by safety factor" (payload calculation)
+  // calculationMode = 'safety_factor' means "by given load" (safety factor calculation)
+  return calculationMode === 'payload'
     ? validatePayloadCalcForm(formData, crane)
     : validateSafetyFactorCalcForm(formData, crane)
 }

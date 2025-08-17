@@ -1,34 +1,20 @@
 from pydantic import BaseModel
 
 from app.schemas.calc_requests import (
-    LcCalcRequestBase,
     PayloadCalcRequest,
-    PayloadCalcRequestBase,
     SafetyFactorCalcRequest,
-    SafetyFactorCalcRequestBase,
 )
 
 
-class LcCalcResponseBase(BaseModel):
-    request: LcCalcRequestBase
+class LcCalcResponse(BaseModel):
     lifting_capacity: float
 
 
-class SafetyFactorCalcResponseBase(LcCalcResponseBase):
-    request: SafetyFactorCalcRequestBase
+class SafetyFactorCalcResponse(LcCalcResponse):
+    request: SafetyFactorCalcRequest
     safety_factor: float
 
 
-class PayloadCalcResponseBase(LcCalcResponseBase):
-    request: PayloadCalcRequestBase
-    payload: float
-
-
-class PayloadCalcResponse(BaseModel):
+class PayloadCalcResponse(LcCalcResponse):
     request: PayloadCalcRequest
-    base_responses: list[PayloadCalcResponseBase]
-
-
-class SafetyFactorCalcResponse(BaseModel):
-    request: SafetyFactorCalcRequest
-    base_responses: list[SafetyFactorCalcResponseBase]
+    payload: float

@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import {
   calculatePayload,
   calculateSafetyFactor,
-  createPayloadBaseRequest,
-  createSafetyFactorBaseRequest,
+  createPayloadRequest,
+  createSafetyFactorRequest,
 } from '@/src/api/calcRequests'
 import useCalculationHistory from '@/src/hooks/useCalculationHistory'
 import {
@@ -27,14 +27,14 @@ const popupTimeout = 5000
  * @param {boolean} initialMode - Optional initial calculation mode
  * @param {Object} initialResult - Optional initial calculation result for pre-filling
  * @returns {Object} Form state and handlers
- * @returns {boolean} returns.isChecked - Current calculation mode (true = safety factor, false = payload)
- * @returns {Function} returns.setIsChecked - Function to change calculation mode (receives boolean)
+ * @returns {string} returns.calculationMode - Current calculation mode ('payload' or 'safety_factor')
+ * @returns {Function} returns.setCalculationMode - Function to change calculation mode (receives string)
  * @returns {Object} returns.formData - Current form field values
  * @returns {string} returns.formData.boomLength - Selected boom length configuration
  * @returns {string} returns.formData.boomRadius - Boom radius value
  * @returns {string} returns.formData.equipmentWeight - Equipment weight value (optional)
- * @returns {string} returns.formData.payload - Payload value (when calculating by payload)
- * @returns {string} returns.formData.safetyFactor - Safety factor value (when calculating by safety factor)
+ * @returns {string} returns.formData.payload - Payload value (when calculating safety factor)
+ * @returns {string} returns.formData.safetyFactor - Safety factor value (when calculating payload/max load)
  * @returns {Object} returns.errors - Error messages for popups
  * @returns {Object} returns.validationErrors - Validation errors for field styling
  * @returns {boolean} returns.isSubmitting - Loading state during calculation
@@ -51,7 +51,9 @@ const useCalculationForm = (
 ) => {
   const { addToHistory } = useCalculationHistory()
 
-  const [isChecked, setIsChecked] = useState(initialMode)
+  const [calculationMode, setCalculationMode] = useState(
+    initialMode || 'safety_factor',
+  )
   const [formData, setFormData] = useState(() => {
     const defaultFormData = {
       boomLength: '',
@@ -75,10 +77,12 @@ const useCalculationForm = (
   const [isSubmitting, setIsSubmitting] = useState(false)
   // Store separate results for each calculation mode
   const [payloadCalculationResult, setPayloadCalculationResult] = useState(
-    initialMode && initialResult ? initialResult : null,
+    initialMode === 'payload' && initialResult ? initialResult : null,
   )
   const [safetyFactorCalculationResult, setSafetyFactorCalculationResult] =
-    useState(!initialMode && initialResult ? initialResult : null)
+    useState(
+      initialMode === 'safety_factor' && initialResult ? initialResult : null,
+    )
 
   // Auto-close popups after 5 seconds, but keep field styling
   useEffect(() => {
@@ -109,12 +113,13 @@ const useCalculationForm = (
     e.preventDefault()
 
     // Use the appropriate validation function based on calculation mode
-    const validationErrors = isChecked
-      ? validatePayloadCalcForm(formData, crane)
-      : validateSafetyFactorCalcForm(formData, crane)
+    const validationErrors =
+      calculationMode === 'payload'
+        ? validatePayloadCalcForm(formData, crane)
+        : validateSafetyFactorCalcForm(formData, crane)
 
-    setErrors(validationErrors) // For popups
-    setValidationErrors(validationErrors) // For field styling
+    setErrors(validationErrors)
+    setValidationErrors(validationErrors)
 
     if (!isFormValid(validationErrors)) {
       return
@@ -125,9 +130,9 @@ const useCalculationForm = (
     try {
       let result
 
-      if (isChecked) {
-        // Calculate payload using safety factor
-        const baseRequest = createPayloadBaseRequest(
+      if (calculationMode === 'payload') {
+        // Calculate payload (maximum load) using safety factor
+        const baseRequest = createPayloadRequest(
           crane.name,
           formData.boomLength,
           formData.boomRadius,
@@ -149,8 +154,8 @@ const useCalculationForm = (
           result: result,
         })
       } else {
-        // Calculate safety factor using payload
-        const baseRequest = createSafetyFactorBaseRequest(
+        // Calculate safety factor using given payload
+        const baseRequest = createSafetyFactorRequest(
           crane.name,
           formData.boomLength,
           formData.boomRadius,
@@ -198,13 +203,14 @@ const useCalculationForm = (
   }
 
   // Return the appropriate result based on current mode
-  const calculationResult = isChecked
-    ? payloadCalculationResult
-    : safetyFactorCalculationResult
+  const calculationResult =
+    calculationMode === 'payload'
+      ? payloadCalculationResult
+      : safetyFactorCalculationResult
 
   return {
-    isChecked,
-    setIsChecked,
+    calculationMode,
+    setCalculationMode,
     formData,
     errors,
     validationErrors,

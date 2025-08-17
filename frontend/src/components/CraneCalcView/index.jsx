@@ -24,8 +24,8 @@ const CraneCalcView = ({
   initialResult = null,
 }) => {
   const {
-    isChecked,
-    setIsChecked,
+    calculationMode,
+    setCalculationMode,
     formData,
     errors,
     validationErrors,
@@ -54,17 +54,16 @@ const CraneCalcView = ({
           errors={errors}
           validationErrors={validationErrors}
           isSubmitting={isSubmitting}
-          isChecked={isChecked}
+          calculationMode={calculationMode}
           onInputChange={handleInputChange}
           onSubmit={handleSubmit}
           onClear={handleClearForm}
-          onModeChange={setIsChecked}
+          onModeChange={setCalculationMode}
         />
         <CalculationResults
           calculationResult={calculationResult}
-          isChecked={isChecked}
+          calculationMode={calculationMode}
           crane={crane}
-          formData={formData}
         />
       </div>
     </div>

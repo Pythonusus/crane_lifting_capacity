@@ -14,25 +14,20 @@ import { saveAs } from 'file-saver'
 /**
  * Generate and download a Word document with crane calculation results
  * @param {Object} calculationResult - The calculation result object
- * @param {boolean} isChecked - Current calculation mode (true = safety factor, false = payload)
+ * @param {string} calculationMode - Current calculation mode ('payload' or 'safety_factor')
  * @param {Object} crane - Crane data object
  */
 export const generateAndDownloadReport = async (
   calculationResult,
-  isChecked,
+  calculationMode,
   crane,
 ) => {
-  if (
-    !calculationResult ||
-    !calculationResult.base_responses ||
-    calculationResult.base_responses.length === 0
-  ) {
+  if (!calculationResult || !calculationResult.request) {
     console.error('No calculation results to export')
     return
   }
 
-  const baseResponse = calculationResult.base_responses[0]
-  const request = baseResponse.request || {}
+  const request = calculationResult.request || {}
 
   // Create document
   const doc = new Document({
@@ -230,7 +225,7 @@ export const generateAndDownloadReport = async (
                       new Paragraph({
                         children: [
                           new TextRun({
-                            text: `${isChecked ? 'по коэффициенту запаса' : 'по заданному грузу'}`,
+                            text: `${calculationMode === 'payload' ? 'по коэффициенту запаса' : 'по заданному грузу'}`,
                             size: 22,
                           }),
                         ],
@@ -469,7 +464,7 @@ export const generateAndDownloadReport = async (
                       new Paragraph({
                         children: [
                           new TextRun({
-                            text: `${baseResponse.lifting_capacity.toFixed(2)} т`,
+                            text: `${calculationResult.lifting_capacity.toFixed(2)} т`,
                             size: 22,
                           }),
                         ],
@@ -481,7 +476,7 @@ export const generateAndDownloadReport = async (
                 ],
               }),
               // Results based on calculation mode
-              ...(isChecked
+              ...(calculationMode === 'payload'
                 ? [
                     new TableRow({
                       children: [
@@ -505,8 +500,8 @@ export const generateAndDownloadReport = async (
                             new Paragraph({
                               children: [
                                 new TextRun({
-                                  text: baseResponse.payload
-                                    ? `${baseResponse.payload.toFixed(2)} т`
+                                  text: calculationResult.payload
+                                    ? `${calculationResult.payload.toFixed(2)} т`
                                     : 'Н/Д',
                                   size: 22,
                                 }),
@@ -542,8 +537,8 @@ export const generateAndDownloadReport = async (
                             new Paragraph({
                               children: [
                                 new TextRun({
-                                  text: baseResponse.safety_factor
-                                    ? baseResponse.safety_factor.toFixed(2)
+                                  text: calculationResult.safety_factor
+                                    ? calculationResult.safety_factor.toFixed(2)
                                     : 'Н/Д',
                                   size: 22,
                                 }),
@@ -578,7 +573,7 @@ export const generateAndDownloadReport = async (
                               children: [
                                 new TextRun({
                                   text: request.payload
-                                    ? `${(baseResponse.lifting_capacity - request.payload - (request.equipment_weight || 0)).toFixed(2)} т`
+                                    ? `${(calculationResult.lifting_capacity - request.payload - (request.equipment_weight || 0)).toFixed(2)} т`
                                     : 'Н/Д',
                                   size: 22,
                                 }),

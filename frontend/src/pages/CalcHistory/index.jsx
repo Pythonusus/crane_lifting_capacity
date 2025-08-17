@@ -23,8 +23,7 @@ import './CalcHistory.css'
 
 // Function to prepare initial form data from history entry
 const prepareInitialFormData = (entry) => {
-  const baseResponse = entry.result.base_responses[0]
-  const request = baseResponse.request
+  const request = entry.result.request
 
   return {
     boomLength: request.boom_len,
@@ -115,10 +114,8 @@ const CalcHistory = () => {
                 {history.map((entry) => {
                   const timestamp = formatTimestamp(entry.timestamp)
 
-                  // Extract base response data once
-                  const baseResponse = entry.result.base_responses[0]
+                  const request = entry.result.request
 
-                  const request = baseResponse.request
                   const isPayloadMethod = entry.calculationMethod === 'payload'
 
                   // Extract and format request values
@@ -135,17 +132,19 @@ const CalcHistory = () => {
 
                   // Extract and format result values
                   const liftingCapacity = formatCalculationValue(
-                    baseResponse.lifting_capacity,
+                    entry.result.lifting_capacity,
                     'т',
                   )
 
                   const calculationResult = isPayloadMethod
-                    ? formatCalculationValue(baseResponse.payload, 'т')
-                    : formatCalculationValue(baseResponse.safety_factor)
+                    ? formatCalculationValue(entry.result.payload, 'т')
+                    : formatCalculationValue(entry.result.safety_factor)
 
                   // Prepare data for navigation
                   const initialFormData = prepareInitialFormData(entry)
                   const initialMode = isPayloadMethod
+                    ? 'payload'
+                    : 'safety_factor'
                   const initialResult = entry.result
                   const craneName = `${entry.manufacturer}_${entry.model}`
 
@@ -202,7 +201,6 @@ const CalcHistory = () => {
                         <div className='history-action-buttons'>
                           <ResultCopyButton
                             calculationResult={entry.result}
-                            isChecked={entry.calculationMethod === 'payload'}
                             crane={{
                               name: `${entry.manufacturer}_${entry.model}`,
                               manufacturer: entry.manufacturer,
@@ -214,7 +212,7 @@ const CalcHistory = () => {
                           />
                           <ResultDownloadButton
                             calculationResult={entry.result}
-                            isChecked={entry.calculationMethod === 'payload'}
+                            calculationMode={entry.calculationMethod}
                             crane={{
                               name: `${entry.manufacturer}_${entry.model}`,
                               manufacturer: entry.manufacturer,

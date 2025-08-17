@@ -94,24 +94,20 @@ const addSpareCapacityInfo = (result, req, base) => {
 const buildCopyText = (calculationResult, crane) => {
   const result = []
 
-  // Fix: Access the first base response from the calculation result
-  const base = calculationResult.base_responses?.[0]
-  if (!base) return ''
-
-  const req = base.request || {}
+  const req = calculationResult.request || {}
   result.push(
     `Результаты расчета грузоподъемности крана ${crane.manufacturer} ${crane.model}`,
   )
 
   addCommonParameters(result, req)
 
-  addPayloadInfo(result, req, base)
+  addPayloadInfo(result, req, calculationResult)
 
-  addLiftingCapacityInfo(result, base)
+  addLiftingCapacityInfo(result, calculationResult)
 
-  addSafetyFactorInfo(result, req, base)
+  addSafetyFactorInfo(result, req, calculationResult)
 
-  addSpareCapacityInfo(result, req, base)
+  addSpareCapacityInfo(result, req, calculationResult)
 
   return result.join('\n')
 }
@@ -121,7 +117,6 @@ const buildCopyText = (calculationResult, crane) => {
  *
  * @param {Object} props - Component props
  * @param {Object|null} props.calculationResult - API calculation result object
- * @param {boolean} props.isChecked - Current calculation mode (determines which result to show)
  * @param {Object} props.crane - Crane data object containing manufacturer and model
  */
 const ResultCopyButton = ({ calculationResult, crane }) => {

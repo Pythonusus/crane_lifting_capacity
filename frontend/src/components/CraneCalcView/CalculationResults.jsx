@@ -13,11 +13,13 @@ import { formatCalculationValue } from '@/src/utilities/formatters'
  * Displays placeholder text when no calculation has been performed.
  *
  * @param {Object} props - Component props
- * @param {Object|null} props.calculationResult - API calculation result object
- * @param {boolean} props.isChecked - Current calculation mode (determines which result to show)
+ * @param {Object} props.calculationResult - Calculation result object
+ * @param {string} props.calculationMode - Calculation mode ('payload' or 'safety_factor')
  * @param {Object} props.crane - Crane data object containing manufacturer and model
  */
-const CalculationResults = ({ calculationResult, isChecked, crane }) => {
+const CalculationResults = ({ calculationResult, calculationMode, crane }) => {
+  const isPayloadMode = calculationMode === 'payload'
+
   const renderResultValue = () => {
     if (!calculationResult) {
       return (
@@ -27,26 +29,20 @@ const CalculationResults = ({ calculationResult, isChecked, crane }) => {
       )
     }
 
-    const baseResponse = calculationResult.base_responses[0]
-
-    if (isChecked) {
-      // When calculating by safety factor, show payload
-      if (baseResponse.payload) {
-        return formatCalculationValue(baseResponse.payload)
+    if (isPayloadMode) {
+      // When calculating payload (max load), show payload
+      if (calculationResult.payload) {
+        return formatCalculationValue(calculationResult.payload)
       }
-      return (
-        <span className='calc-result-value-placeholder'>
-          Выполните расчет для получения результатов
-        </span>
-      )
+    } else {
+      // When calculating safety factor, show safety factor
+      if (calculationResult.safety_factor) {
+        return formatCalculationValue(calculationResult.safety_factor)
+      }
     }
 
-    // When calculating by payload, show safety factor
-    if (baseResponse.safety_factor) {
-      return formatCalculationValue(baseResponse.safety_factor)
-    }
     return (
-      <span className='calc-result-value-placeholder font-size-5'>
+      <span className='calc-result-value-placeholder'>
         Выполните расчет для получения результатов
       </span>
     )
@@ -64,9 +60,7 @@ const CalculationResults = ({ calculationResult, isChecked, crane }) => {
           </div>
           <div className='calc-result-value font-size-5 fw-bold'>
             {calculationResult ? (
-              formatCalculationValue(
-                calculationResult.base_responses[0].lifting_capacity,
-              )
+              formatCalculationValue(calculationResult.lifting_capacity)
             ) : (
               <span className='calc-result-value-placeholder font-size-5'>
                 Выполните расчет для получения результатов
@@ -74,7 +68,7 @@ const CalculationResults = ({ calculationResult, isChecked, crane }) => {
             )}
           </div>
         </div>
-        {isChecked ? (
+        {isPayloadMode ? (
           <div className='calc-result-card'>
             <div className='calc-result-label font-size-5 fw-bold'>
               Допустимый вес груза, т
@@ -98,13 +92,11 @@ const CalculationResults = ({ calculationResult, isChecked, crane }) => {
                 Запас грузоподъемности, т
               </div>
               <div className='calc-result-value font-size-5 fw-bold'>
-                {calculationResult &&
-                calculationResult.base_responses[0].request.payload ? (
+                {calculationResult && calculationResult.request.payload ? (
                   formatCalculationValue(
-                    calculationResult.base_responses[0].lifting_capacity -
-                      calculationResult.base_responses[0].request.payload -
-                      calculationResult.base_responses[0].request
-                        .equipment_weight,
+                    calculationResult.lifting_capacity -
+                      calculationResult.request.payload -
+                      calculationResult.request.equipment_weight,
                   )
                 ) : (
                   <span className='calc-result-value-placeholder font-size-5'>
@@ -122,7 +114,7 @@ const CalculationResults = ({ calculationResult, isChecked, crane }) => {
           />
           <ResultDownloadButton
             calculationResult={calculationResult}
-            isChecked={isChecked}
+            calculationMode={calculationMode}
             crane={crane}
           />
         </div>

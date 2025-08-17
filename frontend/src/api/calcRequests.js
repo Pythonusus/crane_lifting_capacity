@@ -4,15 +4,15 @@
  */
 
 /**
- * Create a base payload calculation request
+ * Create a payload calculation request
  * @param {string} craneName - Name of the crane
  * @param {string} boomLen - Boom length configuration
  * @param {string} radius - Radius in meters (as string)
  * @param {number} equipmentWeight - Weight of equipment in tons
  * @param {number} safetyFactor - Safety factor
- * @returns {Object} Base payload request object
+ * @returns {Object} Payload request object
  */
-export const createPayloadBaseRequest = (
+export const createPayloadRequest = (
   craneName,
   boomLen,
   radius,
@@ -27,15 +27,15 @@ export const createPayloadBaseRequest = (
 })
 
 /**
- * Create a base safety factor calculation request
+ * Create a safety factor calculation request
  * @param {string} craneName - Name of the crane
  * @param {string} boomLen - Boom length configuration
  * @param {string} radius - Radius in meters (as string)
  * @param {number} equipmentWeight - Weight of equipment in tons
  * @param {number} payload - Desired payload in tons
- * @returns {Object} Base safety factor request object
+ * @returns {Object} Safety factor request object
  */
-export const createSafetyFactorBaseRequest = (
+export const createSafetyFactorRequest = (
   craneName,
   boomLen,
   radius,
@@ -50,15 +50,13 @@ export const createSafetyFactorBaseRequest = (
 })
 
 /**
- * Calculate payload for given base requests
- * @param {...Object} baseRequests - Any number of base payload requests
+ * Calculate payload for given request
+ * @param {Object} request - Payload calculation request
  * @returns {Promise<Object>} Calculation results
  */
-export const calculatePayload = async (...baseRequests) => {
+export const calculatePayload = async (request) => {
   const payloadRequest = {
-    payload_request: {
-      base_requests: baseRequests,
-    },
+    payload_request: request,
   }
 
   const response = await fetch('/process', {
@@ -77,15 +75,13 @@ export const calculatePayload = async (...baseRequests) => {
 }
 
 /**
- * Calculate safety factor for given base requests
- * @param {...Object} baseRequests - Any number of base safety factor requests
+ * Calculate safety factor for given request
+ * @param {Object} request - Safety factor calculation request
  * @returns {Promise<Object>} Calculation results
  */
-export const calculateSafetyFactor = async (...baseRequests) => {
+export const calculateSafetyFactor = async (request) => {
   const safetyRequest = {
-    safety_request: {
-      base_requests: baseRequests,
-    },
+    safety_request: request,
   }
 
   const response = await fetch('/process', {

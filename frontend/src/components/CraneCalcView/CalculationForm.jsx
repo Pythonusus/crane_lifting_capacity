@@ -22,7 +22,7 @@ import ValidatedFormField from '@/src/components/ValidatedFormField'
  * @param {Object} props.errors - Error messages for popups
  * @param {Object} props.validationErrors - Validation errors for field styling
  * @param {boolean} props.isSubmitting - Loading state during calculation
- * @param {boolean} props.isChecked - Current calculation mode
+ * @param {string} props.calculationMode - Current calculation mode
  * @param {Function} props.onInputChange - Handler for field value changes (field: string, value: string)
  * @param {Function} props.onSubmit - Handler for form submission (event: Event)
  * @param {Function} props.onClear - Handler to reset form (no parameters)
@@ -34,7 +34,7 @@ const CalculationForm = ({
   errors,
   validationErrors,
   isSubmitting,
-  isChecked,
+  calculationMode,
   onInputChange,
   onSubmit,
   onClear,
@@ -56,12 +56,16 @@ const CalculationForm = ({
           <label className='custom-form-label'>
             <Checkbox
               toggle
-              checked={isChecked}
-              onChange={(e, { checked }) => onModeChange(checked)}
+              checked={calculationMode === 'payload'}
+              onChange={(e, { checked }) =>
+                onModeChange(checked ? 'payload' : 'safety_factor')
+              }
             />
             <div className='calc-method-container font-size-5'>
               <span className='calc-method-label'>Режим расчета:</span>
-              {isChecked ? ' по коэффициенту запаса' : ' по заданному грузу'}
+              {calculationMode === 'payload'
+                ? ' по коэффициенту запаса'
+                : ' по заданному грузу'}
             </div>
           </label>
         </FormField>
@@ -108,7 +112,7 @@ const CalculationForm = ({
           validationError={validationErrors.equipmentWeight}
         />
 
-        {isChecked ? (
+        {calculationMode === 'payload' ? (
           <ValidatedFormField
             field='safetyFactor'
             label='Необходимый коэффициент запаса (необязательно)'

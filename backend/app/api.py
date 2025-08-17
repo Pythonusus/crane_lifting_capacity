@@ -114,7 +114,7 @@ def process(
 ):
     """
     Process lifting capacity calculation requests.
-    Supports both single and batch calculations for:
+    Supports calculations requests for:
     - Payload calculation (given safety factor)
     - Safety factor calculation (given payload)
     """
