@@ -1,7 +1,10 @@
 # All commands are assumed to be run from the root of the project
 
-include .env
+# Include .env file if it exists (optional)
+-include .env
+ifneq (,$(wildcard .env))
 export $(shell sed 's/=.*//' .env)
+endif
 
 # ===== COMMON =====
 
