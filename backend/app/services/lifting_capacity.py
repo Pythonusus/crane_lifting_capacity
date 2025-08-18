@@ -42,14 +42,15 @@ def calc_lc_base(db: Session, request: LcCalcRequest) -> LcCalcResponse:
     lc_table_keys_floats = list(lc_table_keys_float_to_str_map.keys())
 
     radius = request.radius
-    if lc_table.get(radius) is not None:
+    str_radius = lc_table_keys_float_to_str_map.get(radius)
+    if str_radius is not None:
         # Direct match found
-        lifting_capacity = lc_table.get(radius)
+        lifting_capacity = lc_table.get(str_radius)
         return LcCalcResponse(lifting_capacity=lifting_capacity)
 
     # Need interpolation
-    nearest_lesser = get_nearest_lesser(float(radius), lc_table_keys_floats)
-    nearest_greater = get_nearest_greater(float(radius), lc_table_keys_floats)
+    nearest_lesser = get_nearest_lesser(radius, lc_table_keys_floats)
+    nearest_greater = get_nearest_greater(radius, lc_table_keys_floats)
 
     if nearest_lesser is None or nearest_greater is None:
         raise ValueError(f"No lifting capacity data found for radius {radius}")

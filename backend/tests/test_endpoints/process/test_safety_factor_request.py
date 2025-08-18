@@ -7,7 +7,7 @@ class TestSingleSafetyFactorRequest:
         safety_request = SafetyFactorCalcRequest(
             crane_name="Liebherr_LR1100",
             boom_len="14.0м",
-            radius="5.5",
+            radius=5.5,
             equipment_weight=0,
             payload=40.1,
         )
@@ -26,7 +26,7 @@ class TestSingleSafetyFactorRequest:
         # Assert request data in response
         assert safety_response.request.crane_name == "Liebherr_LR1100"
         assert safety_response.request.boom_len == "14.0м"
-        assert float(safety_response.request.radius) == 5.5
+        assert safety_response.request.radius == 5.5
         assert safety_response.request.equipment_weight == 0
         assert safety_response.request.payload == 40.1
 
@@ -51,7 +51,7 @@ class TestSingleSafetyFactorRequest:
         safety_request = SafetyFactorCalcRequest(
             crane_name="Liebherr_LTM1300-6.2",
             boom_len="43.9м",
-            radius="12",
+            radius=12,
             equipment_weight=5,
             payload=50.33,
         )
@@ -70,7 +70,7 @@ class TestSingleSafetyFactorRequest:
         # Assert request data in response
         assert safety_response.request.crane_name == "Liebherr_LTM1300-6.2"
         assert safety_response.request.boom_len == "43.9м"
-        assert float(safety_response.request.radius) == 12
+        assert safety_response.request.radius == 12
         assert safety_response.request.equipment_weight == 5
         assert safety_response.request.payload == 50.33
 

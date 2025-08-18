@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 
 
 class LcCalcRequest(BaseModel):
@@ -7,18 +7,7 @@ class LcCalcRequest(BaseModel):
     """
     crane_name: str
     boom_len: str
-    radius: str  # in meters, accepts string but validates as positive number
-
-    @field_validator('radius')
-    @classmethod
-    def validate_radius(cls, radius: str):
-        try:
-            radius_float = float(radius)
-            if radius_float <= 0:
-                raise ValueError('Radius must be greater than 0')
-            return radius
-        except (ValueError, TypeError):
-            raise ValueError('Radius must be a valid positive number')
+    radius: float = Field(gt=0)  # in meters
 
 
 class PayloadCalcRequest(LcCalcRequest):

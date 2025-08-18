@@ -7,7 +7,7 @@ class TestSinglePayloadRequest:
         payload_request = PayloadCalcRequest(
             crane_name="Liebherr_LR1200.1",
             boom_len="50м",
-            radius="10.32",
+            radius=10.32,
             equipment_weight=0,
             safety_factor=1.5,
         )
@@ -24,7 +24,7 @@ class TestSinglePayloadRequest:
         # Assert request data in response
         assert payload_response.request.crane_name == "Liebherr_LR1200.1"
         assert payload_response.request.boom_len == "50м"
-        assert float(payload_response.request.radius) == 10.32
+        assert payload_response.request.radius == 10.32
         assert payload_response.request.equipment_weight == 0
         assert payload_response.request.safety_factor == 1.5
 
@@ -46,7 +46,7 @@ class TestSinglePayloadRequest:
         payload_request = PayloadCalcRequest(
             crane_name="Takraf_РДК400",
             boom_len="36.0м",
-            radius="16",
+            radius=16,
             equipment_weight=2,
             safety_factor=1.8,
         )
@@ -63,7 +63,7 @@ class TestSinglePayloadRequest:
         # Assert request data in response
         assert payload_response.request.crane_name == "Takraf_РДК400"
         assert payload_response.request.boom_len == "36.0м"
-        assert float(payload_response.request.radius) == 16
+        assert payload_response.request.radius == 16
         assert payload_response.request.equipment_weight == 2
         assert payload_response.request.safety_factor == 1.8
 
