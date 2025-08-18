@@ -137,6 +137,17 @@ start-frontend-dev:
 	cd frontend && npm run dev
 
 
+# ===== RENDER.COM SPECIFIC COMMANDS =====
+# Runs locally all commands required to run the app, without Docker.
+# Test, build, start backend and frontend in production mode.
+build-render-com:
+	make install-frontend-dev
+	make build-frontend
+	cd backend && pip install -r requirements.txt
+
+start-render-com:
+	cd backend && python -m main
+
 # ===== DOCKER =====
 
 # Build all services
