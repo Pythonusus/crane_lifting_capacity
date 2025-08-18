@@ -1,8 +1,8 @@
 /* Utility class for centering content both vertically and horizontally */
 .center-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 .center-text {
   text-align: center !important;
