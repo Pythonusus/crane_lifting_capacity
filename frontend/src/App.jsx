@@ -12,6 +12,7 @@ import CalcHistory from '@/src/pages/CalcHistory'
 import ComparisonTable from '@/src/pages/ComparisonTable'
 import CraneDetail from '@/src/pages/CraneDetail'
 import Home from '@/src/pages/Home'
+import NotFound from '@/src/pages/NotFound'
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path='/compare' element={<ComparisonTable />} />
           <Route path='/history' element={<CalcHistory />} />
           <Route path='/about' element={<About />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
     </Router>
