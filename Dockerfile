@@ -58,8 +58,15 @@ COPY --from=ghcr.io/astral-sh/uv:0.8.11 /uv /usr/local/bin/uv
 # Set working directory
 WORKDIR /crane_lifting_capacity
 
-# Copy backend from builder image
-COPY --from=backend-builder /app/backend/ ./backend/
+# Copy installed packages and code from builder image
+# Copy the .venv directory which contains installed packages
+COPY --from=backend-builder /app/backend/.venv/ ./backend/.venv/
+# Copy the app code
+COPY --from=backend-builder /app/backend/app/ ./backend/app/
+# Copy main.py and other necessary files
+COPY --from=backend-builder /app/backend/main.py ./backend/
+COPY --from=backend-builder /app/backend/utils ./backend/utils
+
 
 # Copy frontend dist folder from builder image
 COPY --from=frontend-builder /app/frontend/dist/ ./frontend/dist/
