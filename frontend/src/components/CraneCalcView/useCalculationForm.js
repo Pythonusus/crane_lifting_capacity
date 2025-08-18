@@ -16,6 +16,12 @@ import {
 // Timeout for auto-closing popups
 const popupTimeout = 5000
 
+// Helper function to normalize numeric input (convert comma to dot for parsing)
+const normalizeNumericInput = (value) => {
+  if (!value) return value
+  return value.replace(',', '.')
+}
+
 /**
  * Custom hook for managing crane calculation form state and logic
  *
@@ -135,11 +141,13 @@ const useCalculationForm = (
         const baseRequest = createPayloadRequest(
           crane.name,
           formData.boomLength,
-          formData.boomRadius,
+          Number.parseFloat(normalizeNumericInput(formData.boomRadius)),
           formData.equipmentWeight
-            ? Number.parseFloat(formData.equipmentWeight)
+            ? Number.parseFloat(normalizeNumericInput(formData.equipmentWeight))
             : 0,
-          formData.safetyFactor ? Number.parseFloat(formData.safetyFactor) : 1,
+          formData.safetyFactor
+            ? Number.parseFloat(normalizeNumericInput(formData.safetyFactor))
+            : 1,
         )
         result = await calculatePayload(baseRequest)
         setPayloadCalculationResult(result)
@@ -158,11 +166,11 @@ const useCalculationForm = (
         const baseRequest = createSafetyFactorRequest(
           crane.name,
           formData.boomLength,
-          formData.boomRadius,
+          Number.parseFloat(normalizeNumericInput(formData.boomRadius)),
           formData.equipmentWeight
-            ? Number.parseFloat(formData.equipmentWeight)
+            ? Number.parseFloat(normalizeNumericInput(formData.equipmentWeight))
             : 0,
-          Number.parseFloat(formData.payload),
+          Number.parseFloat(normalizeNumericInput(formData.payload)),
         )
         result = await calculateSafetyFactor(baseRequest)
         setSafetyFactorCalculationResult(result)

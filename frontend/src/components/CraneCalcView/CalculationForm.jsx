@@ -100,6 +100,7 @@ const CalculationForm = ({
           onChange={(value) => onInputChange('boomRadius', value)}
           error={errors.boomRadius}
           validationError={validationErrors.boomRadius}
+          inputType='number'
         />
 
         <ValidatedFormField
@@ -110,6 +111,7 @@ const CalculationForm = ({
           onChange={(value) => onInputChange('equipmentWeight', value)}
           error={errors.equipmentWeight}
           validationError={validationErrors.equipmentWeight}
+          inputType='number'
         />
 
         {calculationMode === 'payload' ? (
@@ -121,6 +123,7 @@ const CalculationForm = ({
             onChange={(value) => onInputChange('safetyFactor', value)}
             error={errors.safetyFactor}
             validationError={validationErrors.safetyFactor}
+            inputType='number'
           />
         ) : (
           <ValidatedFormField
@@ -131,6 +134,7 @@ const CalculationForm = ({
             onChange={(value) => onInputChange('payload', value)}
             error={errors.payload}
             validationError={validationErrors.payload}
+            inputType='number'
           />
         )}
 

@@ -97,7 +97,7 @@ const validateCommonFields = (formData, crane) => {
     errors.boomLength = 'Выберите конфигурацию стрелы'
   }
 
-  // Boom radius validation
+  // Radius validation
   const radiusTable = crane.lc_table[formData.boomLength]
   const radiusKeys = Object.keys(radiusTable)
     .map(Number)
