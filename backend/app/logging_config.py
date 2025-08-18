@@ -52,7 +52,64 @@ BASE_LOG_CONFIG = {
             "()": JSONFormatter,
         },
     },
-    # HANDLERS: Define WHERE logs should go (console, file, etc.)
+}
+
+# Development logging configuration - console only
+DEV_LOG_CONFIG = {
+    **BASE_LOG_CONFIG,
+    # HANDLERS: Define WHERE logs should go (console only for dev)
+    "handlers": {
+        # Handler for general server messages to console
+        "console": {
+            # StreamHandler = output to a stream (stdout/stderr)
+            "class": "logging.StreamHandler",
+            # Send output to standard output (your terminal)
+            "stream": "ext://sys.stdout",
+            # Use the "default" formatter defined above
+            "formatter": "default",
+        },
+        # Handler for HTTP access logs to console
+        "console_access": {
+            # Also a stream handler
+            "class": "logging.StreamHandler",
+            # Also to standard output
+            "stream": "ext://sys.stdout",
+            # Use the "access" formatter for HTTP request format
+            "formatter": "access",
+        },
+    },
+    "loggers": {
+        # Main uvicorn logger - handles general server messages
+        "uvicorn": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # Uvicorn access logger - handles HTTP request/response logs
+        "uvicorn.access": {
+            "handlers": ["console_access"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # API module logger - handles application business logic logs
+        "app.api": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        # Root app logger - handles all other app modules
+        "app": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
+
+# Production logging configuration - console + file
+PROD_LOG_CONFIG = {
+    **BASE_LOG_CONFIG,
+    # HANDLERS: Define WHERE logs should go (console + file for prod)
     "handlers": {
         # Handler for general server messages to console
         "console": {
@@ -87,42 +144,6 @@ BASE_LOG_CONFIG = {
             "formatter": "json",
         },
     },
-}
-
-# Development logging configuration - console only
-DEV_LOG_CONFIG = {
-    **BASE_LOG_CONFIG,
-    "loggers": {
-        # Main uvicorn logger - handles general server messages
-        "uvicorn": {
-            "handlers": ["console"],
-            "level": "INFO",
-            "propagate": False,
-        },
-        # Uvicorn access logger - handles HTTP request/response logs
-        "uvicorn.access": {
-            "handlers": ["console_access"],
-            "level": "INFO",
-            "propagate": False,
-        },
-        # API module logger - handles application business logic logs
-        "app.api": {
-            "handlers": ["console"],
-            "level": "INFO",
-            "propagate": False,
-        },
-        # Root app logger - handles all other app modules
-        "app": {
-            "handlers": ["console"],
-            "level": "INFO",
-            "propagate": False,
-        },
-    },
-}
-
-# Production logging configuration - console + file
-PROD_LOG_CONFIG = {
-    **BASE_LOG_CONFIG,
     "loggers": {
         # Main uvicorn logger - handles general server messages
         "uvicorn": {
