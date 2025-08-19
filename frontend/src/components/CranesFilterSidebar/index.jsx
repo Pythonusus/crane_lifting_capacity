@@ -110,13 +110,13 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
   return (
     <Segment className='cranes-filter-sidebar'>
       <div className='filter-sidebar-content'>
-        <Header as='h3' className='filter-sidebar-header'>
+        <Header as='h3' className='filter-sidebar-header font-size-3'>
           <Header.Content>Фильтры и сортировка</Header.Content>
         </Header>
 
         {/* Search Input */}
         <div className='filter-section'>
-          <Header as='h4' size='small'>
+          <Header as='h4' size='small' className='mb-5'>
             Поиск по названию модели
           </Header>
           <Popup
@@ -138,7 +138,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
 
         {/* Chassis Type Filter */}
         <div className='filter-section'>
-          <Header as='h4' size='small'>
+          <Header as='h4' size='small' className='mb-5'>
             Тип шасси
           </Header>
           <Dropdown
@@ -153,7 +153,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
 
         {/* Manufacturer Filter */}
         <div className='filter-section'>
-          <Header as='h4' size='small'>
+          <Header as='h4' size='small' className='mb-5'>
             Производитель
           </Header>
           <Dropdown
@@ -168,7 +168,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
 
         {/* Min max lifting capacity Filter */}
         <div className='filter-section'>
-          <Header as='h4' size='small'>
+          <Header as='h4' size='small' className='mb-5'>
             Макс грузоподъемность (т)
           </Header>
           <div className='filter-section-inputs'>
@@ -190,7 +190,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
 
         {/* Sort By Filter */}
         <div className='filter-section'>
-          <Header as='h4' size='small'>
+          <Header as='h4' size='small' className='mb-5'>
             Сортировка
           </Header>
           <Dropdown
@@ -209,6 +209,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
             fluid
             icon
             labelPosition='center'
+            size='small'
             onClick={onClearFilters}
             disabled={
               (!filters.model || filters.model === '') &&

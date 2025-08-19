@@ -5,12 +5,12 @@
 
 .home-sidebar {
   position: fixed;
-  overflow-y: auto;
   height: 100vh;
+  overflow-y: auto;
 }
 
 .home-main-content {
-  margin-left: 275px;
+  margin-left: 265px;
   margin-right: 1rem;
 }
 

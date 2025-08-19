@@ -1,8 +1,8 @@
 .cranes-filter-sidebar {
-  max-width: 245px;
+  max-width: 230px;
   display: flex;
   flex-direction: column;
-  margin: 80px 1em 10em 1em !important;
+  margin: 1em 0.25em 6em 1em !important;
 }
 
 .filter-section {

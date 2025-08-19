@@ -8,12 +8,13 @@
 }
 
 .main-header {
-  height: 52px;
+  height: 64px;
 }
 
 .crane-list-icon {
   width: 64px !important;
   height: 64px !important;
+  margin: 0 !important;
 }
 
 .cranes-table-header th {
