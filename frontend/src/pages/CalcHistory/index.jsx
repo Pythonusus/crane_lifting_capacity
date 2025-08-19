@@ -45,6 +45,18 @@ const prepareInitialFormData = (entry) => {
 const CalcHistory = () => {
   const { history, clearHistory } = useCalculationHistory()
 
+  const handleClearHistory = () => {
+    if (
+      globalThis.confirm(
+        'Вы уверены, что хотите очистить историю расчетов? Это действие нельзя отменить.',
+      )
+    ) {
+      clearHistory()
+      // Show success message
+      globalThis.alert('История расчетов успешно очищена.')
+    }
+  }
+
   return (
     <main className='calc-history-main-content'>
       <div className='calc-history-container'>
@@ -234,7 +246,7 @@ const CalcHistory = () => {
               <Button
                 color='red'
                 size='small'
-                onClick={clearHistory}
+                onClick={handleClearHistory}
                 icon='trash'
                 content='Очистить историю'
                 className='history-clear-button'
