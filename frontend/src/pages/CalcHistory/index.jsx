@@ -52,8 +52,6 @@ const CalcHistory = () => {
       )
     ) {
       clearHistory()
-      // Show success message
-      globalThis.alert('История расчетов успешно очищена.')
     }
   }
 
