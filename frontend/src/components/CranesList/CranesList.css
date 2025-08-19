@@ -21,6 +21,10 @@
   background-color: var(--accent-yellow) !important;
 }
 
+.table-header-description {
+  color: rgb(109, 109, 109);
+}
+
 .crane-name-link:hover {
   text-decoration: underline;
 }

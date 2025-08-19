@@ -70,7 +70,12 @@ const CranesList = ({
         <Table celled striped compact unstackable>
           <TableHeader className='cranes-table-header'>
             <TableRow>
-              <TableHeaderCell>Название</TableHeaderCell>
+              <TableHeaderCell>
+                Название <br />
+                <span className='table-header-description font-size-5'>
+                  (кликните для перехода к расчету)
+                </span>
+              </TableHeaderCell>
               <TableHeaderCell>Тип шасси</TableHeaderCell>
               <TableHeaderCell className='hide-on-tablet'>
                 Код ресурса по ФСЭМ-2022
