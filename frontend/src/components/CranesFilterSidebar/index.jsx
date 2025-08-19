@@ -17,10 +17,40 @@ import {
 
 import './CranesFilterSidebar.css'
 
+// Function to validate numeric input and return error message if invalid
+const validateNumericInput = (inputValue) => {
+  if (!inputValue) return '' // Empty value is allowed
+
+  // Check if input contains only valid characters
+  if (!/^[0-9.,-]*$/.test(inputValue)) {
+    return 'Разрешены только цифры, точка, запятая и знак минус'
+  }
+
+  // Check for multiple decimal separators
+  const commaCount = (inputValue.match(/,/g) || []).length
+  const dotCount = (inputValue.match(/\./g) || []).length
+  if (commaCount + dotCount > 1) {
+    return 'Используйте только один десятичный разделитель'
+  }
+
+  // Check for minus sign in wrong position
+  if (inputValue.includes('-') && !inputValue.startsWith('-')) {
+    return 'Знак минус может быть только в начале числа'
+  }
+
+  // Check for multiple minus signs
+  if ((inputValue.match(/-/g) || []).length > 1) {
+    return 'Используйте только один знак минус'
+  }
+
+  return '' // No errors
+}
+
 const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
   const [chassisTypes, setChassisTypes] = useState([])
   const [manufacturers, setManufacturers] = useState([])
   const [sortOptions, setSortOptions] = useState([])
+  const [validationErrors, setValidationErrors] = useState({})
 
   // Fetch chassis types on component mount
   useEffect(() => {
@@ -74,11 +104,31 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
   }
 
   const handleMinMaxLiftingCapacityChange = (e, { value }) => {
-    onFiltersChange((prev) => ({ ...prev, min_max_lc: value }))
+    // Filter out invalid characters - only allow numbers, dots, and commas
+    const filteredValue = value.replaceAll(/[^0-9.,]/g, '')
+
+    // Only update if the value is valid or empty
+    if (filteredValue === value || filteredValue === '') {
+      const error = validateNumericInput(filteredValue)
+      setValidationErrors((prev) => ({ ...prev, min_max_lc: error }))
+      // Normalize input: convert comma to dot for internal processing
+      const normalizedValue = filteredValue.replaceAll(',', '.')
+      onFiltersChange((prev) => ({ ...prev, min_max_lc: normalizedValue }))
+    }
   }
 
   const handleMaxMaxLiftingCapacityChange = (e, { value }) => {
-    onFiltersChange((prev) => ({ ...prev, max_max_lc: value }))
+    // Filter out invalid characters - only allow numbers, dots, and commas
+    const filteredValue = value.replaceAll(/[^0-9.,]/g, '')
+
+    // Only update if the value is valid or empty
+    if (filteredValue === value || filteredValue === '') {
+      const error = validateNumericInput(filteredValue)
+      setValidationErrors((prev) => ({ ...prev, max_max_lc: error }))
+      // Normalize input: convert comma to dot for internal processing
+      const normalizedValue = filteredValue.replaceAll(',', '.')
+      onFiltersChange((prev) => ({ ...prev, max_max_lc: normalizedValue }))
+    }
   }
 
   const handleSortByChange = (e, { value }) => {
@@ -172,18 +222,44 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
             Макс грузоподъемность (т)
           </Header>
           <div className='filter-section-inputs'>
-            <Input
-              fluid
-              placeholder='Не менее'
-              value={filters.min_max_lc || ''}
-              onChange={handleMinMaxLiftingCapacityChange}
+            <Popup
+              content={validationErrors.min_max_lc}
+              open={!!validationErrors.min_max_lc}
+              position='left center'
+              color='red'
+              size='small'
+              onClose={() =>
+                setValidationErrors((prev) => ({ ...prev, min_max_lc: '' }))
+              }
+              trigger={
+                <Input
+                  fluid
+                  placeholder='Не менее'
+                  value={filters.min_max_lc || ''}
+                  onChange={handleMinMaxLiftingCapacityChange}
+                  error={!!validationErrors.min_max_lc}
+                />
+              }
             />
-            <Input
-              className='m-top'
-              fluid
-              placeholder='Не более'
-              value={filters.max_max_lc || ''}
-              onChange={handleMaxMaxLiftingCapacityChange}
+            <Popup
+              content={validationErrors.max_max_lc}
+              open={!!validationErrors.max_max_lc}
+              position='left center'
+              color='red'
+              size='small'
+              onClose={() =>
+                setValidationErrors((prev) => ({ ...prev, max_max_lc: '' }))
+              }
+              trigger={
+                <Input
+                  className='m-top'
+                  fluid
+                  placeholder='Не более'
+                  value={filters.max_max_lc || ''}
+                  onChange={handleMaxMaxLiftingCapacityChange}
+                  error={!!validationErrors.max_max_lc}
+                />
+              }
             />
           </div>
         </div>
@@ -210,7 +286,10 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
             icon
             labelPosition='center'
             size='small'
-            onClick={onClearFilters}
+            onClick={() => {
+              setValidationErrors({})
+              onClearFilters()
+            }}
             disabled={
               (!filters.model || filters.model === '') &&
               (!filters.chassis_type || filters.chassis_type === '') &&
