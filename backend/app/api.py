@@ -11,7 +11,6 @@ The API provides endpoints for:
 - API documentation
 
 API Structure:
-├── /                   # Serve frontend
 ├── /health             # Health monitoring
 ├── /process            # Lifting capacity calculations
 ├── /api/cranes/{crane_name}  # Get single crane by name
@@ -23,7 +22,8 @@ API Structure:
 ├── /api/attachments/{attachment_id}  # Serve crane attachments
 ├── /docs               # Interactive API documentation (Swagger UI)
 ├── /redoc              # Alternative API documentation (ReDoc)
-└── /metrics            # Prometheus metrics endpoint
+├── /metrics            # Prometheus metrics endpoint
+└── /{catch_all:path}   # Serve frontend
 """
 
 import logging
@@ -88,25 +88,6 @@ app.add_middleware(
     allow_methods=settings.CORS_METHODS,
     allow_headers=settings.CORS_HEADERS,
 )
-
-# Add Prometheus metrics endpoint
-Instrumentator().instrument(app).expose(app)
-
-# Mount frontend static files only when not in development mode
-if not settings.DEVELOPMENT:
-    app.mount(
-        "/dist",
-        StaticFiles(directory=settings.FRONTEND_DIST_PATH),
-        name="dist",
-    )
-
-    # Set up templates
-    templates = Jinja2Templates(directory=settings.FRONTEND_DIST_PATH)
-
-    @app.get("/")
-    def serve_frontend(request: Request):
-        """Serve the frontend app"""
-        return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/health")
@@ -248,3 +229,23 @@ def serve_attachment_by_id(attachment_id: int, db: Session = Depends(get_db)):
     Serve a crane attachment by its ID.
     """
     return serve_attachment(attachment_id, db)
+
+
+# Add Prometheus /metrics endpoint
+Instrumentator().instrument(app).expose(app)
+
+# Mount frontend static files only when not in development mode
+if not settings.DEVELOPMENT:
+    app.mount(
+        "/dist",
+        StaticFiles(directory=settings.FRONTEND_DIST_PATH),
+        name="dist",
+    )
+
+    # Set up templates
+    templates = Jinja2Templates(directory=settings.FRONTEND_DIST_PATH)
+
+    @app.get("/{catch_all:path}")
+    def serve_frontend(request: Request, catch_all: str):
+        """Serve the frontend app"""
+        return templates.TemplateResponse("index.html", {"request": request})
