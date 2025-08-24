@@ -1,5 +1,12 @@
 .image-gallery-header {
   margin-bottom: 0.5rem !important;
+  cursor: pointer;
+}
+
+.image-gallery-header .icon {
+  margin-top: 2px !important;
+  margin-left: 8px;
+  font-size: 14px !important;
 }
 
 .image-gallery-container {

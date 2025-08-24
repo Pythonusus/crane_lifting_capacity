@@ -15,6 +15,7 @@ const ImageGallery = ({ attachments = [] }) => {
   const [selectedImage, setSelectedImage] = useState(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   // Filter only image attachments
   const imageAttachments = attachments.filter(
@@ -96,34 +97,38 @@ const ImageGallery = ({ attachments = [] }) => {
       <Header
         as='h3'
         className='image-gallery-header font-size-5 center-content'
+        onClick={() => setIsExpanded(!isExpanded)}
       >
         Галерея изображений
+        <Icon name={isExpanded ? 'chevron up' : 'chevron down'} size='small' />
       </Header>
-      <div className='image-gallery-container'>
-        {imageAttachments.map((attachment) => (
-          <div key={attachment.id} className='image-item center-content'>
-            <Popup
-              content={attachment.filename}
-              trigger={
-                <Card
-                  fluid
-                  className='image-card'
-                  onClick={() => handleImageClick(attachment)}
-                >
-                  <Image
-                    src={`/api/attachments/${attachment.id}`}
-                    alt={attachment.filename}
-                    className='gallery-image'
-                    wrapped
-                  />
-                </Card>
-              }
-              position='bottom center'
-              size='mini'
-            />
-          </div>
-        ))}
-      </div>
+      {isExpanded && (
+        <div className='image-gallery-container'>
+          {imageAttachments.map((attachment) => (
+            <div key={attachment.id} className='image-item center-content'>
+              <Popup
+                content={attachment.filename}
+                trigger={
+                  <Card
+                    fluid
+                    className='image-card'
+                    onClick={() => handleImageClick(attachment)}
+                  >
+                    <Image
+                      src={`/api/attachments/${attachment.id}`}
+                      alt={attachment.filename}
+                      className='gallery-image'
+                      wrapped
+                    />
+                  </Card>
+                }
+                position='bottom center'
+                size='mini'
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       <Modal
         open={modalOpen}
