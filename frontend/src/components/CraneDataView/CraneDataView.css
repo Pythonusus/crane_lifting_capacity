@@ -22,8 +22,9 @@
 }
 
 .table-main-header {
-  background-color: var(--accent-yellow) !important;
-  padding: 8px !important;
+  background-color: var(--accent-blue) !important;
+  padding-top: 8px !important;
+  padding-bottom: 5px !important;
 }
 
 .attachment-link:hover {

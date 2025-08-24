@@ -53,20 +53,24 @@ const CranesList = ({
         <Table celled striped compact unstackable>
           <TableHeader className='cranes-table-header'>
             <TableRow>
-              <TableHeaderCell>
+              <TableHeaderCell className='text-white'>
                 Название <br />
-                <span className='table-header-description font-size-5'>
+                <span className='table-header-description font-size-5 text-white'>
                   (кликните для перехода к расчету)
                 </span>
               </TableHeaderCell>
-              <TableHeaderCell>Тип шасси</TableHeaderCell>
-              <TableHeaderCell className='hide-on-tablet'>
+              <TableHeaderCell className='text-white'>
+                Тип шасси
+              </TableHeaderCell>
+              <TableHeaderCell className='hide-on-tablet text-white'>
                 Код ресурса по ФСЭМ-2022
               </TableHeaderCell>
-              <TableHeaderCell className='hide-on-tablet'>
+              <TableHeaderCell className='hide-on-tablet text-white'>
                 Стоимость маш.-ч (₽)
               </TableHeaderCell>
-              <TableHeaderCell>Макс. г/п (т)</TableHeaderCell>
+              <TableHeaderCell className='text-white'>
+                Макс. г/п (т)
+              </TableHeaderCell>
             </TableRow>
           </TableHeader>
 

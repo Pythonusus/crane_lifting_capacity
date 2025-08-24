@@ -16,6 +16,14 @@
   text-align: right !important;
 }
 
+.text-white {
+  color: rgb(255, 255, 255) !important;
+}
+
+.text-black {
+  color: black !important;
+}
+
 .m-top {
   margin-top: 0.5em !important;
 }

@@ -38,7 +38,11 @@ const CraneView = ({ crane }) => {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell colSpan='2' className='table-main-header'>
-                <Header as='h1' textAlign='center' className='font-size-4'>
+                <Header
+                  as='h1'
+                  textAlign='center'
+                  className='font-size-4 text-white'
+                >
                   Характеристики крана {crane.manufacturer} {crane.model}
                 </Header>
               </Table.HeaderCell>
@@ -123,7 +127,11 @@ const CraneView = ({ crane }) => {
                 colSpan={crane.lc_table_boom_lengths.length + 1}
                 className='table-main-header'
               >
-                <Header as='h2' textAlign='center' className='font-size-4'>
+                <Header
+                  as='h2'
+                  textAlign='center'
+                  className='font-size-4 text-white'
+                >
                   Таблица грузоподъемности (т)
                 </Header>
               </Table.HeaderCell>
