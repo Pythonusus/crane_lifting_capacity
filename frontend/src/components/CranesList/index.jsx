@@ -15,14 +15,12 @@ import {
   TableRow,
 } from 'semantic-ui-react'
 
-import logo from '@/src/assets/crane_list_icon.png'
 import './CranesList.css'
 
 const CranesList = ({
   cranes = [],
   loading = false,
   error = null,
-  totalCount = 0,
   hasMore = false,
   loadingMore = false,
   onLoadMore = null,
@@ -42,21 +40,6 @@ const CranesList = ({
 
   return (
     <>
-      {/* Cranes list header */}
-      <Header as='h1' className='main-header m-top center-content'>
-        <img
-          src={logo}
-          alt='Crane lifting capacity calculator logo'
-          className='crane-list-icon'
-        />
-        <Header.Content className='resize-text-on-tablet'>
-          Доступные краны
-          <Header.Subheader>
-            Показано: {cranes.length} из {totalCount}
-          </Header.Subheader>
-        </Header.Content>
-      </Header>
-
       {/* Error Message */}
       {error && (
         <Message negative>

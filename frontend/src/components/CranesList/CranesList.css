@@ -1,22 +1,3 @@
-.loading-container {
-  text-align: center;
-  padding: 50px;
-}
-
-.loading-header {
-  margin-top: 20px;
-}
-
-.main-header {
-  height: 64px;
-}
-
-.crane-list-icon {
-  width: 64px !important;
-  height: 64px !important;
-  margin: 0 !important;
-}
-
 .cranes-table-header th {
   background-color: var(--accent-yellow) !important;
 }

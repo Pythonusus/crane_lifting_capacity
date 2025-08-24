@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { Header } from 'semantic-ui-react'
 
 import { fetchFilteredCranes } from '@/src/api/cranes'
+import logo from '@/src/assets/crane_list_icon.png'
 import CranesFilterSidebar from '@/src/components/CranesFilterSidebar'
 import CranesList from '@/src/components/CranesList'
 import { PAGINATION_SIZE } from '@/src/config'
@@ -129,6 +131,21 @@ const Home = () => {
 
   return (
     <div className='home-container'>
+      {/* Cranes list header */}
+      <Header as='h1' className='main-header m-top center-content'>
+        <img
+          src={logo}
+          alt='Crane lifting capacity calculator logo'
+          className='crane-list-icon'
+        />
+        <Header.Content className='resize-text-on-tablet'>
+          Доступные краны
+          <Header.Subheader>
+            Показано: {cranes.length} из {totalCount}
+          </Header.Subheader>
+        </Header.Content>
+      </Header>
+
       {/* Sidebar */}
       <aside className='home-sidebar'>
         <CranesFilterSidebar
@@ -144,7 +161,6 @@ const Home = () => {
           cranes={cranes}
           loading={loading}
           error={error}
-          totalCount={totalCount}
           hasMore={hasMore}
           loadingMore={loadingMore}
           onLoadMore={handleLoadMore}
