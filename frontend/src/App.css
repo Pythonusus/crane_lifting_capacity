@@ -19,18 +19,29 @@
 .header-content {
   display: flex;
   align-items: center;
-  justify-content: center;
   width: 100%;
-  padding: 0 0.5rem;
+  padding: 8px;
+  position: relative;
 }
 
 .navbar-section {
-  flex: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 720px;
 }
 
 /* For tablets and mobile */
-@media (max-width: 991px) {
+@media (max-width: 1250px) {
   .header-content {
     flex-direction: column;
+    justify-content: center;
+  }
+
+  .navbar-section {
+    position: static;
+    left: auto;
+    transform: none;
+    width: 100%;
   }
 }
