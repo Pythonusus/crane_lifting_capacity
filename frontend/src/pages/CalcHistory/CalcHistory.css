@@ -25,8 +25,9 @@
 }
 
 .history-action-buttons .ui.button {
-  padding: 0.4em 0.6em !important;
-  font-size: 0.7rem !important;
+  padding-top: 0.4em !important;
+  padding-bottom: 0.4em !important;
+  font-size: 0.8rem !important;
 }
 
 .history-action-buttons .ui.button .icon {

@@ -16,7 +16,7 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1.25rem;
+  margin: 8px;
 }
 
 .calc-input-form {
@@ -24,6 +24,9 @@
   min-height: 315px;
 }
 
+.calc-form-header {
+  margin-bottom: 8px !important;
+}
 .calc-method-form-field {
   border: 1px solid rgba(34, 36, 38, 0.15);
   border-radius: 5px;
@@ -38,7 +41,7 @@
 }
 
 .calc-method-container {
-  margin: 0 1rem;
+  margin: 0 10px;
   font-weight: 400 !important;
 }
 
@@ -52,17 +55,31 @@
   margin-top: 10px;
 }
 
+.calculate-button {
+  margin: 0 !important;
+}
+
+.clear-button {
+  margin: 0 !important;
+}
+
 .calc-result-view-container {
   width: 400px;
+  min-height: 315px;
   display: flex;
   flex-direction: column;
 }
 
+.calc-result-header {
+  margin-bottom: 8px !important;
+}
+
 .calc-result-cards-container {
+  min-height: 315px;
   display: flex !important;
   flex-direction: column;
-  gap: 1rem;
-  min-height: 315px;
+  gap: 14px;
+  flex: 1;
 }
 
 .calc-result-card {
@@ -91,8 +108,8 @@
 
 .calc-result-actions {
   display: flex;
-  justify-content: center;
   gap: 0.5rem;
+  margin-top: auto;
 }
 
 @media (max-width: 768px) {

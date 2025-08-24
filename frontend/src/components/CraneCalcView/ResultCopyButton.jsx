@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button, Icon } from 'semantic-ui-react'
 
 import { formatCalculationValue } from '@/src/utilities/formatters'
+import './ResultCopyButton.css'
 
 const copyWithFallback = async (text) => {
   // Try to use the clipboard API if available but writeText failed
@@ -145,8 +146,10 @@ const ResultCopyButton = ({ calculationResult, crane }) => {
       labelPosition='left'
       size='tiny'
       color='teal'
+      fluid
       onClick={handleCopy}
       disabled={!calculationResult}
+      className='result-copy-button'
     >
       <Icon name={copied ? 'check' : 'copy'} />
       {copied ? 'Скопировано' : 'Копировать результат'}

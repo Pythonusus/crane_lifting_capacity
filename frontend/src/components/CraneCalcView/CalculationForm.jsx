@@ -48,7 +48,11 @@ const CalculationForm = ({
 
   return (
     <div className='calc-input-form'>
-      <Header as='h3' textAlign='center' className='font-size-4'>
+      <Header
+        as='h3'
+        textAlign='center'
+        className='calc-form-header font-size-4'
+      >
         Введите исходные данные
       </Header>
       <Form size='small' onSubmit={onSubmit}>
@@ -146,6 +150,7 @@ const CalculationForm = ({
             size='tiny'
             loading={isSubmitting}
             disabled={isSubmitting}
+            className='calculate-button'
           >
             Вычислить
           </Button>
@@ -156,6 +161,7 @@ const CalculationForm = ({
             size='tiny'
             onClick={onClear}
             disabled={isSubmitting}
+            className='clear-button'
           >
             Очистить
           </Button>

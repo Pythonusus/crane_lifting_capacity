@@ -50,7 +50,11 @@ const CalculationResults = ({ calculationResult, calculationMode, crane }) => {
 
   return (
     <div className='calc-result-view-container'>
-      <Header as='h3' textAlign='center' className='font-size-4'>
+      <Header
+        as='h3'
+        textAlign='center'
+        className='calc-result-header font-size-4'
+      >
         Результаты расчета грузоподъемности
       </Header>
       <Container className='calc-result-cards-container'>

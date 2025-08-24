@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button, Icon } from 'semantic-ui-react'
 
 import { generateAndDownloadReport } from '@/src/utilities/reportGenerator'
+import './ResultDownloadButton.css'
 
 /**
  * Component for downloading calculation results as a Word document
@@ -38,9 +39,11 @@ const ResultDownloadButton = ({
       labelPosition='left'
       size='tiny'
       color='teal'
+      fluid
       onClick={handleDownload}
       disabled={!calculationResult || isGenerating}
       loading={isGenerating}
+      className='result-download-button'
     >
       <Icon name='download' />
       {isGenerating ? 'Создание отчета...' : 'Скачать отчет DOC'}
