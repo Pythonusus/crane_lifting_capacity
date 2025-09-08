@@ -10,16 +10,17 @@ import './AppLogo.css'
 
 const AppLogo = () => {
   return (
-    <div className='app-logo-container'>
-      <img
-        src={logo}
-        alt='Crane lifting capacity calculator logo'
-        className='app-logo '
-      />
+    <div className='product-name-container'>
+      <div className='app-logo-container'>
+        <img
+          src={logo}
+          alt='Crane lifting capacity calculator logo'
+          className='app-logo '
+        />
+      </div>
       <div className='app-title'>
         <span>Калькулятор</span>
-        <span>грузоподъемности</span>
-        <span>кранов</span>
+        <span>грузоподъемности кранов</span>
       </div>
     </div>
   )

@@ -2,6 +2,11 @@
   height: 100vh;
   display: flex;
   text-align: center;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.3),
+    rgba(130, 148, 241, 0.3)
+  );
 }
 
 .app-container {
@@ -11,31 +16,22 @@
 }
 
 .custom-header {
-  background-color: #f0f1f3 !important;
-  margin: 0 !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 5px !important;
 }
 
 .header-content {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
-  padding: 8px;
-  position: relative;
-}
-
-.navbar-section {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: 720px;
 }
 
 /* For tablets and mobile */
-@media (max-width: 1250px) {
+@media (max-width: 1600px) {
   .header-content {
     flex-direction: column;
     justify-content: center;
+    gap: 14px;
   }
 
   .navbar-section {

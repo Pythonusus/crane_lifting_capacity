@@ -1,4 +1,17 @@
 .custom-navbar {
-  display: inline-flex !important;
-  margin-bottom: 0.5em !important;
+  display: flex;
+
+  align-items: center;
+  background-color: #16181d;
+  border-radius: 14px;
+  padding: 5px;
+}
+
+.custom-navbar a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.custom-navbar a:hover {
+  text-decoration: none;
 }

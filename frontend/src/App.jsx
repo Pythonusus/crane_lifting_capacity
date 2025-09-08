@@ -6,8 +6,9 @@ import '@/src/App.css'
 import 'semantic-ui-css/semantic.min.css'
 
 import AppLogo from '@/src/components/AppLogo'
+import Copyright from '@/src/components/Copyright'
 import Navbar from '@/src/components/Navbar'
-import About from '@/src/pages/About'
+// import About from '@/src/pages/About'
 import CalcHistory from '@/src/pages/CalcHistory'
 import ComparisonTable from '@/src/pages/ComparisonTable'
 import CraneDetail from '@/src/pages/CraneDetail'
@@ -23,9 +24,10 @@ function App() {
         <Header as='header' fixed='top' className='custom-header'>
           <div className='header-content'>
             <AppLogo />
-            <div className='navbar-section'>
-              <Navbar />
-            </div>
+
+            <Navbar />
+
+            <Copyright />
           </div>
         </Header>
 
@@ -34,7 +36,7 @@ function App() {
           <Route path='/cranes/:name' element={<CraneDetail />} />
           <Route path='/compare' element={<ComparisonTable />} />
           <Route path='/history' element={<CalcHistory />} />
-          <Route path='/about' element={<About />} />
+          {/* <Route path='/about' element={<About />} /> */}
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
