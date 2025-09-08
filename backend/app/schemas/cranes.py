@@ -19,7 +19,7 @@ from app.settings import SUPPORTED_IMAGE_CONTENT_TYPES
 class ChassisType(str, Enum):
     """Class containing all available chassis types"""
     # TODO: Uncomment when we have data for these chassis types
-    # TRUCK_MOUNTED = "Автомобильный"
+    TRUCK_MOUNTED = "Автомобильный"
     MOBILE = "Спецшасси автомобильного типа"
     CRAWLER = "Гусеничный"
     RAILWAY = "Железнодорожный"
