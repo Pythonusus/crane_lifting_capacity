@@ -44,6 +44,7 @@ from app.db.queries import (
     get_manufacturers_from_db,
 )
 from app.db.session import get_db
+from app.pymidasoft.license.license_checker import create_license_checker
 from app.schemas.calc_requests import (
     PayloadCalcRequest,
     SafetyFactorCalcRequest,
@@ -89,9 +90,16 @@ app.add_middleware(
     allow_headers=settings.CORS_HEADERS,
 )
 
+# Midas license checker
+license_checker = create_license_checker(
+    name=settings.APP_TITLE,
+    url="https://nelineino.ru/api/check-access/plugin/",
+    debug=not settings.LICENSE_CHECK,
+)
+
 
 @app.get("/health")
-def health():
+def health(_: None = Depends(license_checker.check)):
     """Check application status"""
     return {
         "status_code": 200,
@@ -104,6 +112,7 @@ def process(
     payload_request: PayloadCalcRequest | None = None,
     safety_request: SafetyFactorCalcRequest | None = None,
     db: Session = Depends(get_db),
+    _: None = Depends(license_checker.check),
 ):
     """
     Process lifting capacity calculation requests.
@@ -138,7 +147,11 @@ def process(
 
 
 @app.get("/api/cranes/{crane_name}")
-def get_crane_by_name(crane_name: str, db: Session = Depends(get_db)):
+def get_crane_by_name(
+    crane_name: str,
+    db: Session = Depends(get_db),
+    _: None = Depends(license_checker.check),
+):
     """
     Get a single crane by name.
 
@@ -156,20 +169,26 @@ def get_crane_by_name(crane_name: str, db: Session = Depends(get_db)):
 
 
 @app.get("/api/chassis-types")
-def get_chassis_types():
+def get_chassis_types(_: None = Depends(license_checker.check)):
     """Get all available crane chassis types"""
     return ChassisTypesResponse()
 
 
 @app.get("/api/manufacturers")
-def get_manufacturers(db: Session = Depends(get_db)):
+def get_manufacturers(
+    db: Session = Depends(get_db), _: None = Depends(license_checker.check)
+):
     """Get all available crane manufacturers"""
     manufacturers = get_manufacturers_from_db(db)
     return {"manufacturers": manufacturers}
 
 
 @app.post("/api/cranes")
-def get_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
+def get_cranes(
+    filters: CraneFilterRequest,
+    db: Session = Depends(get_db),
+    _: None = Depends(license_checker.check),
+):
     """
     Filter cranes based on the provided filters with load-more pagination.
     If no filters are provided, return all cranes.
@@ -202,7 +221,9 @@ def get_cranes(filters: CraneFilterRequest, db: Session = Depends(get_db)):
 
 @app.post("/api/cranes/count")
 def get_cranes_count(
-    filters: CraneFilterRequest, db: Session = Depends(get_db)
+    filters: CraneFilterRequest,
+    db: Session = Depends(get_db),
+    _: None = Depends(license_checker.check),
 ):
     """
     Get the total count of cranes matching the provided filters.
@@ -218,13 +239,17 @@ def get_cranes_count(
 
 
 @app.get("/api/sort-options")
-def get_sort_options():
+def get_sort_options(_: None = Depends(license_checker.check)):
     """Get all available crane sorting options"""
     return SortOptionsResponse()
 
 
 @app.get("/api/attachments/{attachment_id}")
-def serve_attachment_by_id(attachment_id: int, db: Session = Depends(get_db)):
+def serve_attachment_by_id(
+    attachment_id: int,
+    db: Session = Depends(get_db),
+    _: None = Depends(license_checker.check),
+):
     """
     Serve a crane attachment by its ID.
     """

@@ -18,6 +18,9 @@ APP_VERSION = "0.1.0"
 # If DEVELOPMENT is not set, it defaults to false
 DEVELOPMENT = os.getenv("DEVELOPMENT", "false").lower() == "true"
 
+# License check settings for Midas license checker
+LICENSE_CHECK = os.getenv("LICENSE_CHECK", "true").lower() == "true"
+
 # Port Settings
 PORT = int(os.getenv("PORT", "8000"))
 

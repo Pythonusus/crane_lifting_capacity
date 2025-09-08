@@ -43,6 +43,7 @@ exclude = [
     "*.egg-info",
     "build",
     "dist",
+    "app/pymidasoft/*"
 ]
 
 [tool.ruff.lint]
@@ -75,7 +76,8 @@ omit = [
     "*/tests/*",
     "*/tests.py",
     "test_*.py",
-    "*_tests.py"
+    "*_tests.py",
+    "app/pymidasoft/*"
 ]
 
 [tool.coverage.html]
