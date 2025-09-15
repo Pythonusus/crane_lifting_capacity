@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Button,
@@ -42,8 +43,21 @@ const prepareInitialFormData = (entry) => {
   }
 }
 
+// Reusable clear history button
+const ClearHistoryButton = ({ onClear, className = '' }) => (
+  <Button
+    color='red'
+    size='small'
+    onClick={onClear}
+    icon='trash'
+    content='Очистить историю'
+    className={className}
+  />
+)
+
 const CalcHistory = () => {
   const { history, clearHistory } = useCalculationHistory()
+  const [hasError, setHasError] = useState(false)
 
   const handleClearHistory = () => {
     if (
@@ -52,209 +66,245 @@ const CalcHistory = () => {
       )
     ) {
       clearHistory()
+      setHasError(false) // Reset error state
     }
   }
 
-  return (
-    <main className='calc-history-main-content'>
-      <div className='calc-history-container'>
-        <Header as='h1' textAlign='center' className='font-size-2'>
-          История расчетов
-        </Header>
+  const handleError = (error) => {
+    console.error('Error in CalcHistory component:', error)
+    setHasError(true)
+  }
 
-        {history.length === 0 ? (
-          <Message info>
-            <Message.Header>История пуста</Message.Header>
-            <p>Выполните расчеты, чтобы увидеть их здесь.</p>
+  // Render error UI if there's an error
+  if (hasError) {
+    return (
+      <main className='calc-history-main-content'>
+        <div className='calc-history-container'>
+          <Header as='h1' textAlign='center' className='font-size-2'>
+            История расчетов
+          </Header>
+
+          <Message error>
+            <Message.Header>
+              Произошла ошибка при загрузке истории
+            </Message.Header>
+            <p>
+              Не удалось загрузить историю расчетов. Возможно, данные
+              повреждены.
+            </p>
           </Message>
-        ) : (
-          <>
-            <Table
-              celled
-              striped
-              compact
-              size='small'
-              unstackable
-              className='history-table center-text'
-            >
-              <TableHeader>
-                <TableRow>
-                  <TableHeaderCell className='timestamp-column hide-on-tablet'>
-                    Дата
-                  </TableHeaderCell>
-                  <TableHeaderCell className='crane-column'>
-                    Кран
-                  </TableHeaderCell>
-                  <TableHeaderCell className='boom-column'>
-                    Тип стрелы
-                  </TableHeaderCell>
-                  <TableHeaderCell className='method-column hide-on-tablet'>
-                    Метод <br /> расчета
-                  </TableHeaderCell>
-                  <TableHeaderCell className='radius-column'>
-                    Вылет
-                  </TableHeaderCell>
-                  <TableHeaderCell className='equipment-column'>
-                    Вес <br /> оборуд.
-                  </TableHeaderCell>
-                  <TableHeaderCell className='input-column'>
-                    <span>
-                      Вес груза
-                      <hr />
-                      Коэф. запаса
-                    </span>
-                  </TableHeaderCell>
-                  <TableHeaderCell className='capacity-column'>
-                    Г/П <br /> на вылете
-                  </TableHeaderCell>
-                  <TableHeaderCell className='result-column'>
-                    <span>
-                      Коэф. запаса
-                      <hr />
-                      Вес груза
-                    </span>
-                  </TableHeaderCell>
-                  <TableHeaderCell className='actions-column'>
-                    Действия
-                  </TableHeaderCell>
-                </TableRow>
-              </TableHeader>
 
-              <TableBody>
-                {history.map((entry) => {
-                  const timestamp = formatTimestamp(entry.timestamp)
+          <div className='error-message-container'>
+            <ClearHistoryButton onClear={handleClearHistory} />
+          </div>
+        </div>
+      </main>
+    )
+  }
 
-                  const request = entry.result.request
+  // Try to render the component, catch any errors
+  try {
+    return (
+      <main className='calc-history-main-content'>
+        <div className='calc-history-container'>
+          <Header as='h1' textAlign='center' className='font-size-2'>
+            История расчетов
+          </Header>
 
-                  const isPayloadMethod = entry.calculationMethod === 'payload'
-
-                  // Extract and format request values
-                  const boomLength = request.boom_len
-                  const radius = formatCalculationValue(request.radius, 'м')
-                  const equipmentWeight = formatCalculationValue(
-                    request.equipment_weight,
-                    'т',
-                  )
-
-                  const inputValue = isPayloadMethod
-                    ? formatCalculationValue(request.safety_factor)
-                    : formatCalculationValue(request.payload, 'т')
-
-                  // Extract and format result values
-                  const liftingCapacity = formatCalculationValue(
-                    entry.result.lifting_capacity,
-                    'т',
-                  )
-
-                  const calculationResult = isPayloadMethod
-                    ? formatCalculationValue(entry.result.payload, 'т')
-                    : formatCalculationValue(entry.result.safety_factor)
-
-                  // Prepare data for navigation
-                  const initialFormData = prepareInitialFormData(entry)
-                  const initialMode = isPayloadMethod
-                    ? 'payload'
-                    : 'safety_factor'
-                  const initialResult = entry.result
-                  const craneName = `${entry.manufacturer}_${entry.model}`
-
-                  return (
-                    <TableRow key={entry.id} className='table-row-hover'>
-                      <TableCell className='history-timestamp hide-on-tablet'>
-                        <span>
-                          {timestamp.date}
-                          <br />
-                          {timestamp.time}
-                        </span>
-                      </TableCell>
-                      <TableCell className='fw-bold'>
-                        <Popup
-                          content='Перейти к расчету'
-                          size='tiny'
-                          trigger={
-                            <Link
-                              to={`/cranes/${encodeURIComponent(craneName)}`}
-                              state={{
-                                initialFormData,
-                                initialMode,
-                                initialResult,
-                              }}
-                              className='crane-name-link'
-                            >
-                              {entry.manufacturer} {entry.model}
-                            </Link>
-                          }
-                        />
-                      </TableCell>
-                      <TableCell>{boomLength}</TableCell>
-                      <TableCell className='hide-on-tablet'>
-                        {entry.calculationMethod === 'payload' ? (
-                          <span className='history-method-label font-size-5'>
-                            Коэф. запаса
-                          </span>
-                        ) : (
-                          <span className='history-method-label font-size-5'>
-                            Вес груза
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell>{radius}</TableCell>
-                      <TableCell>{equipmentWeight}</TableCell>
-                      <TableCell>{inputValue}</TableCell>
-                      <TableCell className='history-result-value fw-bold'>
-                        {liftingCapacity}
-                      </TableCell>
-                      <TableCell className='history-result-value fw-bold'>
-                        {calculationResult}
-                      </TableCell>
-                      <TableCell>
-                        <div className='history-action-buttons'>
-                          <ResultCopyButton
-                            calculationResult={entry.result}
-                            crane={{
-                              name: `${entry.manufacturer}_${entry.model}`,
-                              manufacturer: entry.manufacturer,
-                              model: entry.model,
-                              chassis_type: entry.chassisType || null,
-                              max_lifting_capacity:
-                                entry.maxLiftingCapacity || null,
-                            }}
-                          />
-                          <ResultDownloadButton
-                            calculationResult={entry.result}
-                            calculationMode={entry.calculationMethod}
-                            crane={{
-                              name: `${entry.manufacturer}_${entry.model}`,
-                              manufacturer: entry.manufacturer,
-                              model: entry.model,
-                              chassis_type: entry.chassisType || null,
-                              max_lifting_capacity:
-                                entry.maxLiftingCapacity || null,
-                            }}
-                          />
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
-
-            <div className='history-clear-button-container'>
-              <Button
-                color='red'
+          {history.length === 0 ? (
+            <Message info>
+              <Message.Header>История пуста</Message.Header>
+              <p>Выполните расчеты, чтобы увидеть их здесь.</p>
+            </Message>
+          ) : (
+            <>
+              <Table
+                celled
+                striped
+                compact
                 size='small'
-                onClick={handleClearHistory}
-                icon='trash'
-                content='Очистить историю'
-                className='history-clear-button'
-              />
-            </div>
-          </>
-        )}
-      </div>
-    </main>
-  )
+                unstackable
+                className='history-table center-text'
+              >
+                <TableHeader>
+                  <TableRow>
+                    <TableHeaderCell className='timestamp-column hide-on-tablet'>
+                      Дата
+                    </TableHeaderCell>
+                    <TableHeaderCell className='crane-column'>
+                      Кран
+                    </TableHeaderCell>
+                    <TableHeaderCell className='boom-column'>
+                      Тип стрелы
+                    </TableHeaderCell>
+                    <TableHeaderCell className='method-column hide-on-tablet'>
+                      Метод <br /> расчета
+                    </TableHeaderCell>
+                    <TableHeaderCell className='radius-column'>
+                      Вылет
+                    </TableHeaderCell>
+                    <TableHeaderCell className='equipment-column'>
+                      Вес <br /> оборуд.
+                    </TableHeaderCell>
+                    <TableHeaderCell className='input-column'>
+                      <span>
+                        Вес груза
+                        <hr />
+                        Коэф. запаса
+                      </span>
+                    </TableHeaderCell>
+                    <TableHeaderCell className='capacity-column'>
+                      Г/П <br /> на вылете
+                    </TableHeaderCell>
+                    <TableHeaderCell className='result-column'>
+                      <span>
+                        Коэф. запаса
+                        <hr />
+                        Вес груза
+                      </span>
+                    </TableHeaderCell>
+                    <TableHeaderCell className='actions-column'>
+                      Действия
+                    </TableHeaderCell>
+                  </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                  {history.map((entry) => {
+                    const timestamp = formatTimestamp(entry.timestamp)
+
+                    const request = entry.result.request
+
+                    const isPayloadMethod =
+                      entry.calculationMethod === 'payload'
+
+                    // Extract and format request values
+                    const boomLength = request.boom_len
+                    const radius = formatCalculationValue(request.radius, 'м')
+                    const equipmentWeight = formatCalculationValue(
+                      request.equipment_weight,
+                      'т',
+                    )
+
+                    const inputValue = isPayloadMethod
+                      ? formatCalculationValue(request.safety_factor)
+                      : formatCalculationValue(request.payload, 'т')
+
+                    // Extract and format result values
+                    const liftingCapacity = formatCalculationValue(
+                      entry.result.lifting_capacity,
+                      'т',
+                    )
+
+                    const calculationResult = isPayloadMethod
+                      ? formatCalculationValue(entry.result.payload, 'т')
+                      : formatCalculationValue(entry.result.safety_factor)
+
+                    // Prepare data for navigation
+                    const initialFormData = prepareInitialFormData(entry)
+                    const initialMode = isPayloadMethod
+                      ? 'payload'
+                      : 'safety_factor'
+                    const initialResult = entry.result
+                    const craneName = `${entry.manufacturer}_${entry.model}`
+
+                    return (
+                      <TableRow key={entry.id} className='table-row-hover'>
+                        <TableCell className='history-timestamp hide-on-tablet'>
+                          <span>
+                            {timestamp.date}
+                            <br />
+                            {timestamp.time}
+                          </span>
+                        </TableCell>
+                        <TableCell className='fw-bold'>
+                          <Popup
+                            content='Перейти к расчету'
+                            size='tiny'
+                            trigger={
+                              <Link
+                                to={`/cranes/${encodeURIComponent(craneName)}`}
+                                state={{
+                                  initialFormData,
+                                  initialMode,
+                                  initialResult,
+                                }}
+                                className='crane-name-link'
+                              >
+                                {entry.manufacturer} {entry.model}
+                              </Link>
+                            }
+                          />
+                        </TableCell>
+                        <TableCell>{boomLength}</TableCell>
+                        <TableCell className='hide-on-tablet'>
+                          {entry.calculationMethod === 'payload' ? (
+                            <span className='history-method-label font-size-5'>
+                              Коэф. запаса
+                            </span>
+                          ) : (
+                            <span className='history-method-label font-size-5'>
+                              Вес груза
+                            </span>
+                          )}
+                        </TableCell>
+                        <TableCell>{radius}</TableCell>
+                        <TableCell>{equipmentWeight}</TableCell>
+                        <TableCell>{inputValue}</TableCell>
+                        <TableCell className='history-result-value fw-bold'>
+                          {liftingCapacity}
+                        </TableCell>
+                        <TableCell className='history-result-value fw-bold'>
+                          {calculationResult}
+                        </TableCell>
+                        <TableCell>
+                          <div className='history-action-buttons'>
+                            <ResultCopyButton
+                              calculationResult={entry.result}
+                              crane={{
+                                name: `${entry.manufacturer}_${entry.model}`,
+                                manufacturer: entry.manufacturer,
+                                model: entry.model,
+                                chassis_type: entry.chassisType || null,
+                                max_lifting_capacity:
+                                  entry.maxLiftingCapacity || null,
+                              }}
+                            />
+                            <ResultDownloadButton
+                              calculationResult={entry.result}
+                              calculationMode={entry.calculationMethod}
+                              crane={{
+                                name: `${entry.manufacturer}_${entry.model}`,
+                                manufacturer: entry.manufacturer,
+                                model: entry.model,
+                                chassis_type: entry.chassisType || null,
+                                max_lifting_capacity:
+                                  entry.maxLiftingCapacity || null,
+                              }}
+                            />
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+
+              <div className='history-clear-button-container'>
+                <ClearHistoryButton
+                  onClear={handleClearHistory}
+                  className='history-clear-button'
+                />
+              </div>
+            </>
+          )}
+        </div>
+      </main>
+    )
+  } catch (error) {
+    handleError(error)
+    return null // This will trigger a re-render with the error UI
+  }
 }
 
 export default CalcHistory

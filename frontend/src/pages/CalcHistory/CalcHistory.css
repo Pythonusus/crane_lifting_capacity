@@ -43,3 +43,9 @@
 .history-clear-button {
   margin: 0 !important;
 }
+
+/* Error state styles */
+.error-message-container {
+  text-align: center;
+  margin-top: 20px;
+}
