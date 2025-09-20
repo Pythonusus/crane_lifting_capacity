@@ -9,6 +9,7 @@ import {
 } from 'semantic-ui-react'
 
 import ValidatedFormField from '@/src/components/ValidatedFormField'
+import './CalculationForm.css'
 
 /**
  * Form component for crane calculation inputs
@@ -47,16 +48,16 @@ const CalculationForm = ({
   }))
 
   return (
-    <div className='calc-input-form'>
+    <div className='calculation-form'>
       <Header
         as='h3'
         textAlign='center'
-        className='calc-form-header font-size-4'
+        className='calculation-form-header font-size-4'
       >
         Введите исходные данные
       </Header>
       <Form size='small' onSubmit={onSubmit}>
-        <FormField className='calc-method-form-field'>
+        <FormField className='calculation-method-form-field'>
           <label className='custom-form-label'>
             <Checkbox
               toggle
@@ -65,8 +66,8 @@ const CalculationForm = ({
                 onModeChange(checked ? 'payload' : 'safety_factor')
               }
             />
-            <div className='calc-method-container font-size-5'>
-              <span className='calc-method-label'>Режим расчета:</span>
+            <div className='calculation-method-container font-size-5'>
+              <span className='calculation-method-label'>Режим расчета:</span>
               {calculationMode === 'payload'
                 ? ' по коэффициенту запаса'
                 : ' по заданному грузу'}
@@ -142,7 +143,7 @@ const CalculationForm = ({
           />
         )}
 
-        <div className='calc-buttons-container'>
+        <div className='calculation-buttons-container'>
           <Button
             type='submit'
             color='blue'

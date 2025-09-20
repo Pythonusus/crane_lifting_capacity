@@ -4,6 +4,7 @@ import { Container, Header } from 'semantic-ui-react'
 import ResultCopyButton from '@/src/components/ResultCopyButton'
 import ResultDownloadButton from '@/src/components/ResultDownloadButton'
 import { formatCalculationValue } from '@/src/utilities/formatters'
+import './CalculationResults.css'
 
 /**
  * Component to display crane calculation results
@@ -22,7 +23,7 @@ const CalculationResults = ({ calculationResult, calculationMode, crane }) => {
   const renderResultValue = () => {
     if (!calculationResult) {
       return (
-        <span className='calc-result-value-placeholder'>
+        <span className='calculation-result-value-placeholder'>
           Выполните расчет для получения результатов
         </span>
       )
@@ -41,60 +42,60 @@ const CalculationResults = ({ calculationResult, calculationMode, crane }) => {
     }
 
     return (
-      <span className='calc-result-value-placeholder'>
+      <span className='calculation-result-value-placeholder'>
         Выполните расчет для получения результатов
       </span>
     )
   }
 
   return (
-    <div className='calc-result-view-container'>
+    <div className='calculation-results'>
       <Header
         as='h3'
         textAlign='center'
-        className='calc-result-header font-size-4'
+        className='calculation-results-header font-size-4'
       >
         Результаты расчета грузоподъемности
       </Header>
-      <Container className='calc-result-cards-container'>
-        <div className='calc-result-card'>
-          <div className='calc-result-label font-size-5 fw-bold'>
+      <Container className='calculation-results-cards-container'>
+        <div className='calculation-results-card'>
+          <div className='calculation-results-label font-size-5 fw-bold'>
             Грузоподъемность на данном вылете, т
           </div>
-          <div className='calc-result-value font-size-5 fw-bold'>
+          <div className='calculation-results-value font-size-5 fw-bold'>
             {calculationResult ? (
               formatCalculationValue(calculationResult.lifting_capacity)
             ) : (
-              <span className='calc-result-value-placeholder font-size-5'>
+              <span className='calculation-result-value-placeholder font-size-5'>
                 Выполните расчет для получения результатов
               </span>
             )}
           </div>
         </div>
         {isPayloadMode ? (
-          <div className='calc-result-card'>
-            <div className='calc-result-label font-size-5 fw-bold'>
+          <div className='calculation-results-card'>
+            <div className='calculation-results-label font-size-5 fw-bold'>
               Допустимый вес груза, т
             </div>
-            <div className='calc-result-value font-size-5 fw-bold'>
+            <div className='calculation-results-value font-size-5 fw-bold'>
               {renderResultValue()}
             </div>
           </div>
         ) : (
           <>
-            <div className='calc-result-card'>
-              <div className='calc-result-label font-size-5 fw-bold'>
+            <div className='calculation-results-card'>
+              <div className='calculation-results-label font-size-5 fw-bold'>
                 Коэффициент запаса
               </div>
-              <div className='calc-result-value font-size-5 fw-bold'>
+              <div className='calculation-results-value font-size-5 fw-bold'>
                 {renderResultValue()}
               </div>
             </div>
-            <div className='calc-result-card'>
-              <div className='calc-result-label font-size-5 fw-bold'>
+            <div className='calculation-results-card'>
+              <div className='calculation-results-label font-size-5 fw-bold'>
                 Запас грузоподъемности, т
               </div>
-              <div className='calc-result-value font-size-5 fw-bold'>
+              <div className='calculation-results-value font-size-5 fw-bold'>
                 {calculationResult && calculationResult.request.payload ? (
                   formatCalculationValue(
                     calculationResult.lifting_capacity -
@@ -102,7 +103,7 @@ const CalculationResults = ({ calculationResult, calculationMode, crane }) => {
                       calculationResult.request.equipment_weight,
                   )
                 ) : (
-                  <span className='calc-result-value-placeholder font-size-5'>
+                  <span className='calculation-result-value-placeholder font-size-5'>
                     Выполните расчет для получения результатов
                   </span>
                 )}
@@ -110,7 +111,7 @@ const CalculationResults = ({ calculationResult, calculationMode, crane }) => {
             </div>
           </>
         )}
-        <div className='calc-result-actions'>
+        <div className='calculation-results-actions'>
           <ResultCopyButton
             calculationResult={calculationResult}
             crane={crane}

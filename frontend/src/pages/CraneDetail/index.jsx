@@ -3,8 +3,10 @@ import { useParams, useLocation } from 'react-router-dom'
 import { Container, Header, Icon, Message } from 'semantic-ui-react'
 
 import { fetchCraneByName } from '@/src/api/cranes'
-import CraneCalcView from '@/src/components/CraneCalcView'
+import CalculationForm from '@/src/components/CalculationForm'
+import CalculationResults from '@/src/components/CalculationResults'
 import CraneDataView from '@/src/components/CraneDataView'
+import useCalculationForm from '@/src/hooks/useCalculationForm'
 import './CraneDetail.css'
 
 const CraneDetail = () => {
@@ -18,6 +20,20 @@ const CraneDetail = () => {
   const initialFormData = location.state?.initialFormData || null
   const initialMode = location.state?.initialMode || 'safety_factor'
   const initialResult = location.state?.initialResult || null
+
+  // Use calculation form hook
+  const {
+    calculationMode,
+    setCalculationMode,
+    formData,
+    errors,
+    validationErrors,
+    isSubmitting,
+    calculationResult,
+    handleInputChange,
+    handleSubmit,
+    handleClearForm,
+  } = useCalculationForm(crane, initialFormData, initialMode, initialResult)
 
   useEffect(() => {
     const loadCrane = async () => {
@@ -67,12 +83,36 @@ const CraneDetail = () => {
   return (
     <main className='crane-detail-main-content'>
       <CraneDataView crane={crane} />
-      <CraneCalcView
-        crane={crane}
-        initialFormData={initialFormData}
-        initialMode={initialMode}
-        initialResult={initialResult}
-      />
+      <div className='calc-view-container'>
+        <hr className='calc-view-divider' />
+        <Header
+          as='h2'
+          textAlign='center'
+          className='calc-view-header font-size-3'
+        >
+          Расcчитать грузоподъемность крана
+        </Header>
+        <hr className='calc-view-divider' />
+        <div className='calc-input-and-result-container'>
+          <CalculationForm
+            crane={crane}
+            formData={formData}
+            errors={errors}
+            validationErrors={validationErrors}
+            isSubmitting={isSubmitting}
+            calculationMode={calculationMode}
+            onInputChange={handleInputChange}
+            onSubmit={handleSubmit}
+            onClear={handleClearForm}
+            onModeChange={setCalculationMode}
+          />
+          <CalculationResults
+            calculationResult={calculationResult}
+            calculationMode={calculationMode}
+            crane={crane}
+          />
+        </div>
+      </div>
     </main>
   )
 }
