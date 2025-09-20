@@ -13,6 +13,8 @@ import {
   TableRow,
 } from 'semantic-ui-react'
 
+import ResultCopyButton from '@/src/components/ResultCopyButton'
+import ResultDownloadButton from '@/src/components/ResultDownloadButton'
 import useHistoryClear from '@/src/hooks/useHistoryClear'
 import useHistoryDelete from '@/src/hooks/useHistoryDelete'
 import useHistoryState from '@/src/hooks/useHistoryState'

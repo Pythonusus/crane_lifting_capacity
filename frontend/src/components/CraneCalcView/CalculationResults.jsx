@@ -1,9 +1,8 @@
 import React from 'react'
 import { Container, Header } from 'semantic-ui-react'
 
-import ResultCopyButton from './ResultCopyButton'
-import ResultDownloadButton from './ResultDownloadButton'
-
+import ResultCopyButton from '@/src/components/ResultCopyButton'
+import ResultDownloadButton from '@/src/components/ResultDownloadButton'
 import { formatCalculationValue } from '@/src/utilities/formatters'
 
 /**
