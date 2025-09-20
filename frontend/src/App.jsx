@@ -8,7 +8,7 @@ import 'semantic-ui-css/semantic.min.css'
 import AppLogo from '@/src/components/AppLogo'
 import Copyright from '@/src/components/Copyright'
 import Navbar from '@/src/components/Navbar'
-// import About from '@/src/pages/About'
+import About from '@/src/pages/About'
 import CalcHistory from '@/src/pages/CalcHistory'
 import ComparisonTable from '@/src/pages/ComparisonTable'
 import CraneDetail from '@/src/pages/CraneDetail'
@@ -36,7 +36,7 @@ function App() {
           <Route path='/cranes/:name' element={<CraneDetail />} />
           <Route path='/compare' element={<ComparisonTable />} />
           <Route path='/history' element={<CalcHistory />} />
-          {/* <Route path='/about' element={<About />} /> */}
+          <Route path='/about' element={<About />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
