@@ -6,7 +6,8 @@ import {
   createPayloadRequest,
   createSafetyFactorRequest,
 } from '@/src/api/calcRequests'
-import useCalculationHistory from '@/src/hooks/useCalculationHistory'
+import useHistoryAdd from '@/src/hooks/useHistoryAdd'
+import useHistoryState from '@/src/hooks/useHistoryState'
 import {
   isFormValid,
   validatePayloadCalcForm,
@@ -55,7 +56,8 @@ const useCalculationForm = (
   initialMode = false,
   initialResult = null,
 ) => {
-  const { addToHistory } = useCalculationHistory()
+  const { history, setHistory } = useHistoryState()
+  const { addToHistory } = useHistoryAdd(history, setHistory)
 
   const [calculationMode, setCalculationMode] = useState(
     initialMode || 'safety_factor',

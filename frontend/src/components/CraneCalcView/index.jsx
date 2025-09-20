@@ -3,7 +3,7 @@ import { Header } from 'semantic-ui-react'
 
 import CalculationForm from '@/src/components/CraneCalcView/CalculationForm'
 import CalculationResults from '@/src/components/CraneCalcView/CalculationResults'
-import useCalculationForm from '@/src/components/CraneCalcView/useCalculationForm'
+import useCalculationForm from '@/src/hooks/useCalculationForm'
 import '@/src/components/CraneCalcView/CraneCalcView.css'
 
 /**
