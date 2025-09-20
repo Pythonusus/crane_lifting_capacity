@@ -14,6 +14,7 @@ import {
 } from 'semantic-ui-react'
 
 import ResultCopyButton from '@/src/components/ResultCopyButton'
+import ResultDeleteButton from '@/src/components/ResultDeleteButton'
 import ResultDownloadButton from '@/src/components/ResultDownloadButton'
 import useHistoryClear from '@/src/hooks/useHistoryClear'
 import useHistoryDelete from '@/src/hooks/useHistoryDelete'
@@ -63,6 +64,8 @@ const CalcHistory = () => {
 
   // Individual operation hooks
   const { clearHistory } = useHistoryClear(history, setHistory)
+  const { deleteSingleEntry } = useHistoryDelete(history, setHistory)
+
   const [hasError, setHasError] = useState(false)
 
   const handleClearHistory = () => {
@@ -287,6 +290,10 @@ const CalcHistory = () => {
                                 max_lifting_capacity:
                                   entry.maxLiftingCapacity || null,
                               }}
+                            />
+                            <ResultDeleteButton
+                              deleteSingleEntry={deleteSingleEntry}
+                              entryId={entry.id}
                             />
                           </div>
                         </TableCell>
