@@ -10,11 +10,13 @@ import {
   Button,
 } from 'semantic-ui-react'
 
-import useCalculationHistory from '@/src/hooks/useCalculationHistory'
+import useHistoryClear from '@/src/hooks/useHistoryClear'
+import useHistoryState from '@/src/hooks/useHistoryState'
 import './About.css'
 
 const About = () => {
-  const { clearHistory, history } = useCalculationHistory()
+  const { history, setHistory } = useHistoryState()
+  const { clearHistory } = useHistoryClear(history, setHistory)
 
   const handleClearHistory = () => {
     if (

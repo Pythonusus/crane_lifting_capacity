@@ -13,9 +13,9 @@ import {
   TableRow,
 } from 'semantic-ui-react'
 
-import ResultCopyButton from '@/src/components/CraneCalcView/ResultCopyButton'
-import ResultDownloadButton from '@/src/components/CraneCalcView/ResultDownloadButton'
-import useCalculationHistory from '@/src/hooks/useCalculationHistory'
+import useHistoryClear from '@/src/hooks/useHistoryClear'
+import useHistoryDelete from '@/src/hooks/useHistoryDelete'
+import useHistoryState from '@/src/hooks/useHistoryState'
 import {
   formatCalculationValue,
   formatTimestamp,
@@ -56,7 +56,11 @@ const ClearHistoryButton = ({ onClear, className = '' }) => (
 )
 
 const CalcHistory = () => {
-  const { history, clearHistory } = useCalculationHistory()
+  // Core state management
+  const { history, setHistory } = useHistoryState()
+
+  // Individual operation hooks
+  const { clearHistory } = useHistoryClear(history, setHistory)
   const [hasError, setHasError] = useState(false)
 
   const handleClearHistory = () => {
