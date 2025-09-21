@@ -55,7 +55,7 @@ const CranesList = ({
             <TableRow>
               <TableHeaderCell className='text-white'>
                 Название <br />
-                <span className='table-header-description font-size-5 text-white'>
+                <span className='font-size-5 text-white'>
                   (нажмите для перехода к расчету)
                 </span>
               </TableHeaderCell>
