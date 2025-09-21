@@ -9,6 +9,20 @@
   height: fit-content;
 }
 
+.crane-column {
+  width: 80px !important;
+}
+
+.price-column {
+  width: 100px !important;
+  text-align: center !important;
+}
+
+.history-price-cell {
+  text-align: center !important;
+  font-weight: 500;
+}
+
 .crane-name-link:hover {
   text-decoration: underline;
 }

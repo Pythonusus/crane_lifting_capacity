@@ -13,6 +13,7 @@ import {
   TableRow,
 } from 'semantic-ui-react'
 
+import CranePriceField from '@/src/components/CranePriceField'
 import ResultCopyButton from '@/src/components/ResultCopyButton'
 import ResultDeleteButton from '@/src/components/ResultDeleteButton'
 import ResultDownloadButton from '@/src/components/ResultDownloadButton'
@@ -143,8 +144,11 @@ const CalcHistory = () => {
                     <TableHeaderCell className='crane-column'>
                       Кран
                     </TableHeaderCell>
+                    <TableHeaderCell className='price-column hide-on-tablet'>
+                      Стоимость <br /> маш.-ч (₽)
+                    </TableHeaderCell>
                     <TableHeaderCell className='boom-column'>
-                      Тип стрелы
+                      Тип <br /> стрелы
                     </TableHeaderCell>
                     <TableHeaderCell className='method-column hide-on-tablet'>
                       Метод <br /> расчета
@@ -243,6 +247,11 @@ const CalcHistory = () => {
                                 {entry.manufacturer} {entry.model}
                               </Link>
                             }
+                          />
+                        </TableCell>
+                        <TableCell className='hide-on-tablet'>
+                          <CranePriceField
+                            craneName={entry.manufacturer + '_' + entry.model}
                           />
                         </TableCell>
                         <TableCell>{boomLength}</TableCell>
