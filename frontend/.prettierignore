@@ -33,6 +33,3 @@ Thumbs.db
 
 # Coverage files
 coverage/
-
-# License checker from Midas
-src/license-checker.js

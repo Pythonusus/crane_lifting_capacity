@@ -93,7 +93,7 @@ app.add_middleware(
 # Midas license checker
 license_checker = create_license_checker(
     name=settings.APP_TITLE,
-    url="https://nelineino.ru/api/check-access/plugin/",
+    url="https://lk.nelin.ru/api/check-access/plugin/",
     debug=not settings.LICENSE_CHECK,
 )
 

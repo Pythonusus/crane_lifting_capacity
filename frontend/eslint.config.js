@@ -47,7 +47,6 @@ export default [
       'tmp/**',
       '.nyc_output/**',
       'docs/api/**',
-      'src/license-checker.js',
     ],
   },
   {
