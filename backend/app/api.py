@@ -99,7 +99,7 @@ license_checker = create_license_checker(
 
 
 @app.get("/health")
-def health(_: None = Depends(license_checker.check)):
+def health():
     """Check application status"""
     return {
         "status_code": 200,
