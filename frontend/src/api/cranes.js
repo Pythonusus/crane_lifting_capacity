@@ -3,6 +3,8 @@
  * @module api/cranes
  */
 
+import { fetchWithLicense } from '@midasoft/license-checker-module'
+
 import { PAGINATION_SIZE } from '@/src/config'
 import { formatFormValue } from '@/src/utilities/formatters'
 
@@ -51,7 +53,7 @@ export const fetchFilteredCranes = async (
     limit,
   }
 
-  const response = await fetch('/api/cranes', {
+  const response = await fetchWithLicense('/api/cranes', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -77,7 +79,7 @@ export const fetchFilteredCranes = async (
  * @returns {Promise<string[]>} List of available chassis types
  */
 export const fetchChassisTypes = async () => {
-  const response = await fetch('/api/chassis-types')
+  const response = await fetchWithLicense('/api/chassis-types')
 
   if (!response.ok) {
     throw new Error('Failed to fetch chassis types')
@@ -92,7 +94,7 @@ export const fetchChassisTypes = async () => {
  * @returns {Promise<string[]>} List of available manufacturers
  */
 export const fetchManufacturers = async () => {
-  const response = await fetch('/api/manufacturers')
+  const response = await fetchWithLicense('/api/manufacturers')
 
   if (!response.ok) {
     throw new Error('Failed to fetch manufacturers')
@@ -107,7 +109,7 @@ export const fetchManufacturers = async () => {
  * @returns {Promise<Array>} List of available sorting options
  */
 export const fetchSortOptions = async () => {
-  const response = await fetch('/api/sort-options')
+  const response = await fetchWithLicense('/api/sort-options')
 
   if (!response.ok) {
     throw new Error('Failed to fetch sort options')
@@ -123,7 +125,9 @@ export const fetchSortOptions = async () => {
  * @returns {Promise<Object>} The crane object
  */
 export const fetchCraneByName = async (craneName) => {
-  const response = await fetch(`/api/cranes/${encodeURIComponent(craneName)}`)
+  const response = await fetchWithLicense(
+    `/api/cranes/${encodeURIComponent(craneName)}`,
+  )
 
   if (!response.ok) {
     if (response.status === 404) {

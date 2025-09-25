@@ -10,6 +10,14 @@ export default defineConfig({
   // During development, we serve the frontend from the root folder.
   // This is needed for hot reloading to work
   base: process.env.NODE_ENV === 'production' ? '/dist/' : '/',
+  build: {
+    target: 'es2022', // Support top-level await
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'es2022', // Support top-level await for dependencies
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(process.cwd(), '.'),

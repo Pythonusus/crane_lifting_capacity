@@ -3,6 +3,8 @@
  * @module api/calcRequests
  */
 
+import { fetchWithLicense } from '@midasoft/license-checker-module'
+
 /**
  * Create a payload calculation request
  * @param {string} craneName - Name of the crane
@@ -59,7 +61,7 @@ export const calculatePayload = async (request) => {
     payload_request: request,
   }
 
-  const response = await fetch('/process', {
+  const response = await fetchWithLicense('/process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -84,7 +86,7 @@ export const calculateSafetyFactor = async (request) => {
     safety_request: request,
   }
 
-  const response = await fetch('/process', {
+  const response = await fetchWithLicense('/process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
