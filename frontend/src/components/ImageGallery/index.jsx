@@ -17,10 +17,10 @@ const ImageGallery = ({ attachments = [] }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isExpanded, setIsExpanded] = useState(false)
 
-  // Filter only image attachments
-  const imageAttachments = attachments.filter(
-    (attachment) => attachment.is_inline,
-  )
+  // Filter only image attachments and sort by filename
+  const imageAttachments = attachments
+    .filter((attachment) => attachment.is_inline)
+    .toSorted((a, b) => a.filename.localeCompare(b.filename))
 
   const handleImageClick = (attachment) => {
     const index = imageAttachments.findIndex((img) => img.id === attachment.id)

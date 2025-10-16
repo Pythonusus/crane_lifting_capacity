@@ -101,7 +101,7 @@ const validateCommonFields = (formData, crane) => {
   const radiusTable = crane.lc_table[formData.boomLength]
   const radiusKeys = Object.keys(radiusTable)
     .map(Number)
-    .sort((a, b) => a - b)
+    .toSorted((a, b) => a - b)
   const radiusMin = radiusKeys.at(0)
   const radiusMax = radiusKeys.at(-1)
 
