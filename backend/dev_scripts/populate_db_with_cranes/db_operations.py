@@ -47,36 +47,83 @@ def write_cranes_to_db(crane_data_list: List[Crane], db_url: str) -> None:
                 if existing_crane:
                     print(f"\nUpdating existing crane: {crane_name}")
                     # Update existing crane data
+                    # Basic information
                     existing_crane.model = crane_data.model
                     existing_crane.manufacturer = crane_data.manufacturer
+                    existing_crane.country = crane_data.country
                     existing_crane.chassis_type = crane_data.chassis_type.value
+                    existing_crane.max_lifting_capacity = (
+                        crane_data.max_lifting_capacity
+                    )
+                    existing_crane.description = crane_data.description
+                    existing_crane.manufacturer_url = (
+                        str(crane_data.manufacturer_url)
+                        if crane_data.manufacturer_url
+                        else None
+                    )
+                    existing_crane.crane_url = (
+                        str(crane_data.crane_url)
+                        if crane_data.crane_url
+                        else None
+                    )
+                    # Convert lc_tables Dict[str, LcTable] to JSON format
+                    existing_crane.lc_tables = {
+                        table_name: lc_table.model_dump()
+                        for table_name, lc_table in crane_data.lc_tables.items()
+                    }
+
+                    # Economic section
                     existing_crane.pricebook = crane_data.pricebook
                     existing_crane.resource_code = crane_data.resource_code
                     existing_crane.base_price = crane_data.base_price
                     existing_crane.labor_cost = crane_data.labor_cost
-                    existing_crane.max_lifting_capacity = (
-                        crane_data.max_lifting_capacity
+
+                    # Attachments section
+                    existing_crane.dwg_url = (
+                        str(crane_data.dwg_url) if crane_data.dwg_url else None
                     )
-                    existing_crane.lc_table_radiuses = (
-                        crane_data.lc_table_radiuses
-                    )
-                    existing_crane.lc_table = crane_data.lc_table
 
                     crane_db_model = existing_crane
                 else:
                     print(f"\nCreating new crane: {crane_name}")
                     # Create new crane
+
+                    # Convert lc_tables Dict[str, LcTable] to JSON format
+                    lc_tables_json = {
+                        table_name: lc_table.model_dump()
+                        for table_name, lc_table in crane_data.lc_tables.items()
+                    }
+
                     crane_db_model = CraneDbModel(
+                        # Basic information
                         model=crane_data.model,
                         manufacturer=crane_data.manufacturer,
+                        country=crane_data.country,
                         chassis_type=crane_data.chassis_type.value,
+                        max_lifting_capacity=crane_data.max_lifting_capacity,
+                        description=crane_data.description,
+                        manufacturer_url=(
+                            str(crane_data.manufacturer_url)
+                            if crane_data.manufacturer_url
+                            else None
+                        ),
+                        crane_url=(
+                            str(crane_data.crane_url)
+                            if crane_data.crane_url
+                            else None
+                        ),
+                        lc_tables=lc_tables_json,
+                        # Economic section
                         pricebook=crane_data.pricebook,
                         resource_code=crane_data.resource_code,
                         base_price=crane_data.base_price,
                         labor_cost=crane_data.labor_cost,
-                        max_lifting_capacity=crane_data.max_lifting_capacity,
-                        lc_table_radiuses=crane_data.lc_table_radiuses,
-                        lc_table=crane_data.lc_table,
+                        # Attachments section
+                        dwg_url=(
+                            str(crane_data.dwg_url)
+                            if crane_data.dwg_url
+                            else None
+                        ),
                     )
                     session.add(crane_db_model)
                     session.flush()  # Get the ID for the new crane
@@ -85,20 +132,23 @@ def write_cranes_to_db(crane_data_list: List[Crane], db_url: str) -> None:
                 print("  Crane data:")
                 print(f"    Model: {crane_data.model}")
                 print(f"    Manufacturer: {crane_data.manufacturer}")
+                print(f"    Country: {crane_data.country}")
                 print(f"    Chassis Type: {crane_data.chassis_type.value}")
+                print(f"    Max LC: {crane_data.max_lifting_capacity}")
+                print(f"    Description: {crane_data.description}")
+                print(f"    Manufacturer URL: {crane_data.manufacturer_url}")
+                print(f"    Crane URL: {crane_data.crane_url}")
+                print(f"    LC Tables: {crane_data.lc_tables_names}")
+                for table_name, lc_table in crane_data.lc_tables.items():
+                    print(f"      {table_name}:")
+                    print(f"        Boom Lengths: {lc_table.boom_lengths}")
+                    print(f"        Radiuses: {lc_table.radiuses}")
+                    pprint(lc_table.table, indent=4)
                 print(f"    Pricebook: {crane_data.pricebook}")
                 print(f"    Resource Code: {crane_data.resource_code}")
                 print(f"    Base Price: {crane_data.base_price}")
                 print(f"    Labor Cost: {crane_data.labor_cost}")
-                print(
-                    f"    Max Lifting Capacity: "
-                    f"{crane_data.max_lifting_capacity}"
-                )
-                print(
-                    f"    LC Table Radiuses: {crane_data.lc_table_radiuses}"
-                )
-                print("    LC Table:")
-                pprint(crane_data.lc_table, indent=6, width=80)
+                print(f"    DWG URL: {crane_data.dwg_url}")
 
                 # HANDLE ATTACHMENTS
                 # Check and remove existing attachments first

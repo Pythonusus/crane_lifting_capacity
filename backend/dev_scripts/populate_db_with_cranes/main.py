@@ -7,26 +7,41 @@ crane creation and updates to existing cranes.
 
 Data Format Requirements:
     Excel files must follow this structure:
-    - A1: "Модель"             B1: model
-    - A2: "Производитель"      B2: manufacturer
-    - A3: "Тип шасси"          B3: chassis_type
-    - A4: "Сборник"            B4: pricebook
-    - A5: "Код ресурса"        B5: resource_code
 
-    - D1: "Сметная цена без учета оплаты труда"
-    - D2: base_price
-    - D3: "Оплата труда машинистов"
-    - D4: labor_cost
-    - D5: "Максимальная грузоподъемность"
-    - G5: max_lifting_capacity
-    - B8: "Вылет, м" (LC table starts here)
-    - B9+: radiuses (until empty cell)
-    - C+8: boom lengths (until empty cell)
+    First Sheet (Metadata Sheet):
+        Basic information:
+        - B4: "Модель"                         C4: model
+        - B5: "Производитель"                  C5: manufacturer
+        - B6: "Страна"                         C6: country
+        - B7: "Тип шасси"                      C7: chassis_type
+        - B8: "Макс гп"                        C8: max_lifting_capacity
+        - B9: "Описание"                       C9: description (optional)
+        - B10: "Ссылка на производителя"       C10: manufacturer_url (optional)
+        - B11: "Ссылка на кран"                C11: crane_url (optional)
 
-    Empty values in LC table are marked with '-' or 0
+        Economic section:
+        - D4: "Сборник"                        E4: pricebook
+        - D5: "Код ресурса"                    E5: resource_code
+        - D6: "Базовая цена"                   E6: base_price
+        - D7: "Зарплата машиниста"             E7: labor_cost
 
-    Attachments should be stored in
-        {ATTACHMENTS_DIR}/attachments/{chassis_type}/crane_data_directory
+        Attachments:
+        - F4: "Ссылка на чертеж"               G4: dwg_url (optional)
+
+    Subsequent Sheets (LC Tables):
+        Each sheet after the first contains one lifting capacity table:
+        - B1: table name
+        - B4: "Вылет, м" (header)
+        - C4 onwards: boom lengths (header row)
+        - B5 onwards: radius values (first column)
+        - C5 onwards: capacity values at intersection of radius and boom length
+        - Empty values are marked with '-' or 0
+
+    Structure:
+        - First sheet: Contains all crane metadata
+        - Sheet 2, 3, ...: Each contains one lifting capacity table
+
+    Attachments should be stored in the same directory as the Excel file.
 
 Features:
     - Processes multiple Excel files in subdirectories
@@ -35,6 +50,7 @@ Features:
     - Validates data using Pydantic schemas
     - Provides detailed logging of import process
     - Handles errors gracefully with rollback on failure
+    - Supports multiple lifting capacity tables per crane
 
 Database Operations:
     - Creates new cranes with all data and attachments
@@ -53,8 +69,7 @@ Usage:
     python manage.py populate-db --database-url postgresql://user:pass@localhost/cranes
 
 Environment Variables:
-    - ATTACHMENTS_DIR: Default directory containing
-        {ATTACHMENTS_DIR}/attachments/{chassis_type}/crane_data_directory
+    - CRANES_DIR: Default directory containing crane data files
     - DATABASE_URL: Default database connection URL
 
 Error Handling:
@@ -68,14 +83,14 @@ Error Handling:
 from pathlib import Path
 from typing import Optional, Union
 
-from app.settings import ATTACHMENTS_DIR, DATABASE_URL
+from app.settings import CRANES_DIR, DATABASE_URL
 
 from .data_extractor import extract_cranes_data
 from .db_operations import write_cranes_to_db
 
 
 def populate_db(
-    data_dir: Optional[Union[str, Path]] = None,
+    cranes_dir: Optional[Union[str, Path]] = None,
     database_url: Optional[str] = None,
 ) -> None:
     """
@@ -84,28 +99,28 @@ def populate_db(
     otherwise falls back to app settings.
 
     Args:
-        data_dir: Directory containing cranes data files (optional)
+        cranes_dir: Directory containing cranes data files (optional)
         database_url: Database URL (optional)
     """
 
     # Use provided args if available, otherwise fall back to settings
-    final_data_dir = data_dir or ATTACHMENTS_DIR
+    final_cranes_dir = cranes_dir or CRANES_DIR
     final_database_url = database_url or DATABASE_URL
 
-    if not all([final_data_dir, final_database_url]):
+    if not all([final_cranes_dir, final_database_url]):
         print(
-            "Error: ATTACHMENTS_DIR and DATABASE_URL must be provided either "
+            "Error: CRANES_DIR and DATABASE_URL must be provided either "
             "via command line or in settings"
         )
         return
 
     print("Starting database population...")
-    print(f"Using data directory: {final_data_dir}")
+    print(f"Using data directory: {final_cranes_dir}")
     print(f"Using database URL: {final_database_url}")
     print("\n")
     print("Extracting cranes data...")
 
-    cranes_data_list = extract_cranes_data(final_data_dir)
+    cranes_data_list = extract_cranes_data(final_cranes_dir)
 
     print("Successfully extracted cranes data")
 

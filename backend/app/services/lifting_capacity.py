@@ -28,7 +28,9 @@ def calc_lc_base(db: Session, request: LcCalcRequest) -> LcCalcResponse:
     if not crane:
         raise ValueError(f"Crane '{request.crane_name}' not found")
 
-    lc_table = crane.lc_table.get(request.boom_len)
+    lc_table = crane.lc_tables.get(request.table_name)["table"].get(
+        request.boom_len
+    )
     if lc_table is None:
         raise ValueError(
             f"No lifting capacity data found for boom length {request.boom_len}"

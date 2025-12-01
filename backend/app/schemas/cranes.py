@@ -9,6 +9,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
+    HttpUrl,
     computed_field,
     field_validator,
 )
@@ -18,6 +19,7 @@ from app.settings import SUPPORTED_IMAGE_CONTENT_TYPES
 
 class ChassisType(str, Enum):
     """Class containing all available chassis types"""
+
     # TODO: Uncomment when we have data for these chassis types
     TRUCK_MOUNTED = "Автомобильный"
     MOBILE = "Спецшасси автомобильного типа"
@@ -95,19 +97,44 @@ class CraneBinaryAttachment(CraneMetadataAttachment):
     data: bytes
 
 
+class LcTable(BaseModel):
+    """Lifting capacity table"""
+
+    radiuses: List[str]
+    table: Dict[str, Dict[str, float]]
+
+    @field_validator("table")
+    def validate_table(cls, table):
+        for radius_capacity in table.values():
+            for radius, capacity in radius_capacity.items():
+                if float(radius) <= 0:
+                    raise ValueError("Radius must be positive")
+                if capacity <= 0:
+                    raise ValueError("Capacity must be positive")
+        return table
+
+    @computed_field
+    def boom_lengths(self) -> list[str]:
+        return list(self.table.keys())
+
+
 class CraneListItem(BaseModel):
     """Simplified crane model for list views (better performance)"""
 
     model_config = ConfigDict(from_attributes=True)
 
+    # Basic information
     id: Optional[int] = None
     model: str
     manufacturer: str
+    country: str
     chassis_type: ChassisType
+    max_lifting_capacity: float = Field(gt=0)
+
+    # Economic section
     resource_code: str
     base_price: float = Field(gt=0)
     labor_cost: float = Field(gt=0)
-    max_lifting_capacity: float = Field(gt=0)
 
     @computed_field
     def name(self) -> str:
@@ -123,28 +150,27 @@ class Crane(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+    # Basic information
     id: Optional[int] = None
     model: str
     manufacturer: str
+    country: str
     chassis_type: ChassisType
+    max_lifting_capacity: float = Field(gt=0)
+    description: Optional[str] = None
+    manufacturer_url: Optional[HttpUrl] = None
+    crane_url: Optional[HttpUrl] = None
+    lc_tables: Dict[str, LcTable]  # Key is lc_table name
+
+    # Economic section
     pricebook: str
     resource_code: str
     base_price: float = Field(gt=0)
     labor_cost: float = Field(gt=0)
-    max_lifting_capacity: float = Field(gt=0)
-    lc_table_radiuses: List[str]
-    lc_table: Dict[str, Dict[str, float]]
-    attachments: Optional[List[CraneMetadataAttachment]] = None
 
-    @field_validator('lc_table')
-    def validate_lc_table(cls, lc_table):
-        for radius_capacity in lc_table.values():
-            for radius, capacity in radius_capacity.items():
-                if float(radius) <= 0:
-                    raise ValueError("Radius must be positive")
-                if capacity <= 0:
-                    raise ValueError("Capacity must be positive")
-        return lc_table
+    # Attachments section
+    dwg_url: Optional[HttpUrl] = None
+    attachments: Optional[List[CraneMetadataAttachment]] = None
 
     @computed_field
     def name(self) -> str:
@@ -155,8 +181,8 @@ class Crane(BaseModel):
         return round(self.base_price + self.labor_cost, 2)
 
     @computed_field
-    def lc_table_boom_lengths(self) -> list[str]:
-        return list(self.lc_table.keys())
+    def lc_tables_names(self) -> list[str]:
+        return list(self.lc_tables.keys())
 
     def __str__(self) -> str:
         return self.name

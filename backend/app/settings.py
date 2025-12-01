@@ -56,5 +56,5 @@ DATABASE_URL = os.getenv(
     "DATABASE_URL", f"sqlite:///{PROJECT_ROOT / 'data' / 'app.db.sqlite3'}"
 )
 
-# Directory containing parsable attachments (used by dev_scripts)
-ATTACHMENTS_DIR = PROJECT_ROOT / "attachments"
+# Directory containing parsable cranes data (used by dev_scripts)
+CRANES_DIR = PROJECT_ROOT / "cranes"

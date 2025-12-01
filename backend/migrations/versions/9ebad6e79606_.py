@@ -1,8 +1,8 @@
 """
 
-Revision ID: 95fe341db985
+Revision ID: 9ebad6e79606
 Revises: 
-Create Date: 2025-08-05 18:13:40.487597
+Create Date: 2025-12-01 18:31:05.737325
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '95fe341db985'
+revision: str = '9ebad6e79606'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,14 +25,18 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('model', sa.String(), nullable=False),
     sa.Column('manufacturer', sa.String(), nullable=False),
+    sa.Column('country', sa.String(), nullable=False),
     sa.Column('chassis_type', sa.String(), nullable=False),
+    sa.Column('max_lifting_capacity', sa.Float(), nullable=False),
+    sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('manufacturer_url', sa.String(), nullable=True),
+    sa.Column('crane_url', sa.String(), nullable=True),
+    sa.Column('lc_tables', sa.JSON(), nullable=False),
     sa.Column('pricebook', sa.String(), nullable=False),
     sa.Column('resource_code', sa.String(), nullable=False),
     sa.Column('base_price', sa.Float(), nullable=False),
     sa.Column('labor_cost', sa.Float(), nullable=False),
-    sa.Column('max_lifting_capacity', sa.Float(), nullable=False),
-    sa.Column('lc_table_radiuses', sa.JSON(), nullable=False),
-    sa.Column('lc_table', sa.JSON(), nullable=False),
+    sa.Column('dwg_url', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('manufacturer', 'model', name='uq_manufacturer_model')
     )

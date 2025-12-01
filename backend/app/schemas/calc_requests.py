@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -6,6 +8,7 @@ class LcCalcRequest(BaseModel):
     Calculate crane lifting capacity for given crane, boom length and radius.
     """
     crane_name: str
+    table_name: Optional[str] = "Основная стрела"
     boom_len: str
     radius: float = Field(gt=0)  # in meters
 

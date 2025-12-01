@@ -45,10 +45,12 @@ migrate:
 	cd backend && uv run alembic upgrade head
 
 # Populate database from Excel files. Paths are taken from .env file.
+# If no cranes dir is provided in env or in cli, ./cranes will be used
 populate-db:
 	cd backend && uv run python manage.py populate-db
 
 # Dump cranes data to JSON files in cranes_dump directory
+# If no output dir is provided in env or in cli, ./backend/dev_scripts/cranes_dump will be used
 dump-cranes:
 	cd backend && uv run python manage.py dump-cranes
 
@@ -140,10 +142,15 @@ start-frontend-dev:
 # ===== RENDER.COM SPECIFIC COMMANDS =====
 # Runs locally all commands required to run the app, without Docker.
 # Test, build, start backend and frontend in production mode.
+
+# Freeze dependencies to requirements.txt
+freeze-deps:
+	cd backend && uv pip freeze > requirements_for_render.txt
+
 build-render-com:
 	make install-frontend-dev
 	make build-frontend
-	cd backend && pip install -r requirements.txt
+	cd backend && pip install -r requirements_for_render.txt
 
 start-render-com:
 	cd backend && python -m main

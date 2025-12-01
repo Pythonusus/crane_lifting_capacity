@@ -34,11 +34,11 @@ def get_content_type(filename: Union[str, Path]) -> str:
     return content_type
 
 
-def find_crane_attachments(
-    attachments_dir: Union[str, Path]
+def parse_crane_attachments(
+    crane_dir: Union[str, Path]
 ) -> List[CraneBinaryAttachment]:
     """
-    Find all attachment files for a specific crane.
+    Parse all attachment files for a specific crane.
 
     Args:
         attachments_dir: Directory containing the crane's files
@@ -50,7 +50,7 @@ def find_crane_attachments(
     attachments = []
 
     # Convert to Path object for consistent handling
-    attachments_path = Path(attachments_dir)
+    attachments_path = Path(crane_dir)
 
     if not attachments_path.exists():
         print(f"No crane directory found at: {attachments_path}")

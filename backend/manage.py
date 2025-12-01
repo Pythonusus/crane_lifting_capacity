@@ -17,7 +17,7 @@ Usage Examples:
     python manage.py populate-db
 
     # Populate database from specific data directory
-    python manage.py populate-db --data-dir /path/to/data/dir
+    python manage.py populate-db --cranes-dir /path/to/data/dir
 
     # Populate database with custom database URL
     python manage.py populate-db --database-url postgresql://user:pass@localhost/cranes
@@ -53,29 +53,47 @@ Environment Variables:
 
 Examples with Environment Variables:
     # Set environment variables in .env file
-    ATTACHMENTS_DIR=/path/to/data/dir
+    CRANES_DIR=/path/to/data/dir
     DATABASE_URL=postgresql://user:pass@localhost/cranes
 
     # Then use simple commands
-    python manage.py populate-db  # Uses ATTACHMENTS_DIR and
+    python manage.py populate-db  # Uses CRANES_DIR and
                                   # DATABASE_URL from .env
     python manage.py show-cranes-summary  # Uses DATABASE_URL from .env
     python manage.py dump-cranes  # Uses DATABASE_URL from .env
 
 Data Format Requirements:
     Excel files must follow this structure:
-    - A1: "Модель" (Model)             B1: model value
-    - A2: "Производитель" (Manufacturer) B2: manufacturer value
-    - A3: "Тип" (Type)                 B3: chassis_type value
-    - A4: "Сборник" (Pricebook)        B4: pricebook value
-    - A5: "Код ресурса" (Resource Code) B5: resource_code value
-    - D1: "Сметная цена без учета оплаты труда" (Base Price)
-    - D2: base_price value
-    - D3: "Оплата труда машинистов" (Labor Cost)
-    - D4: labor_cost value
-    - D5: "Максимальная грузоподъемность" (Max Lifting Capacity)
-         G5: max_lifting_capacity value
-    - B8: Lifting capacity table starts here
+
+    Basic information:
+    --------------------------------------------------------------
+    B4: "Модель"                              C4: model value
+    B5: "Производитель"                       C5: manufacturer value
+    B6: "Страна"                              C6: country value
+    B7: "Тип шасси"                           C7: chassis_type value
+    B8: "Макс гп"                             C8: max_lifting_capacity value
+    B9: "Описание"                            C9: description value
+    B10: "Ссылка на производителя"            C10: manufacturer_url value
+    B11: "Ссылка на кран"                     C11: crane_url value
+
+    Economic section:
+    --------------------------------------------------------------
+    D4: "Сборник"                             E4: pricebook value
+    D5: "Код ресурса"                         E5: resource_code value
+    D6: "Базовая цена"                        E6: base_price value
+    D7: "Зарплата машиниста"                  E7: labor_cost value
+
+    Attachments:
+    --------------------------------------------------------------
+    F4: "Ссылка на чертеж"                    G4: dwg_url value
+
+    Lifting capacity table:
+    --------------------------------------------------------------
+    B1: table_name (name of the lifting capacity table)
+    B4: "Вылет, м" (table header label)
+    C4+: boom length headers (starting from column C, row 4)
+    B5+: radius values (starting from row 5, column B)
+    C5+: capacity values (starting from row 5, column C and onwards)
 
     Attachments should be stored in data/attachments/{crane_type}/ directory
     with files named as {manufacturer}_{model}.{extension}

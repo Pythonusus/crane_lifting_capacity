@@ -87,7 +87,8 @@ ipython_config.py
 
 # Attachments
 /attachments
-
+/cranes
+/backend/dev_scripts/cranes_dump
 
 # ===== FRONTEND =====
 

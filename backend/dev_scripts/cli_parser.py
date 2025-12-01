@@ -68,9 +68,9 @@ def create_parser():
         "populate-db", help="Populate database with cranes data"
     )
     populate_parser.add_argument(
-        "--data-dir",
+        "--cranes-dir",
         help="Directory containing cranes data files "
-        "(if not provided, will use ATTACHMENTS_DIR from settings)",
+        "(if not provided, will use CRANES_DIR from settings)",
     )
     populate_parser.add_argument(
         "--database-url",
@@ -113,9 +113,9 @@ def handle_populate_db(args):
     Handle the populate-db command.
 
     Args:
-        args: Parsed arguments containing data_dir and database_url options
+        args: Parsed arguments containing cranes_dir and database_url options
     """
-    populate_db(data_dir=args.data_dir, database_url=args.database_url)
+    populate_db(cranes_dir=args.cranes_dir, database_url=args.database_url)
 
 
 def handle_dump_cranes(args):

@@ -148,7 +148,8 @@ def dump_cranes_to_json(
             crane_schema = Crane.model_validate(crane)
 
             # Create a custom dump with attachment metadata
-            crane_dump = crane_schema.model_dump()
+            # Use mode="json" to ensure HttpUrl are serialized
+            crane_dump = crane_schema.model_dump(mode="json")
 
             # Replace attachments with metadata only
             crane_dump["attachments"] = attachment_metadata

@@ -5,8 +5,8 @@ from app.schemas.calc_responses import SafetyFactorCalcResponse
 class TestSingleSafetyFactorRequest:
     def test_radius_not_in_lc_table(self, client, calc_accuracy):
         safety_request = SafetyFactorCalcRequest(
-            crane_name="Liebherr_LR1100",
-            boom_len="14.0м",
+            crane_name="Liebherr_LR1100.1",
+            boom_len="14.0м (S)",
             radius=5.5,
             equipment_weight=0,
             payload=40.1,
@@ -24,14 +24,14 @@ class TestSingleSafetyFactorRequest:
         )
 
         # Assert request data in response
-        assert safety_response.request.crane_name == "Liebherr_LR1100"
-        assert safety_response.request.boom_len == "14.0м"
+        assert safety_response.request.crane_name == "Liebherr_LR1100.1"
+        assert safety_response.request.boom_len == "14.0м (S)"
         assert safety_response.request.radius == 5.5
         assert safety_response.request.equipment_weight == 0
         assert safety_response.request.payload == 40.1
 
         # Expected values
-        expected_lifting_capacity = 77.15
+        expected_lifting_capacity = 68.3
         expected_safety_factor = expected_lifting_capacity / (
             safety_response.request.payload
             + safety_response.request.equipment_weight

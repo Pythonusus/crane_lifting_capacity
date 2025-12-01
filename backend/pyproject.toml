@@ -25,7 +25,7 @@ dev = [
     "pytest>=8.3.5",
     "pytest-cov>=6.1.1",
     "ruff>=0.11.8",
-    "openpyxl>=3.1.2",
+    "openpyxl>=3.1.5,<3.2.0",  # Allow patch updates only
 ]
 
 [project.urls]
@@ -48,7 +48,7 @@ exclude = [
 
 [tool.ruff.lint]
 preview = true
-select = ["A", "E", "F", "W", "I", "C90", "RET"]
+select = ["A", "E", "F", "W", "I", "C90", "RET", "Q"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"] # ignore unused imports for __init__.py
