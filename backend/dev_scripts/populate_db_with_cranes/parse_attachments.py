@@ -26,11 +26,11 @@ def get_content_type(filename: Union[str, Path]) -> str:
     content_type, _ = mimetypes.guess_type(filename_str)
     if content_type is None:
         # Fallback for unsupported extensions
-        if filename_str.lower().endswith('.dwg'):
-            return 'application/acad'
-        if filename_str.lower().endswith('.xlsx'):
-            return 'application/vnd.ms-excel'
-        return 'application/octet-stream'
+        if filename_str.lower().endswith(".dwg"):
+            return "application/acad"
+        if filename_str.lower().endswith(".xlsx"):
+            return "application/vnd.ms-excel"
+        return "application/octet-stream"
     return content_type
 
 
@@ -63,7 +63,7 @@ def parse_crane_attachments(
             continue
 
         try:
-            with open(file_path, 'rb') as f:
+            with open(file_path, "rb") as f:
                 file_data = f.read()
 
                 # Create CraneBinaryAttachment object

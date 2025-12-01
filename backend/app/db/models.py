@@ -52,7 +52,7 @@ class CraneDbModel(Base):
 
     # Manufacturer + model combination is unique
     __table_args__ = (
-        UniqueConstraint('manufacturer', 'model', name='uq_manufacturer_model'),
+        UniqueConstraint("manufacturer", "model", name="uq_manufacturer_model"),
     )
 
     @property

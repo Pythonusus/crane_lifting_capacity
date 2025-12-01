@@ -38,7 +38,7 @@ def cranes_test_data():
 
     # Load all JSON files from the cranes_dump directory
     for json_file in cranes_test_data_dir.glob("*.json"):
-        with open(json_file, 'r', encoding='utf-8') as f:
+        with open(json_file, "r", encoding="utf-8") as f:
             try:
                 json_data = json.load(f)
             except json.JSONDecodeError as e:

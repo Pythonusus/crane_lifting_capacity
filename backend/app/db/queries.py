@@ -28,7 +28,7 @@ def get_crane_db_model_by_name(
         Crane | None: The crane object if found, None otherwise
     """
     # Split the name into manufacturer and model
-    parts = crane_name.split('_', 1)
+    parts = crane_name.split("_", 1)
 
     if len(parts) != 2:
         return None
@@ -57,20 +57,20 @@ def _apply_sorting_to_cranes_query(query, sort_by: str | None = None):
     """
     # Define sorting options mapping
     sorting_options = {
-        'displayNameAsc': [
+        "displayNameAsc": [
             asc(CraneDbModel.manufacturer),
             asc(CraneDbModel.model),
         ],
-        'displayNameDesc': [
+        "displayNameDesc": [
             desc(CraneDbModel.manufacturer),
             desc(CraneDbModel.model),
         ],
-        'maxCapacityAsc': [asc(CraneDbModel.max_lifting_capacity)],
-        'maxCapacityDesc': [desc(CraneDbModel.max_lifting_capacity)],
-        'pricePerHourAsc': [
+        "maxCapacityAsc": [asc(CraneDbModel.max_lifting_capacity)],
+        "maxCapacityDesc": [desc(CraneDbModel.max_lifting_capacity)],
+        "pricePerHourAsc": [
             asc(CraneDbModel.base_price + CraneDbModel.labor_cost)
         ],
-        'pricePerHourDesc': [
+        "pricePerHourDesc": [
             desc(CraneDbModel.base_price + CraneDbModel.labor_cost)
         ],
     }
@@ -188,7 +188,7 @@ def get_crane_id_by_name(db: Session, crane_name: str) -> int | None:
         Crane ID if found, None otherwise
     """
     # Split the crane name to get manufacturer and model
-    parts = crane_name.split('_', 1)
+    parts = crane_name.split("_", 1)
     if len(parts) != 2:
         return None
 
