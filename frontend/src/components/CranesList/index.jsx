@@ -63,6 +63,9 @@ const CranesList = ({
                 Тип шасси
               </TableHeaderCell>
               <TableHeaderCell className='hide-on-tablet text-white'>
+                Страна <br /> производитель
+              </TableHeaderCell>
+              <TableHeaderCell className='hide-on-tablet text-white'>
                 Код ресурса по ФСЭМ-2022
               </TableHeaderCell>
               <TableHeaderCell className='hide-on-tablet text-white'>
@@ -91,6 +94,9 @@ const CranesList = ({
                   />
                 </TableCell>
                 <TableCell>{crane.chassis_type}</TableCell>
+                <TableCell className='hide-on-tablet'>
+                  {crane.country}
+                </TableCell>
                 <TableCell className='hide-on-tablet'>
                   {crane.resource_code}
                 </TableCell>

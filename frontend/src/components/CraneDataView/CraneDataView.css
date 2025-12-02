@@ -8,8 +8,8 @@
 }
 
 .crane-metadata-container {
-  min-width: 400px;
-  max-width: 400px;
+  min-width: 440px;
+  max-width: 440px;
   text-align: left;
 }
 
@@ -32,8 +32,7 @@
 }
 
 .table-scrollable-container {
-  max-height: 390px;
-  min-width: 400px;
+  min-width: 440px;
   overflow: auto;
 }
 

@@ -41,11 +41,13 @@ const CalculationForm = ({
   onClear,
   onModeChange,
 }) => {
-  const boomLengthOptions = crane.lc_table_boom_lengths.map((boomLength) => ({
-    key: boomLength,
-    text: boomLength,
-    value: boomLength,
-  }))
+  const boomLengthOptions = crane.lc_tables['Основная стрела'].boom_lengths.map(
+    (boomLength) => ({
+      key: boomLength,
+      text: boomLength,
+      value: boomLength,
+    }),
+  )
 
   return (
     <div className='calculation-form'>

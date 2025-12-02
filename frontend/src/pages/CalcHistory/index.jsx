@@ -144,6 +144,9 @@ const CalcHistory = () => {
                     <TableHeaderCell className='crane-column'>
                       Кран
                     </TableHeaderCell>
+                    <TableHeaderCell className='crane-column'>
+                      Тип шасси
+                    </TableHeaderCell>
                     <TableHeaderCell className='price-column hide-on-tablet'>
                       Стоимость <br /> маш.-ч (₽)
                     </TableHeaderCell>
@@ -193,6 +196,7 @@ const CalcHistory = () => {
 
                     // Extract and format request values
                     const boomLength = request.boom_len
+                    const chassisType = entry.chassisType
                     const radius = formatCalculationValue(request.radius, 'м')
                     const equipmentWeight = formatCalculationValue(
                       request.equipment_weight,
@@ -249,6 +253,7 @@ const CalcHistory = () => {
                             }
                           />
                         </TableCell>
+                        <TableCell>{chassisType}</TableCell>
                         <TableCell className='hide-on-tablet'>
                           <CranePriceField
                             craneName={entry.manufacturer + '_' + entry.model}

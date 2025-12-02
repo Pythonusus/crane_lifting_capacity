@@ -98,7 +98,8 @@ const validateCommonFields = (formData, crane) => {
   }
 
   // Radius validation
-  const radiusTable = crane.lc_table[formData.boomLength]
+  const radiusTable =
+    crane.lc_tables['Основная стрела'].table[formData.boomLength]
   const radiusKeys = Object.keys(radiusTable)
     .map(Number)
     .toSorted((a, b) => a - b)
