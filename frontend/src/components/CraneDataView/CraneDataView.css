@@ -21,6 +21,12 @@
   padding: 4px 8px !important;
 }
 
+.metadata-table tbody tr td a {
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
 .table-main-header {
   background-color: var(--accent-blue) !important;
   padding-top: 8px !important;
