@@ -19,6 +19,7 @@
   display: flex !important;
   justify-content: left !important;
   font-size: 1rem !important;
+  margin: 2px !important;
 }
 
 .calculation-method-container {
