@@ -5,13 +5,14 @@ from sqlalchemy.orm import Session, noload
 
 from app.db.filters import (
     filter_cranes_by_chassis_type,
+    filter_cranes_by_country,
     filter_cranes_by_manufacturer,
     filter_cranes_by_max_lifting_capacity,
     filter_cranes_by_model,
 )
 from app.db.models import CraneBinaryAttachmentDbModel, CraneDbModel
 from app.schemas.cranes import CraneFilterRequest
-from app.settings import PAGINATION_SIZE
+from app.settings import FRIENDLY_COUNTRIES, PAGINATION_SIZE
 
 
 def get_crane_db_model_by_name(
@@ -113,6 +114,8 @@ def _build_filtered_cranes_query(
         base_query = filter_cranes_by_chassis_type(
             base_query, filters.chassis_type
         )
+    if filters.country:
+        base_query = filter_cranes_by_country(base_query, filters.country)
     if filters.min_max_lc or filters.max_max_lc:
         base_query = filter_cranes_by_max_lifting_capacity(
             base_query, filters.min_max_lc, filters.max_max_lc
@@ -174,6 +177,26 @@ def get_manufacturers_from_db(db: Session) -> List[str]:
     """
     manufacturers = db.query(CraneDbModel.manufacturer).distinct().all()
     return [manufacturer[0] for manufacturer in manufacturers]
+
+
+def get_countries_from_db(db: Session) -> List[str]:
+    """
+    Get all available countries.
+    Includes "РФ и дружественные страны" option if any friendly countries exist.
+    """
+    countries = db.query(CraneDbModel.country).distinct().all()
+    country_list = [country[0] for country in countries]
+
+    # Check if any friendly countries exist in the database
+    has_friendly_countries = any(
+        country in country_list for country in FRIENDLY_COUNTRIES
+    )
+
+    # Add "РФ и дружественные страны" option if applicable
+    if has_friendly_countries:
+        country_list.insert(0, "РФ и дружественные страны")
+
+    return country_list
 
 
 def get_crane_id_by_name(db: Session, crane_name: str) -> int | None:

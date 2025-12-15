@@ -197,6 +197,7 @@ class CraneFilterRequest(BaseModel):
     model: Optional[str] = None
     manufacturer: Optional[str] = None
     chassis_type: Optional[ChassisType] = None
+    country: Optional[str] = None
     min_max_lc: Optional[float] = Field(None, gt=0)
     max_max_lc: Optional[float] = Field(None, gt=0)
     sortBy: Optional[str] = None

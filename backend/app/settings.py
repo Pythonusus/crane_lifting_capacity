@@ -58,3 +58,10 @@ DATABASE_URL = os.getenv(
 
 # Directory containing parsable cranes data (used by dev_scripts)
 CRANES_DIR = PROJECT_ROOT / "cranes"
+
+# Friendly countries names for filtering cranes by country
+FRIENDLY_COUNTRIES = [
+    "Российская Федерация",
+    "ГДР",
+    "Китай"
+]

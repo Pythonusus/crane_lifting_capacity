@@ -11,6 +11,7 @@ import {
 
 import {
   fetchChassisTypes,
+  fetchCountries,
   fetchManufacturers,
   fetchSortOptions,
 } from '@/src/api/cranes'
@@ -49,6 +50,7 @@ const validateNumericInput = (inputValue) => {
 const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
   const [chassisTypes, setChassisTypes] = useState([])
   const [manufacturers, setManufacturers] = useState([])
+  const [countries, setCountries] = useState([])
   const [sortOptions, setSortOptions] = useState([])
   const [validationErrors, setValidationErrors] = useState({})
 
@@ -78,6 +80,19 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
     loadManufacturers()
   }, [])
 
+  // Fetch countries on component mount
+  useEffect(() => {
+    const loadCountries = async () => {
+      try {
+        const countries = await fetchCountries()
+        setCountries(countries)
+      } catch (error_) {
+        console.error('Failed to load countries:', error_)
+      }
+    }
+    loadCountries()
+  }, [])
+
   // Fetch sort options on component mount
   useEffect(() => {
     const loadSortOptions = async () => {
@@ -101,6 +116,10 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
 
   const handleManufacturerChange = (e, { value }) => {
     onFiltersChange((prev) => ({ ...prev, manufacturer: value }))
+  }
+
+  const handleCountryChange = (e, { value }) => {
+    onFiltersChange((prev) => ({ ...prev, country: value }))
   }
 
   const handleMinMaxLiftingCapacityChange = (e, { value }) => {
@@ -153,6 +172,17 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
         key: manufacturer,
         text: manufacturer,
         value: manufacturer,
+      })),
+    ]
+  }
+
+  const getCountryOptions = () => {
+    return [
+      { key: '', text: 'Все страны', value: '' },
+      ...countries.map((country) => ({
+        key: country,
+        text: country,
+        value: country,
       })),
     ]
   }
@@ -213,6 +243,21 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
             options={getManufacturerOptions()}
             value={filters.manufacturer || ''}
             onChange={handleManufacturerChange}
+          />
+        </div>
+
+        {/* Country Filter */}
+        <div className='filter-section'>
+          <Header as='h4' size='small' className='mb-5'>
+            Страна
+          </Header>
+          <Dropdown
+            fluid
+            selection
+            placeholder='Выберите страну'
+            options={getCountryOptions()}
+            value={filters.country || ''}
+            onChange={handleCountryChange}
           />
         </div>
 
@@ -294,6 +339,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
               (!filters.model || filters.model === '') &&
               (!filters.chassis_type || filters.chassis_type === '') &&
               (!filters.manufacturer || filters.manufacturer === '') &&
+              (!filters.country || filters.country === '') &&
               (!filters.min_max_lc || filters.min_max_lc === '') &&
               (!filters.max_max_lc || filters.max_max_lc === '') &&
               filters.sortBy === 'displayNameAsc'

@@ -44,6 +44,7 @@ export const fetchFilteredCranes = async (
     model: formatFormValue(filters.model),
     manufacturer: formatFormValue(filters.manufacturer),
     chassis_type: formatFormValue(filters.chassis_type),
+    country: formatFormValue(filters.country),
     min_max_lc: formatFormValue(filters.min_max_lc),
     max_max_lc: formatFormValue(filters.max_max_lc),
     // Include sorting parameter
@@ -102,6 +103,21 @@ export const fetchManufacturers = async () => {
 
   const data = await response.json()
   return data.manufacturers || []
+}
+
+/**
+ * Fetches all available countries from the backend
+ * @returns {Promise<string[]>} List of available countries
+ */
+export const fetchCountries = async () => {
+  const response = await fetchWithLicense('/api/countries')
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch countries')
+  }
+
+  const data = await response.json()
+  return data.countries || []
 }
 
 /**

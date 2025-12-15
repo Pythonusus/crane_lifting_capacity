@@ -2,6 +2,7 @@ from sqlalchemy.orm import Query
 
 from app.db.models import CraneDbModel
 from app.schemas.cranes import ChassisType
+from app.settings import FRIENDLY_COUNTRIES
 
 
 def filter_cranes_by_model(queryset: Query, model: str) -> Query:
@@ -22,8 +23,7 @@ def filter_cranes_by_model(queryset: Query, model: str) -> Query:
     # Refactor if filtering becomes to slow with db grow.
     all_cranes = queryset.all()
     filtered_cranes = [
-        crane for crane in all_cranes
-        if model.lower() in crane.model.lower()
+        crane for crane in all_cranes if model.lower() in crane.model.lower()
     ]
 
     # Return a new query with the filtered IDs
@@ -78,3 +78,13 @@ def filter_cranes_by_max_lifting_capacity(
             CraneDbModel.max_lifting_capacity <= max_max_lifting_capacity
         )
     return queryset
+
+
+def filter_cranes_by_country(queryset: Query, country: str) -> Query:
+    """
+    Filter a queryset of cranes by their country.
+    """
+    if country == "РФ и дружественные страны":
+        return queryset.filter(CraneDbModel.country.in_(FRIENDLY_COUNTRIES))
+
+    return queryset.filter(CraneDbModel.country == country)

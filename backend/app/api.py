@@ -38,6 +38,7 @@ from sqlalchemy.orm import Session
 
 import app.settings as settings
 from app.db.queries import (
+    get_countries_from_db,
     get_crane_db_model_by_name,
     get_cranes_db_models_by_filters,
     get_filtered_cranes_count,
@@ -181,6 +182,15 @@ def get_manufacturers(
     """Get all available crane manufacturers"""
     manufacturers = get_manufacturers_from_db(db)
     return {"manufacturers": manufacturers}
+
+
+@app.get("/api/countries")
+def get_countries(
+    db: Session = Depends(get_db), _: None = Depends(license_checker.check)
+):
+    """Get all available crane countries"""
+    countries = get_countries_from_db(db)
+    return {"countries": countries}
 
 
 @app.post("/api/cranes")
