@@ -123,7 +123,7 @@ http://localhost:8000
 | `CORS_CREDENTIALS` | Разрешить CORS credentials | `true` |
 | `CORS_METHODS` | Разрешенные HTTP методы | `*` |
 | `CORS_HEADERS` | Разрешенные HTTP заголовки | `*` |
-| `PAGINATION_SIZE` | Размер страницы для пагинации | `15` |
+| `PAGINATION_SIZE` | Размер страницы для пагинации | `30` |
 | `DATABASE_URL` | URL для подключения к базе данных | `sqlite:///crane_lifting_capacity/data/app.db.sqlite3` |
 
 <a name = "api-endpoints"></a>

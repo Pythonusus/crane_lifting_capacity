@@ -5,6 +5,6 @@
  * Used for initial load and "Show More" functionality
  */
 export const PAGINATION_SIZE = Number.parseInt(
-  import.meta.env.PAGINATION_SIZE || '15',
+  import.meta.env.PAGINATION_SIZE || '30',
   10,
 )

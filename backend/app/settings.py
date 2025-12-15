@@ -46,7 +46,7 @@ SUPPORTED_IMAGE_CONTENT_TYPES = [
 ]
 
 # Pagination Settings
-PAGINATION_SIZE = os.getenv("PAGINATION_SIZE", "15")
+PAGINATION_SIZE = int(os.getenv("PAGINATION_SIZE", "30"))
 
 # Frontend dist directory (used to mount frontend in production)
 FRONTEND_DIST_PATH = PROJECT_ROOT / "frontend" / "dist"
