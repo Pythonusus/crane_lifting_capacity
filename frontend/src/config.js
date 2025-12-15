@@ -8,3 +8,33 @@ export const PAGINATION_SIZE = Number.parseInt(
   import.meta.env.PAGINATION_SIZE || '30',
   10,
 )
+
+/**
+ * Maximum number of history entries to store
+ */
+export const MAX_HISTORY_ENTRIES = 50
+
+/**
+ * Maximum number of comparison table entries to store
+ */
+export const MAX_COMPARISON_TABLE_ENTRIES = 10
+
+/**
+ * Storage key for comparison table
+ */
+export const COMPARISON_TABLE_STORAGE_KEY = 'crane_comparison_table'
+
+/**
+ * Storage key for history
+ */
+export const HISTORY_STORAGE_KEY = 'crane_calculation_history'
+
+/**
+ * Storage key for comparison form data
+ */
+export const COMPARISON_FORM_STORAGE_KEY = 'crane_comparison_form_data'
+
+/**
+ * Timeout for popup messages
+ */
+export const POPUP_TIMEOUT = 3000
