@@ -1,4 +1,4 @@
-import { Button, Icon } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react'
 
 import './ResultDeleteButton.css'
 
@@ -6,12 +6,24 @@ import './ResultDeleteButton.css'
  * Component for deleting a calculation result
  *
  * @param {Object} props - Component props
- * @param {Function} props.deleteSingleEntry - Function to delete the calculation result
- * @param {number} props.entryId - ID of the calculation result to delete
+ * @param {Function} props.deleteSingleEntry - Function to delete the entry
+ * @param {number} props.entryId - ID of the entry to delete
+ * @param {boolean} props.skipConfirmation - If true, skip confirmation dialog (default: false)
+ * @param {string} props.content - Content of the button (default: 'Удалить')
+ * @param {string} props.size - Size of the button (default: 'tiny')
+ * @param {string} props.className - Class name of the button (default: '')
  */
-const ResultDeleteButton = ({ deleteSingleEntry, entryId }) => {
+const ResultDeleteButton = ({
+  deleteSingleEntry,
+  entryId,
+  skipConfirmation = false,
+  content = 'Удалить',
+  size = 'tiny',
+  className = '',
+}) => {
   const handleDelete = () => {
     if (
+      skipConfirmation ||
       globalThis.confirm(
         'Вы уверены, что хотите удалить этот расчет из истории? Это действие нельзя отменить.',
       )
@@ -22,17 +34,15 @@ const ResultDeleteButton = ({ deleteSingleEntry, entryId }) => {
 
   return (
     <Button
-      icon
       labelPosition='left'
       color='red'
-      size='tiny'
+      size={size}
       fluid
+      content={content}
+      icon='trash'
       onClick={handleDelete}
-      className='result-delete-button'
-    >
-      <Icon name='trash' />
-      Удалить расчет
-    </Button>
+      className={`result-delete-button ${className}`}
+    />
   )
 }
 

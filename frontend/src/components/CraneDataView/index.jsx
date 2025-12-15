@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Header, Table } from 'semantic-ui-react'
 
+import AddToComparisonButton from '@/src/components/AddToComparisonButton'
 import ImageGallery from '@/src/components/ImageGallery'
 import './CraneDataView.css'
 
@@ -229,6 +230,17 @@ const CraneView = ({ crane }) => {
                     ))}
                 </Table.Cell>
               </Table.Row>
+              <Table.Row>
+                <Table.Cell>
+                  <b>Добавить в таблицу сравнения:</b>
+                </Table.Cell>
+                <Table.Cell className='center-text'>
+                  <AddToComparisonButton
+                    craneName={crane.name}
+                    className='detail-add-to-comparison-button'
+                  />
+                </Table.Cell>
+              </Table.Row>
             </Table.Body>
           </Table>
         </div>
@@ -276,7 +288,10 @@ const CraneView = ({ crane }) => {
                 Вылет, м
               </Table.HeaderCell>
               {boomLengths.map((boomLength) => (
-                <Table.HeaderCell key={boomLength}>
+                <Table.HeaderCell
+                  key={boomLength}
+                  className=' custom-boom-cell'
+                >
                   {boomLength}
                 </Table.HeaderCell>
               ))}

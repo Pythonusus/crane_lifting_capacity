@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { Container, Header, Icon, Message } from 'semantic-ui-react'
 
@@ -16,9 +16,48 @@ const CraneDetail = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Extract initial form data from navigation state
-  const initialFormData = location.state?.initialFormData || null
-  const initialMode = location.state?.initialMode || 'safety_factor'
+  // Extract initial form data from navigation state or URL search params
+  const initialFormData = useMemo(() => {
+    // First try to get from state (same-tab navigation)
+    if (location.state?.initialFormData) {
+      return location.state.initialFormData
+    }
+
+    // Otherwise, try to get from URL search params (new tab)
+    const searchParams = new URLSearchParams(location.search)
+    const boomLength = searchParams.get('boomLength')
+    const boomRadius = searchParams.get('boomRadius')
+    const equipmentWeight = searchParams.get('equipmentWeight')
+    const payload = searchParams.get('payload')
+    const safetyFactor = searchParams.get('safetyFactor')
+
+    if (
+      boomLength ||
+      boomRadius ||
+      equipmentWeight ||
+      payload ||
+      safetyFactor
+    ) {
+      return {
+        boomLength: boomLength || '',
+        boomRadius: boomRadius || '',
+        equipmentWeight: equipmentWeight || '',
+        payload: payload || '',
+        safetyFactor: safetyFactor || '',
+      }
+    }
+
+    return null
+  }, [location.state, location.search])
+
+  const initialMode = useMemo(() => {
+    if (location.state?.initialMode) {
+      return location.state.initialMode
+    }
+    const searchParams = new URLSearchParams(location.search)
+    return searchParams.get('mode') || 'safety_factor'
+  }, [location.state, location.search])
+
   const initialResult = location.state?.initialResult || null
 
   // Use calculation form hook

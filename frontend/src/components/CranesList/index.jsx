@@ -15,6 +15,7 @@ import {
   TableRow,
 } from 'semantic-ui-react'
 
+import AddToComparisonButton from '@/src/components/AddToComparisonButton'
 import './CranesList.css'
 
 const CranesList = ({
@@ -74,6 +75,9 @@ const CranesList = ({
               <TableHeaderCell className='text-white'>
                 Макс. г/п (т)
               </TableHeaderCell>
+              <TableHeaderCell className='text-white comparison-column'>
+                Добавить к сравнению
+              </TableHeaderCell>
             </TableRow>
           </TableHeader>
 
@@ -104,6 +108,9 @@ const CranesList = ({
                   {crane.price_per_hour.toLocaleString()}
                 </TableCell>
                 <TableCell>{crane.max_lifting_capacity}</TableCell>
+                <TableCell className='comparison-cell'>
+                  <AddToComparisonButton craneName={crane.name} compact />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

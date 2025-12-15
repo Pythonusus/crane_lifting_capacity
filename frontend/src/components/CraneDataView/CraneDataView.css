@@ -27,6 +27,10 @@
   white-space: normal;
 }
 
+.detail-add-to-comparison-button {
+  width: 25% !important;
+}
+
 .table-main-header {
   background-color: var(--accent-blue) !important;
   padding-top: 8px !important;
@@ -55,6 +59,10 @@
 
 .custom-header-cell {
   padding: 6px !important;
+}
+
+.custom-boom-cell {
+  max-width: 140px !important;
 }
 
 .sticky-left {
