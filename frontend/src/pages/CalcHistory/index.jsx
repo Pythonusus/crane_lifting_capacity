@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Button,
-  Header,
   Message,
   Popup,
   Table,
@@ -13,10 +12,10 @@ import {
   TableRow,
 } from 'semantic-ui-react'
 
-import CranePriceField from '@/src/components/CranePriceField'
 import ResultCopyButton from '@/src/components/ResultCopyButton'
 import ResultDeleteButton from '@/src/components/ResultDeleteButton'
 import ResultDownloadButton from '@/src/components/ResultDownloadButton'
+import { MAX_HISTORY_ENTRIES } from '@/src/config'
 import useHistoryClear from '@/src/hooks/useHistoryClear'
 import useHistoryDelete from '@/src/hooks/useHistoryDelete'
 import useHistoryState from '@/src/hooks/useHistoryState'
@@ -90,10 +89,6 @@ const CalcHistory = () => {
     return (
       <main className='calc-history-main-content'>
         <div className='calc-history-container'>
-          <Header as='h1' textAlign='center' className='font-size-2'>
-            История расчетов
-          </Header>
-
           <Message error>
             <Message.Header>
               Произошла ошибка при загрузке истории
@@ -117,10 +112,6 @@ const CalcHistory = () => {
     return (
       <main className='calc-history-main-content'>
         <div className='calc-history-container'>
-          <Header as='h1' textAlign='center' className='font-size-2'>
-            История расчетов
-          </Header>
-
           {history.length === 0 ? (
             <Message info>
               <Message.Header>История пуста</Message.Header>
@@ -128,6 +119,10 @@ const CalcHistory = () => {
             </Message>
           ) : (
             <>
+              <div className='font-size-4'>
+                Хранятся последние {MAX_HISTORY_ENTRIES} расчетов.
+                <br /> Сейчас сохранено: {history.length}
+              </div>
               <Table
                 celled
                 striped
@@ -141,45 +136,48 @@ const CalcHistory = () => {
                     <TableHeaderCell className='timestamp-column hide-on-tablet'>
                       Дата
                     </TableHeaderCell>
-                    <TableHeaderCell className='crane-column'>
+                    <TableHeaderCell className='history-crane-column'>
                       Кран
                     </TableHeaderCell>
-                    <TableHeaderCell className='crane-column'>
-                      Тип шасси
+                    <TableHeaderCell className='history-country-column hide-on-tablet'>
+                      Страна
                     </TableHeaderCell>
-                    <TableHeaderCell className='price-column hide-on-tablet'>
+                    <TableHeaderCell className='history-chassis-column'>
+                      Тип <br /> шасси
+                    </TableHeaderCell>
+                    <TableHeaderCell className='history-price-column hide-on-tablet'>
                       Стоимость <br /> маш.-ч (₽)
                     </TableHeaderCell>
-                    <TableHeaderCell className='boom-column'>
+                    <TableHeaderCell className='history-boom-column'>
                       Тип <br /> стрелы
                     </TableHeaderCell>
-                    <TableHeaderCell className='method-column hide-on-tablet'>
+                    <TableHeaderCell className='history-method-column hide-on-tablet'>
                       Метод <br /> расчета
                     </TableHeaderCell>
-                    <TableHeaderCell className='radius-column'>
+                    <TableHeaderCell className='history-radius-column'>
                       Вылет
                     </TableHeaderCell>
-                    <TableHeaderCell className='equipment-column'>
+                    <TableHeaderCell className='history-equipment-column'>
                       Вес <br /> оборуд.
                     </TableHeaderCell>
-                    <TableHeaderCell className='input-column'>
+                    <TableHeaderCell className='history-input-column'>
                       <span>
                         Вес груза
                         <hr />
                         Коэф. запаса
                       </span>
                     </TableHeaderCell>
-                    <TableHeaderCell className='capacity-column'>
+                    <TableHeaderCell className='history-capacity-column'>
                       Г/П <br /> на вылете
                     </TableHeaderCell>
-                    <TableHeaderCell className='result-column'>
+                    <TableHeaderCell className='history-result-column'>
                       <span>
                         Коэф. запаса
                         <hr />
                         Вес груза
                       </span>
                     </TableHeaderCell>
-                    <TableHeaderCell className='actions-column'>
+                    <TableHeaderCell className='history-actions-column'>
                       Действия
                     </TableHeaderCell>
                   </TableRow>
@@ -240,7 +238,21 @@ const CalcHistory = () => {
                             size='tiny'
                             trigger={
                               <Link
-                                to={`/cranes/${encodeURIComponent(craneName)}`}
+                                to={{
+                                  pathname: `/cranes/${encodeURIComponent(craneName)}`,
+                                  search: new URLSearchParams({
+                                    boomLength:
+                                      initialFormData.boomLength || '',
+                                    boomRadius:
+                                      initialFormData.boomRadius || '',
+                                    equipmentWeight:
+                                      initialFormData.equipmentWeight || '',
+                                    payload: initialFormData.payload || '',
+                                    safetyFactor:
+                                      initialFormData.safetyFactor || '',
+                                    mode: initialMode,
+                                  }).toString(),
+                                }}
                                 state={{
                                   initialFormData,
                                   initialMode,
@@ -253,11 +265,14 @@ const CalcHistory = () => {
                             }
                           />
                         </TableCell>
+                        <TableCell className='hide-on-tablet'>
+                          {entry.country || ''}
+                        </TableCell>
                         <TableCell>{chassisType}</TableCell>
                         <TableCell className='hide-on-tablet'>
-                          <CranePriceField
-                            craneName={entry.manufacturer + '_' + entry.model}
-                          />
+                          {entry.pricePerHour
+                            ? formatCalculationValue(entry.pricePerHour, '₽')
+                            : '-'}
                         </TableCell>
                         <TableCell>{boomLength}</TableCell>
                         <TableCell className='hide-on-tablet'>
@@ -308,6 +323,8 @@ const CalcHistory = () => {
                             <ResultDeleteButton
                               deleteSingleEntry={deleteSingleEntry}
                               entryId={entry.id}
+                              content='Удалить расчет'
+                              skipConfirmation={true}
                             />
                           </div>
                         </TableCell>

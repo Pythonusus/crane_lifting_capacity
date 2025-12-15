@@ -9,18 +9,21 @@
   height: fit-content;
 }
 
-.crane-column {
-  width: 80px !important;
+.history-chassis-column {
+  width: 120px !important;
 }
 
-.price-column {
+.history-crane-column {
+  width: 110px !important;
+}
+
+.history-country-column {
+  width: 90px !important;
+}
+
+.history-price-column {
   width: 100px !important;
   text-align: center !important;
-}
-
-.history-price-cell {
-  text-align: center !important;
-  font-weight: 500;
 }
 
 .crane-name-link:hover {
@@ -51,7 +54,6 @@
 
 .history-clear-button-container {
   margin-top: 1rem;
-  text-align: right;
 }
 
 .history-clear-button {

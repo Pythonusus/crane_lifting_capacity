@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 const HISTORY_STORAGE_KEY = 'crane_calculation_history'
-const MAX_HISTORY_ENTRIES = 20
+const MAX_HISTORY_ENTRIES = 50
 
 /**
  * Hook for adding calculations to history
@@ -16,8 +16,10 @@ const useHistoryAdd = (history, setHistory) => {
    * @param {Object} calculation - Calculation data to store
    * @param {string} calculation.manufacturer - Manufacturer of the crane
    * @param {string} calculation.model - Model of the crane
+   * @param {string} calculation.country - Country of the crane
    * @param {string} calculation.chassisType - Chassis type of the crane
    * @param {number} calculation.maxLiftingCapacity - Maximum lifting capacity of the crane
+   * @param {number} calculation.pricePerHour - Price per hour of the crane
    * @param {Object} calculation.result - Calculation result from API (contains request data)
    * @param {string} calculation.calculationMethod - 'payload' or 'safety_factor'
    */
@@ -29,8 +31,10 @@ const useHistoryAdd = (history, setHistory) => {
           // Store only crane metadata
           manufacturer: calculation.manufacturer,
           model: calculation.model,
+          country: calculation.country || '',
           chassisType: calculation.chassisType,
           maxLiftingCapacity: calculation.maxLiftingCapacity,
+          pricePerHour: calculation.pricePerHour || null,
           // Store calculation method and result (request data is in result)
           calculationMethod: calculation.calculationMethod,
           result: calculation.result,
