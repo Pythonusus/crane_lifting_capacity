@@ -128,11 +128,29 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
 
     // Only update if the value is valid or empty
     if (filteredValue === value || filteredValue === '') {
-      const error = validateNumericInput(filteredValue)
+      let error = validateNumericInput(filteredValue)
+
+      // Check if value is zero (not empty)
+      if (!error && filteredValue !== '') {
+        const normalizedValue = filteredValue.replaceAll(',', '.')
+        const numValue = Number.parseFloat(normalizedValue)
+        if (
+          numValue === 0 ||
+          normalizedValue === '0' ||
+          normalizedValue === '0.0'
+        ) {
+          error = 'Значение должно быть больше нуля'
+        }
+      }
+
       setValidationErrors((prev) => ({ ...prev, min_max_lc: error }))
+
       // Normalize input: convert comma to dot for internal processing
-      const normalizedValue = filteredValue.replaceAll(',', '.')
-      onFiltersChange((prev) => ({ ...prev, min_max_lc: normalizedValue }))
+      // Only update if there's no error
+      if (!error) {
+        const normalizedValue = filteredValue.replaceAll(',', '.')
+        onFiltersChange((prev) => ({ ...prev, min_max_lc: normalizedValue }))
+      }
     }
   }
 
@@ -142,11 +160,93 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
 
     // Only update if the value is valid or empty
     if (filteredValue === value || filteredValue === '') {
-      const error = validateNumericInput(filteredValue)
+      let error = validateNumericInput(filteredValue)
+
+      // Check if value is zero (not empty)
+      if (!error && filteredValue !== '') {
+        const normalizedValue = filteredValue.replaceAll(',', '.')
+        const numValue = Number.parseFloat(normalizedValue)
+        if (
+          numValue === 0 ||
+          normalizedValue === '0' ||
+          normalizedValue === '0.0'
+        ) {
+          error = 'Значение должно быть больше нуля'
+        }
+      }
+
       setValidationErrors((prev) => ({ ...prev, max_max_lc: error }))
+
       // Normalize input: convert comma to dot for internal processing
-      const normalizedValue = filteredValue.replaceAll(',', '.')
-      onFiltersChange((prev) => ({ ...prev, max_max_lc: normalizedValue }))
+      // Only update if there's no error
+      if (!error) {
+        const normalizedValue = filteredValue.replaceAll(',', '.')
+        onFiltersChange((prev) => ({ ...prev, max_max_lc: normalizedValue }))
+      }
+    }
+  }
+
+  const handleRadiusChange = (e, { value }) => {
+    // Filter out invalid characters - only allow numbers, dots, and commas
+    const filteredValue = value.replaceAll(/[^0-9.,]/g, '')
+
+    // Only update if the value is valid or empty
+    if (filteredValue === value || filteredValue === '') {
+      let error = validateNumericInput(filteredValue)
+
+      // Check if value is zero (not empty)
+      if (!error && filteredValue !== '') {
+        const normalizedValue = filteredValue.replaceAll(',', '.')
+        const numValue = Number.parseFloat(normalizedValue)
+        if (
+          numValue === 0 ||
+          normalizedValue === '0' ||
+          normalizedValue === '0.0'
+        ) {
+          error = 'Значение должно быть больше нуля'
+        }
+      }
+
+      setValidationErrors((prev) => ({ ...prev, radius: error }))
+
+      // Normalize input: convert comma to dot for internal processing
+      // Only update if there's no error
+      if (!error) {
+        const normalizedValue = filteredValue.replaceAll(',', '.')
+        onFiltersChange((prev) => ({ ...prev, radius: normalizedValue }))
+      }
+    }
+  }
+
+  const handlePayloadChange = (e, { value }) => {
+    // Filter out invalid characters - only allow numbers, dots, and commas
+    const filteredValue = value.replaceAll(/[^0-9.,]/g, '')
+
+    // Only update if the value is valid or empty
+    if (filteredValue === value || filteredValue === '') {
+      let error = validateNumericInput(filteredValue)
+
+      // Check if value is zero (not empty)
+      if (!error && filteredValue !== '') {
+        const normalizedValue = filteredValue.replaceAll(',', '.')
+        const numValue = Number.parseFloat(normalizedValue)
+        if (
+          numValue === 0 ||
+          normalizedValue === '0' ||
+          normalizedValue === '0.0'
+        ) {
+          error = 'Значение должно быть больше нуля'
+        }
+      }
+
+      setValidationErrors((prev) => ({ ...prev, payload: error }))
+
+      // Normalize input: convert comma to dot for internal processing
+      // Only update if there's no error
+      if (!error) {
+        const normalizedValue = filteredValue.replaceAll(',', '.')
+        onFiltersChange((prev) => ({ ...prev, payload: normalizedValue }))
+      }
     }
   }
 
@@ -309,6 +409,56 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
           </div>
         </div>
 
+        {/* Deep Filtering: Radius and Payload */}
+        <div className='filter-section'>
+          <Header as='h4' size='small' className='mb-5'>
+            Подбор крана
+          </Header>
+          <p className='mb-3 font-size-5 filter-section-description'>
+            Найдет ближайший кран для каждого типа шасси и производителя
+          </p>
+          <div className='filter-section-inputs filter-section-inputs-inline'>
+            <Popup
+              content={validationErrors.radius}
+              open={!!validationErrors.radius}
+              position='left center'
+              color='red'
+              size='small'
+              onClose={() =>
+                setValidationErrors((prev) => ({ ...prev, radius: '' }))
+              }
+              trigger={
+                <Input
+                  fluid
+                  placeholder='Вылет (м)'
+                  value={filters.radius || ''}
+                  onChange={handleRadiusChange}
+                  error={!!validationErrors.radius}
+                />
+              }
+            />
+            <Popup
+              content={validationErrors.payload}
+              open={!!validationErrors.payload}
+              position='left center'
+              color='red'
+              size='small'
+              onClose={() =>
+                setValidationErrors((prev) => ({ ...prev, payload: '' }))
+              }
+              trigger={
+                <Input
+                  fluid
+                  placeholder='Груз (т)'
+                  value={filters.payload || ''}
+                  onChange={handlePayloadChange}
+                  error={!!validationErrors.payload}
+                />
+              }
+            />
+          </div>
+        </div>
+
         {/* Sort By Filter */}
         <div className='filter-section'>
           <Header as='h4' size='small' className='mb-5'>
@@ -342,6 +492,8 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
               (!filters.country || filters.country === '') &&
               (!filters.min_max_lc || filters.min_max_lc === '') &&
               (!filters.max_max_lc || filters.max_max_lc === '') &&
+              (!filters.radius || filters.radius === '') &&
+              (!filters.payload || filters.payload === '') &&
               filters.sortBy === 'displayNameAsc'
             }
             color='blue'

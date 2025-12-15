@@ -2,7 +2,7 @@
   max-width: 230px;
   display: flex;
   flex-direction: column;
-  margin: 0 0.25em 260px 1em !important;
+  margin: 0 0.25em 0 1em !important;
 }
 
 .filter-section {
@@ -11,6 +11,49 @@
 
 .filter-section h4 {
   font-size: 0.9em !important;
+}
+
+.filter-section-description {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.filter-section .ui.input {
+  font-size: 12px;
+}
+
+.filter-section .ui.input input {
+  font-size: 12px;
+}
+
+.filter-section .ui.dropdown {
+  font-size: 12px;
+}
+
+.filter-section .ui.dropdown .text {
+  font-size: 12px;
+}
+
+.filter-section .ui.dropdown .menu {
+  font-size: 12px;
+}
+
+.filter-section .ui.dropdown .menu .item {
+  font-size: 12px;
+}
+
+.filter-section-inputs-inline {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-section-inputs-inline .ui.input {
+  flex: 1;
+  font-size: 12px;
+}
+
+.filter-section-inputs-inline .ui.input input {
+  font-size: 12px;
 }
 
 @media (max-width: 991px) {

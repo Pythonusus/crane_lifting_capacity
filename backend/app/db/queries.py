@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session, noload
 from app.db.filters import (
     filter_cranes_by_chassis_type,
     filter_cranes_by_country,
+    filter_cranes_by_deep_filtering,
     filter_cranes_by_manufacturer,
     filter_cranes_by_max_lifting_capacity,
     filter_cranes_by_model,
@@ -103,7 +104,15 @@ def _build_filtered_cranes_query(
     if filters is None:
         return base_query
 
-    # Apply filters
+    # Apply deep filtering FIRST if radius and payload are provided
+    # This finds the cheapest crane per chassis_type/manufacturer
+    # that can lift the payload at the given radius
+    if filters.radius is not None and filters.payload is not None:
+        base_query = filter_cranes_by_deep_filtering(
+            base_query, filters.radius, filters.payload
+        )
+
+    # Apply other filters on top of the deep filtering result
     if filters.model:
         base_query = filter_cranes_by_model(base_query, filters.model)
     if filters.manufacturer:

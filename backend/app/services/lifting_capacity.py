@@ -16,7 +16,7 @@ from app.schemas.calc_responses import (
     PayloadCalcResponse,
     SafetyFactorCalcResponse,
 )
-from utils.math import get_nearest_greater, get_nearest_lesser, interpolate_1d
+from utils.lifting_capacity import get_lifting_capacity_at_radius
 
 
 def calc_lc_base(db: Session, request: LcCalcRequest) -> LcCalcResponse:
@@ -36,36 +36,13 @@ def calc_lc_base(db: Session, request: LcCalcRequest) -> LcCalcResponse:
             f"No lifting capacity data found for boom length {request.boom_len}"
         )
 
-    # Create a mapping from float values to original string keys.
-    # This is necessary because keys are strings, but we need to use them
-    # as floats for finding nearest values. And then we need to convert them
-    # back to strings to use as keys in lc_table.
-    lc_table_keys_float_to_str_map = {float(k): k for k in lc_table.keys()}
-    lc_table_keys_floats = list(lc_table_keys_float_to_str_map.keys())
+    lifting_capacity = get_lifting_capacity_at_radius(lc_table, request.radius)
+    if lifting_capacity is None:
+        raise ValueError(
+            f"No lifting capacity data found for radius {request.radius}"
+        )
 
-    radius = request.radius
-    str_radius = lc_table_keys_float_to_str_map.get(radius)
-    if str_radius is not None:
-        # Direct match found
-        lifting_capacity = lc_table.get(str_radius)
-        return LcCalcResponse(lifting_capacity=lifting_capacity)
-
-    # Need interpolation
-    nearest_lesser = get_nearest_lesser(radius, lc_table_keys_floats)
-    nearest_greater = get_nearest_greater(radius, lc_table_keys_floats)
-
-    if nearest_lesser is None or nearest_greater is None:
-        raise ValueError(f"No lifting capacity data found for radius {radius}")
-
-    # Use the original string keys from the mapping
-    lc_less = lc_table.get(lc_table_keys_float_to_str_map[nearest_lesser])
-    lc_greater = lc_table.get(lc_table_keys_float_to_str_map[nearest_greater])
-
-    lc = interpolate_1d(
-        float(radius), nearest_lesser, lc_less, nearest_greater, lc_greater
-    )
-
-    return LcCalcResponse(lifting_capacity=lc)
+    return LcCalcResponse(lifting_capacity=lifting_capacity)
 
 
 def calc_payload_from_safety_factor(db: Session, request: PayloadCalcRequest):

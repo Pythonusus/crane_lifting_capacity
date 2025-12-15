@@ -47,6 +47,8 @@ export const fetchFilteredCranes = async (
     country: formatFormValue(filters.country),
     min_max_lc: formatFormValue(filters.min_max_lc),
     max_max_lc: formatFormValue(filters.max_max_lc),
+    radius: formatFormValue(filters.radius),
+    payload: formatFormValue(filters.payload),
     // Include sorting parameter
     sortBy: filters.sortBy || 'displayNameAsc',
     // Add pagination parameters

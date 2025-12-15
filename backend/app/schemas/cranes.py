@@ -200,6 +200,14 @@ class CraneFilterRequest(BaseModel):
     country: Optional[str] = None
     min_max_lc: Optional[float] = Field(None, gt=0)
     max_max_lc: Optional[float] = Field(None, gt=0)
+    # Deep filtering: find cheapest crane per chassis_type/manufacturer
+    # that can lift payload at radius
+    radius: Optional[float] = Field(
+        None, gt=0, description="Radius in meters for deep filtering"
+    )
+    payload: Optional[float] = Field(
+        None, gt=0, description="Payload in tons for deep filtering"
+    )
     sortBy: Optional[str] = None
     # Load-more pagination parameters
     offset: Optional[int] = Field(
