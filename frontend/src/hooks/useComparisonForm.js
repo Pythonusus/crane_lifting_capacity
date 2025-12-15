@@ -320,10 +320,31 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
 
             // Same priority: handle special cases
             if (aPriority === 0) {
-              // Both successful: sort by price
+              // Both successful: sort by price, then by boom length index
               const aPrice = a.crane.price_per_hour || Infinity
               const bPrice = b.crane.price_per_hour || Infinity
-              return aPrice - bPrice
+              const priceDiff = aPrice - bPrice
+              if (priceDiff !== 0) {
+                return priceDiff
+              }
+              // Same price: sort by boom length index (smaller indexes first)
+              const aBoomLengths =
+                a.crane.lc_tables['Основная стрела']?.boom_lengths || []
+              const bBoomLengths =
+                b.crane.lc_tables['Основная стрела']?.boom_lengths || []
+              const aSelectedBoomLength =
+                a.selectedBoomLength ||
+                (aBoomLengths.length > 0 ? aBoomLengths[0] : null)
+              const bSelectedBoomLength =
+                b.selectedBoomLength ||
+                (bBoomLengths.length > 0 ? bBoomLengths[0] : null)
+              const aBoomIndex = aSelectedBoomLength
+                ? aBoomLengths.indexOf(aSelectedBoomLength)
+                : Infinity
+              const bBoomIndex = bSelectedBoomLength
+                ? bBoomLengths.indexOf(bSelectedBoomLength)
+                : Infinity
+              return aBoomIndex - bBoomIndex
             }
 
             // For unsafe, error, or other: keep original order
