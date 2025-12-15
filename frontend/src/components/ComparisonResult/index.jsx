@@ -1,6 +1,8 @@
 import React from 'react'
-import { Button, Container, Header } from 'semantic-ui-react'
+import { Container, Header } from 'semantic-ui-react'
 
+import ComparisonCopyButton from '@/src/components/ComparisonCopyButton'
+import ComparisonDownloadButton from '@/src/components/ComparisonDownloadButton'
 import { formatCalculationValue } from '@/src/utilities/formatters'
 import './ComparisonResult.css'
 
@@ -12,9 +14,10 @@ import './ComparisonResult.css'
  *
  * @param {Object} props - Component props
  * @param {Array} props.comparisonResults - Array of comparison results with crane and results data
- * @param {string} props.calculationMode - Calculation mode ('payload' or 'safety_factor')
+ * @param {Array} props.comparisonTable - Comparison table entries with stored results
+ * @param {Object} props.formData - Form data used for the comparison
  */
-const ComparisonResult = ({ comparisonResults }) => {
+const ComparisonResult = ({ comparisonResults, comparisonTable, formData }) => {
   const renderCheapestCrane = () => {
     if (!comparisonResults) {
       return (
@@ -107,29 +110,16 @@ const ComparisonResult = ({ comparisonResults }) => {
           </div>
         </div>
         <div className='comparison-results-actions'>
-          <Button
-            icon
-            labelPosition='left'
-            size='tiny'
-            color='teal'
-            fluid
-            disabled={!comparisonResults || !comparisonResults.results}
-            className='comparison-results-copy-button'
-          >
-            Копировать результат
-          </Button>
-
-          <Button
-            icon
-            labelPosition='left'
-            size='tiny'
-            color='teal'
-            fluid
-            disabled={!comparisonResults || !comparisonResults.results}
-            className='comparison-results-download-button'
-          >
-            Скачать отчет DOC
-          </Button>
+          <ComparisonCopyButton
+            comparisonResults={comparisonResults}
+            comparisonTable={comparisonTable}
+            formData={formData}
+          />
+          <ComparisonDownloadButton
+            comparisonResults={comparisonResults}
+            comparisonTable={comparisonTable}
+            formData={formData}
+          />
         </div>
       </Container>
     </div>

@@ -491,7 +491,11 @@ const ComparisonTable = () => {
               onSubmit={handleSubmit}
               onClear={handleClearForm}
             />
-            <ComparisonResult comparisonResults={comparisonResults} />
+            <ComparisonResult
+              comparisonResults={comparisonResults}
+              comparisonTable={comparisonTable}
+              formData={formData}
+            />
           </div>
         </div>
       </main>
