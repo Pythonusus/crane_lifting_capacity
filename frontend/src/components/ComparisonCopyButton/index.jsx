@@ -43,14 +43,22 @@ const buildParametersSection = (formData, result) => {
   if (formData.payload) {
     result.push(`Вес груза: ${formData.payload} т`)
   }
-  result.push('', 'РЕЗУЛЬТАТЫ СРАВНЕНИЯ', '')
+  result.push(
+    'Сборник сметных цен: ФСЭМ ФСНБ 2022',
+    '',
+    'РЕЗУЛЬТАТЫ СРАВНЕНИЯ',
+    '',
+  )
 }
 
 const formatCraneResult = (calcResult, index) => {
   const crane = calcResult.crane
   const resultData = calcResult.result
-  const craneName = `${crane.manufacturer} ${crane.model}`
+  const manufacturer = crane.manufacturer || 'Н/Д'
+  const model = crane.model || 'Н/Д'
   const boomLength = calcResult.boomLength || 'Н/Д'
+  const chassisType = crane.chassis_type || 'Н/Д'
+  const country = crane.country || 'Н/Д'
   const price = crane.base_price
     ? formatCalculationValue(crane.base_price, '₽')
     : 'Н/Д'
@@ -65,10 +73,13 @@ const formatCraneResult = (calcResult, index) => {
     : 'Н/Д'
 
   return [
-    `${index + 1}. ${craneName}`,
-    `   Тип стрелы: ${boomLength}`,
-    `   Стоимость маш.-ч: ${price}`,
-    `   Г/П на вылете: ${liftingCapacity}`,
+    `${index + 1}. ${manufacturer}`,
+    `   ${model}`,
+    `   Стрела: ${boomLength}`,
+    `   Тип шасси: ${chassisType}`,
+    `   Страна: ${country}`,
+    `   Сметная цена без учета оплаты труда машинистов: ${price} руб./маш.-ч`,
+    `   Г/П на данном вылете: ${liftingCapacity}`,
     `   Коэффициент запаса: ${safetyFactor}`,
     `   Запас Г/П: ${remainingLc}`,
     '',
@@ -95,7 +106,7 @@ const buildBestCranesSection = (comparisonResults, result) => {
     return
   }
 
-  result.push('ЛУЧШИЕ ВАРИАНТЫ', '')
+  result.push('ВЫВОДЫ ПО РЕЗУЛЬТАТАМ СРАВНЕНИЯ', '')
 
   if (comparisonResults.cheapestCrane) {
     const cheapest = comparisonResults.cheapestCrane

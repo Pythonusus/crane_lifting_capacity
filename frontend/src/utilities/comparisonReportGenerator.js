@@ -37,13 +37,22 @@ export const generateAndDownloadComparisonReport = async (
   const doc = new Document({
     sections: [
       {
-        properties: {},
+        properties: {
+          page: {
+            margin: {
+              top: 360,
+              right: 600,
+              bottom: 360,
+              left: 600,
+            },
+          },
+        },
         children: [
           // Title
           new Paragraph({
             children: [
               new TextRun({
-                text: 'ОТЧЕТ О СРАВНЕНИИ КРАНОВ',
+                text: 'ОТЧЕТ О ТЕХНИКО-ЭКОНОМИЧЕСКОМ СРАВНЕНИИ КРАНОВ',
                 bold: true,
                 size: 32,
               }),
@@ -83,8 +92,8 @@ export const generateAndDownloadComparisonReport = async (
                             size: 22,
                           }),
                         ],
-                        spacing: { before: 60, after: 60 },
-                        indent: { left: 57 },
+                        spacing: { before: 40, after: 40 },
+                        indent: { left: 40 },
                       }),
                     ],
                     width: { size: 40, type: WidthType.PERCENTAGE },
@@ -98,8 +107,8 @@ export const generateAndDownloadComparisonReport = async (
                             size: 22,
                           }),
                         ],
-                        spacing: { before: 60, after: 60 },
-                        indent: { left: 57 },
+                        spacing: { before: 40, after: 40 },
+                        indent: { left: 40 },
                       }),
                     ],
                     width: { size: 60, type: WidthType.PERCENTAGE },
@@ -120,8 +129,8 @@ export const generateAndDownloadComparisonReport = async (
                                   size: 22,
                                 }),
                               ],
-                              spacing: { before: 60, after: 60 },
-                              indent: { left: 57 },
+                              spacing: { before: 40, after: 40 },
+                              indent: { left: 40 },
                             }),
                           ],
                         }),
@@ -134,8 +143,8 @@ export const generateAndDownloadComparisonReport = async (
                                   size: 22,
                                 }),
                               ],
-                              spacing: { before: 60, after: 60 },
-                              indent: { left: 57 },
+                              spacing: { before: 40, after: 40 },
+                              indent: { left: 40 },
                             }),
                           ],
                         }),
@@ -155,8 +164,8 @@ export const generateAndDownloadComparisonReport = async (
                             size: 22,
                           }),
                         ],
-                        spacing: { before: 60, after: 60 },
-                        indent: { left: 57 },
+                        spacing: { before: 40, after: 40 },
+                        indent: { left: 40 },
                       }),
                     ],
                   }),
@@ -169,10 +178,45 @@ export const generateAndDownloadComparisonReport = async (
                             size: 22,
                           }),
                         ],
-                        spacing: { before: 60, after: 60 },
-                        indent: { left: 57 },
+                        spacing: { before: 40, after: 40 },
+                        indent: { left: 40 },
                       }),
                     ],
+                  }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({
+                    children: [
+                      new Paragraph({
+                        children: [
+                          new TextRun({
+                            text: 'Сборник сметных цен',
+                            bold: true,
+                            size: 22,
+                          }),
+                        ],
+                        spacing: { before: 40, after: 40 },
+                        indent: { left: 40 },
+                      }),
+                    ],
+                    width: { size: 40, type: WidthType.PERCENTAGE },
+                  }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({
+                        children: [
+                          new TextRun({
+                            text: 'ФСЭМ ФСНБ 2022',
+                            size: 22,
+                          }),
+                        ],
+                        spacing: { before: 40, after: 40 },
+                        indent: { left: 40 },
+                      }),
+                    ],
+                    width: { size: 60, type: WidthType.PERCENTAGE },
                   }),
                 ],
               }),
@@ -208,62 +252,100 @@ export const generateAndDownloadComparisonReport = async (
                           new TextRun({
                             text: 'Кран',
                             bold: true,
-                            size: 22,
+                            size: 20,
                           }),
                         ],
                         alignment: AlignmentType.CENTER,
-                        spacing: { before: 60, after: 60 },
+                        spacing: { before: 40, after: 40 },
                       }),
                     ],
-                    width: { size: 20, type: WidthType.PERCENTAGE },
+                    width: { size: 15, type: WidthType.PERCENTAGE },
+                    margins: { top: 80, right: 80, bottom: 80, left: 80 },
                   }),
                   new TableCell({
                     children: [
                       new Paragraph({
                         children: [
                           new TextRun({
-                            text: 'Тип стрелы',
+                            text: 'Стрела',
                             bold: true,
-                            size: 22,
+                            size: 20,
                           }),
                         ],
                         alignment: AlignmentType.CENTER,
-                        spacing: { before: 60, after: 60 },
+                        spacing: { before: 40, after: 40 },
                       }),
                     ],
-                    width: { size: 15, type: WidthType.PERCENTAGE },
+                    width: { size: 10, type: WidthType.PERCENTAGE },
+                    margins: { top: 80, right: 80, bottom: 80, left: 80 },
                   }),
                   new TableCell({
                     children: [
                       new Paragraph({
                         children: [
                           new TextRun({
-                            text: 'Стоимость маш.-ч (₽)',
+                            text: 'Тип шасси',
                             bold: true,
-                            size: 22,
+                            size: 20,
                           }),
                         ],
                         alignment: AlignmentType.CENTER,
-                        spacing: { before: 60, after: 60 },
+                        spacing: { before: 40, after: 40 },
                       }),
                     ],
-                    width: { size: 15, type: WidthType.PERCENTAGE },
+                    width: { size: 10, type: WidthType.PERCENTAGE },
+                    margins: { top: 80, right: 80, bottom: 80, left: 80 },
                   }),
                   new TableCell({
                     children: [
                       new Paragraph({
                         children: [
                           new TextRun({
-                            text: 'Г/П на вылете (т)',
+                            text: 'Страна',
                             bold: true,
-                            size: 22,
+                            size: 20,
                           }),
                         ],
                         alignment: AlignmentType.CENTER,
-                        spacing: { before: 60, after: 60 },
+                        spacing: { before: 40, after: 40 },
                       }),
                     ],
-                    width: { size: 15, type: WidthType.PERCENTAGE },
+                    width: { size: 10, type: WidthType.PERCENTAGE },
+                    margins: { top: 80, right: 80, bottom: 80, left: 80 },
+                  }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({
+                        children: [
+                          new TextRun({
+                            text: 'Сметная цена без учета оплаты труда машинистов, руб./маш.-ч',
+                            bold: true,
+                            size: 20,
+                          }),
+                        ],
+                        alignment: AlignmentType.CENTER,
+                        spacing: { before: 40, after: 40 },
+                      }),
+                    ],
+                    width: { size: 12, type: WidthType.PERCENTAGE },
+                    margins: { top: 80, right: 80, bottom: 80, left: 80 },
+                  }),
+                  new TableCell({
+                    children: [
+                      new Paragraph({
+                        children: [
+                          new TextRun({
+                            text: 'Грузоподъемность на данном вылете (т)',
+                            bold: true,
+                            size: 20,
+                          }),
+                        ],
+                        alignment: AlignmentType.CENTER,
+                        spacing: { before: 40, after: 40 },
+                      }),
+                    ],
+                    width: { size: 12, type: WidthType.PERCENTAGE },
+                    margins: { top: 80, right: 80, bottom: 80, left: 80 },
                   }),
                   new TableCell({
                     children: [
@@ -272,30 +354,32 @@ export const generateAndDownloadComparisonReport = async (
                           new TextRun({
                             text: 'Коэф. запаса',
                             bold: true,
-                            size: 22,
+                            size: 20,
                           }),
                         ],
                         alignment: AlignmentType.CENTER,
-                        spacing: { before: 60, after: 60 },
+                        spacing: { before: 40, after: 40 },
                       }),
                     ],
-                    width: { size: 15, type: WidthType.PERCENTAGE },
+                    width: { size: 10, type: WidthType.PERCENTAGE },
+                    margins: { top: 80, right: 80, bottom: 80, left: 80 },
                   }),
                   new TableCell({
                     children: [
                       new Paragraph({
                         children: [
                           new TextRun({
-                            text: 'Запас Г/П (т)',
+                            text: 'Запас грузоподъемности (т)',
                             bold: true,
-                            size: 22,
+                            size: 20,
                           }),
                         ],
                         alignment: AlignmentType.CENTER,
-                        spacing: { before: 60, after: 60 },
+                        spacing: { before: 40, after: 40 },
                       }),
                     ],
-                    width: { size: 20, type: WidthType.PERCENTAGE },
+                    width: { size: 11, type: WidthType.PERCENTAGE },
+                    margins: { top: 80, right: 80, bottom: 80, left: 80 },
                   }),
                 ],
               }),
@@ -303,8 +387,11 @@ export const generateAndDownloadComparisonReport = async (
               ...validResults.map((result) => {
                 const crane = result.crane
                 const calcResult = result.result
-                const craneName = `${crane.manufacturer} ${crane.model}`
+                const manufacturer = crane.manufacturer || 'Н/Д'
+                const model = crane.model || 'Н/Д'
                 const boomLength = result.boomLength || 'Н/Д'
+                const chassisType = crane.chassis_type || 'Н/Д'
+                const country = crane.country || 'Н/Д'
                 const price = crane.base_price
                   ? `${crane.base_price.toFixed(2)}`
                   : 'Н/Д'
@@ -325,14 +412,25 @@ export const generateAndDownloadComparisonReport = async (
                         new Paragraph({
                           children: [
                             new TextRun({
-                              text: craneName,
+                              text: manufacturer,
                               size: 20,
                             }),
                           ],
-                          spacing: { before: 60, after: 60 },
-                          indent: { left: 57 },
+                          spacing: { before: 40, after: 20 },
+                          indent: { left: 40 },
+                        }),
+                        new Paragraph({
+                          children: [
+                            new TextRun({
+                              text: model,
+                              size: 20,
+                            }),
+                          ],
+                          spacing: { before: 0, after: 40 },
+                          indent: { left: 40 },
                         }),
                       ],
+                      margins: { top: 80, right: 80, bottom: 80, left: 80 },
                     }),
                     new TableCell({
                       children: [
@@ -344,9 +442,40 @@ export const generateAndDownloadComparisonReport = async (
                             }),
                           ],
                           alignment: AlignmentType.CENTER,
-                          spacing: { before: 60, after: 60 },
+                          spacing: { before: 40, after: 40 },
                         }),
                       ],
+                      margins: { top: 80, right: 80, bottom: 80, left: 80 },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          children: [
+                            new TextRun({
+                              text: chassisType,
+                              size: 20,
+                            }),
+                          ],
+                          alignment: AlignmentType.CENTER,
+                          spacing: { before: 40, after: 40 },
+                        }),
+                      ],
+                      margins: { top: 80, right: 80, bottom: 80, left: 80 },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          children: [
+                            new TextRun({
+                              text: country,
+                              size: 20,
+                            }),
+                          ],
+                          alignment: AlignmentType.CENTER,
+                          spacing: { before: 40, after: 40 },
+                        }),
+                      ],
+                      margins: { top: 80, right: 80, bottom: 80, left: 80 },
                     }),
                     new TableCell({
                       children: [
@@ -358,9 +487,10 @@ export const generateAndDownloadComparisonReport = async (
                             }),
                           ],
                           alignment: AlignmentType.CENTER,
-                          spacing: { before: 60, after: 60 },
+                          spacing: { before: 40, after: 40 },
                         }),
                       ],
+                      margins: { top: 80, right: 80, bottom: 80, left: 80 },
                     }),
                     new TableCell({
                       children: [
@@ -372,9 +502,10 @@ export const generateAndDownloadComparisonReport = async (
                             }),
                           ],
                           alignment: AlignmentType.CENTER,
-                          spacing: { before: 60, after: 60 },
+                          spacing: { before: 40, after: 40 },
                         }),
                       ],
+                      margins: { top: 80, right: 80, bottom: 80, left: 80 },
                     }),
                     new TableCell({
                       children: [
@@ -386,9 +517,10 @@ export const generateAndDownloadComparisonReport = async (
                             }),
                           ],
                           alignment: AlignmentType.CENTER,
-                          spacing: { before: 60, after: 60 },
+                          spacing: { before: 40, after: 40 },
                         }),
                       ],
+                      margins: { top: 80, right: 80, bottom: 80, left: 80 },
                     }),
                     new TableCell({
                       children: [
@@ -400,9 +532,10 @@ export const generateAndDownloadComparisonReport = async (
                             }),
                           ],
                           alignment: AlignmentType.CENTER,
-                          spacing: { before: 60, after: 60 },
+                          spacing: { before: 40, after: 40 },
                         }),
                       ],
+                      margins: { top: 80, right: 80, bottom: 80, left: 80 },
                     }),
                   ],
                 })
@@ -417,7 +550,7 @@ export const generateAndDownloadComparisonReport = async (
                 new Paragraph({
                   children: [
                     new TextRun({
-                      text: 'ЛУЧШИЕ ВАРИАНТЫ',
+                      text: 'ВЫВОДЫ ПО РЕЗУЛЬТАТАМ СРАВНЕНИЯ',
                       bold: true,
                       size: 24,
                     }),
@@ -441,7 +574,7 @@ export const generateAndDownloadComparisonReport = async (
                             size: 22,
                           }),
                         ],
-                        spacing: { before: 60, after: 60 },
+                        spacing: { before: 40, after: 40 },
                       }),
                     ]
                   : []),
@@ -463,7 +596,7 @@ export const generateAndDownloadComparisonReport = async (
                             size: 22,
                           }),
                         ],
-                        spacing: { before: 60, after: 60 },
+                        spacing: { before: 40, after: 40 },
                       }),
                     ]
                   : []),
