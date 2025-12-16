@@ -5,8 +5,53 @@ import { fetchFilteredCranes } from '@/src/api/cranes'
 import logo from '@/src/assets/crane_list_icon.png'
 import CranesFilterSidebar from '@/src/components/CranesFilterSidebar'
 import CranesList from '@/src/components/CranesList'
-import { PAGINATION_SIZE } from '@/src/config'
+import { FILTERS_STORAGE_KEY, PAGINATION_SIZE } from '@/src/config'
 import './Home.css'
+
+/**
+ * Default filter values
+ */
+const getDefaultFilters = () => ({
+  model: '', // Search by crane model
+  chassis_type: '', // Filter by chassis type (mobile, tower, etc.)
+  manufacturer: '', // Filter by manufacturer
+  country: '', // Filter by country
+  min_max_lc: '', // Minimum lifting capacity filter
+  max_max_lc: '', // Maximum lifting capacity filter
+  radius: '', // Radius filter for deep filtering
+  payload: '', // Payload filter for deep filtering
+  sortBy: 'displayNameAsc', // Current sort criteria (default: Name ascending)
+})
+
+/**
+ * Load filters from localStorage
+ */
+const loadFiltersFromStorage = () => {
+  try {
+    const storedFilters = localStorage.getItem(FILTERS_STORAGE_KEY)
+    if (storedFilters) {
+      const parsedFilters = JSON.parse(storedFilters)
+      // Merge with defaults to ensure all fields exist
+      return { ...getDefaultFilters(), ...parsedFilters }
+    }
+  } catch (error) {
+    console.error('Error loading filters from storage:', error)
+    // Clear corrupted data
+    localStorage.removeItem(FILTERS_STORAGE_KEY)
+  }
+  return getDefaultFilters()
+}
+
+/**
+ * Save filters to localStorage
+ */
+const saveFiltersToStorage = (filters) => {
+  try {
+    localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters))
+  } catch (error) {
+    console.error('Error saving filters to storage:', error)
+  }
+}
 
 /**
  * Main Home component - displays a filterable and sortable list of cranes
@@ -16,6 +61,7 @@ import './Home.css'
  * - Load-more pagination for large datasets
  * - Real-time search with debouncing
  * - Responsive hidable sidebar
+ * - Persists filter state between page navigations
  */
 const Home = () => {
   // State for storing the list of cranes fetched from API
@@ -30,14 +76,13 @@ const Home = () => {
   const [loadingMore, setLoadingMore] = useState(false)
 
   // Filter state object containing all current filter values
-  const [filters, setFilters] = useState({
-    model: '', // Search by crane model
-    chassis_type: '', // Filter by chassis type (mobile, tower, etc.)
-    manufacturer: '', // Filter by manufacturer
-    min_max_lc: '', // Minimum lifting capacity filter
-    max_max_lc: '', // Maximum lifting capacity filter
-    sortBy: 'displayNameAsc', // Current sort criteria (default: Name ascending)
-  })
+  // Load from localStorage on mount
+  const [filters, setFilters] = useState(() => loadFiltersFromStorage())
+
+  // Save filters to localStorage whenever they change
+  useEffect(() => {
+    saveFiltersToStorage(filters)
+  }, [filters])
 
   /**
    * Effect hook that runs whenever filters change
@@ -87,14 +132,10 @@ const Home = () => {
    * Clears search terms and resets sort to default
    */
   const handleClearFilters = () => {
-    setFilters({
-      model: '',
-      chassis_type: '',
-      manufacturer: '',
-      min_max_lc: '',
-      max_max_lc: '',
-      sortBy: 'displayNameAsc',
-    })
+    const defaultFilters = getDefaultFilters()
+    setFilters(defaultFilters)
+    // Clear from localStorage as well
+    localStorage.removeItem(FILTERS_STORAGE_KEY)
   }
 
   /**

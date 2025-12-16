@@ -35,6 +35,11 @@ export const HISTORY_STORAGE_KEY = 'crane_calculation_history'
 export const COMPARISON_FORM_STORAGE_KEY = 'crane_comparison_form_data'
 
 /**
+ * Storage key for crane filters
+ */
+export const FILTERS_STORAGE_KEY = 'crane_filters'
+
+/**
  * Timeout for popup messages
  */
 export const POPUP_TIMEOUT = 3000
