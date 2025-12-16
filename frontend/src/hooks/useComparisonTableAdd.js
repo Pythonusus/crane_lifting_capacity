@@ -45,9 +45,22 @@ const useComparisonTableAdd = (setComparisonTable) => {
         const defaultBoomLength =
           craneData.lc_tables['Основная стрела'].boom_lengths[0]
 
+        // Generate truly unique ID using crypto.randomUUID() if available, otherwise use high-precision timestamp + random
+        const generateUniqueId = () => {
+          if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+            return crypto.randomUUID()
+          }
+          // Fallback: microsecond precision timestamp + random string (Math.random is safe for non-crypto ID generation)
+          // eslint-disable-next-line
+          const random1 = Math.random().toString(36).slice(2, 11)
+          // eslint-disable-next-line
+          const random2 = Math.random().toString(36).slice(2, 11)
+          return `${performance.now()}-${random1}-${random2}`
+        }
+
         // Create new entry
         const newEntry = {
-          id: Date.now(),
+          id: generateUniqueId(),
           crane: craneData,
           selectedBoomLength: defaultBoomLength,
           results: {

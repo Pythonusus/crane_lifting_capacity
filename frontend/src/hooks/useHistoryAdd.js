@@ -26,8 +26,21 @@ const useHistoryAdd = (history, setHistory) => {
   const addToHistory = useCallback(
     (calculation) => {
       try {
+        // Generate truly unique ID using crypto.randomUUID() if available, otherwise use high-precision timestamp + random
+        const generateUniqueId = () => {
+          if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+            return crypto.randomUUID()
+          }
+          // Fallback: microsecond precision timestamp + random string (Math.random is safe for non-crypto ID generation)
+          // eslint-disable-next-line
+          const random1 = Math.random().toString(36).slice(2, 11)
+          // eslint-disable-next-line
+          const random2 = Math.random().toString(36).slice(2, 11)
+          return `${performance.now()}-${random1}-${random2}`
+        }
+
         const newEntry = {
-          id: Date.now(), // Simple ID based on timestamp
+          id: generateUniqueId(),
           // Store only crane metadata
           manufacturer: calculation.manufacturer,
           model: calculation.model,
