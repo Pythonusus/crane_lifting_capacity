@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Button, Popup } from 'semantic-ui-react'
 
 import { MAX_COMPARISON_TABLE_ENTRIES, POPUP_TIMEOUT } from '@/src/config'
@@ -20,15 +20,51 @@ const AddToComparisonButton = ({
   className = '',
   size = 'mini',
 }) => {
-  const { setComparisonTable } = useComparisonTableState()
+  const { comparisonTable, setComparisonTable } = useComparisonTableState()
   const { addCraneToComparison } = useComparisonTableAdd(setComparisonTable)
 
-  const [showSuccess, setShowSuccess] = useState(false)
-  const [showLimitReached, setShowLimitReached] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [showLimitWarning, setShowLimitWarning] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+
+  // Check if crane is already in comparison table
+  const isCraneInTable = useMemo(() => {
+    return comparisonTable.some((entry) => entry.crane?.name === craneName)
+  }, [comparisonTable, craneName])
+
+  // Check if limit is reached
+  const isLimitReached = useMemo(() => {
+    return comparisonTable.length >= MAX_COMPARISON_TABLE_ENTRIES
+  }, [comparisonTable.length])
+
+  // Auto-hide limit warning after timeout
+  useEffect(() => {
+    if (showLimitWarning) {
+      const timer = setTimeout(() => {
+        setShowLimitWarning(false)
+      }, POPUP_TIMEOUT)
+      return () => clearTimeout(timer)
+    }
+  }, [showLimitWarning])
+
+  // Auto-hide success message after timeout
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => {
+        setShowSuccess(false)
+      }, POPUP_TIMEOUT)
+      return () => clearTimeout(timer)
+    }
+  }, [showSuccess])
 
   const handleAddToComparison = async () => {
     if (isLoading) {
+      return
+    }
+
+    // Check limit and show warning if reached, but don't prevent clicking
+    if (isLimitReached) {
+      setShowLimitWarning(true)
       return
     }
 
@@ -37,20 +73,8 @@ const AddToComparisonButton = ({
       const result = await addCraneToComparison(craneName)
       if (result.success) {
         setShowSuccess(true)
-        // Hide success message after 2 seconds
-        setTimeout(() => {
-          setShowSuccess(false)
-        }, POPUP_TIMEOUT)
-      } else {
-        // Handle different failure reasons
-        if (result.reason === 'limit_reached') {
-          setShowLimitReached(true)
-          // Hide limit reached message after 2 seconds
-          setTimeout(() => {
-            setShowLimitReached(false)
-          }, POPUP_TIMEOUT)
-        }
       }
+      // State will automatically update based on comparisonTable changes
     } catch (error) {
       console.error('Error adding crane to comparison:', error)
     } finally {
@@ -58,12 +82,13 @@ const AddToComparisonButton = ({
     }
   }
 
-  // Determine button state and content
+  // Determine button state and content based on persisted comparison table state
   let buttonContent
   let buttonIcon
   let buttonColor
   let buttonDisabled = false
   let popupContent
+  let popupOpen = false
 
   if (isLoading) {
     buttonContent = ''
@@ -71,16 +96,24 @@ const AddToComparisonButton = ({
     buttonColor = 'teal'
     buttonDisabled = true
     popupContent = 'Загрузка данных крана...'
+  } else if (showLimitWarning) {
+    buttonContent = ''
+    buttonIcon = 'exclamation triangle'
+    buttonColor = 'orange'
+    popupContent = `Достигнут лимит кранов в таблице сравнения (${MAX_COMPARISON_TABLE_ENTRIES})`
+    popupOpen = true
   } else if (showSuccess) {
     buttonContent = ''
     buttonIcon = 'check'
     buttonColor = 'green'
     popupContent = 'Кран добавлен в таблицу сравнения'
-  } else if (showLimitReached) {
+    popupOpen = true
+  } else if (isCraneInTable) {
     buttonContent = ''
-    buttonIcon = 'exclamation triangle'
-    buttonColor = 'orange'
-    popupContent = `Достигнут лимит кранов в таблице сравнения (${MAX_COMPARISON_TABLE_ENTRIES})`
+    buttonIcon = 'check'
+    buttonColor = 'green'
+    popupContent =
+      'Кран добавлен в таблицу сравнения. Нажмите, чтобы добавить еще раз'
   } else {
     buttonContent = ''
     buttonIcon = 'add'
@@ -92,6 +125,12 @@ const AddToComparisonButton = ({
     <Popup
       content={popupContent}
       size='small'
+      open={popupOpen}
+      on={popupOpen ? null : 'hover'}
+      onClose={() => {
+        setShowLimitWarning(false)
+        setShowSuccess(false)
+      }}
       trigger={
         <Button
           icon={buttonIcon}
