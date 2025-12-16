@@ -26,6 +26,10 @@
   text-align: center !important;
 }
 
+.history-boom-column {
+  width: 110px !important;
+}
+
 .crane-name-link:hover {
   text-decoration: underline;
 }
