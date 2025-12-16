@@ -18,6 +18,7 @@ import ComparisonForm from '@/src/components/ComparisonForm'
 import ComparisonResult from '@/src/components/ComparisonResult'
 import {
   COMPARISON_TABLE_STORAGE_KEY,
+  COMPARISON_RESULTS_STORAGE_KEY,
   MAX_COMPARISON_TABLE_ENTRIES,
 } from '@/src/config'
 import useComparisonForm from '@/src/hooks/useComparisonForm'
@@ -152,6 +153,9 @@ const ComparisonTable = () => {
 
         return updatedTable
       })
+
+      // Also clear comparison results from localStorage
+      localStorage.removeItem(COMPARISON_RESULTS_STORAGE_KEY)
     } catch (error) {
       console.error('Error clearing results:', error)
       handleError(error)

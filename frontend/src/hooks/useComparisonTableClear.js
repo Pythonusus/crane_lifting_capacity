@@ -1,5 +1,7 @@
 import { useCallback } from 'react'
 
+import { COMPARISON_RESULTS_STORAGE_KEY } from '@/src/config'
+
 const COMPARISON_TABLE_STORAGE_KEY = 'crane_comparison_table'
 
 /**
@@ -16,6 +18,7 @@ const useComparisonTableClear = (comparisonTable, setComparisonTable) => {
   const clearComparisonTable = useCallback(() => {
     try {
       localStorage.removeItem(COMPARISON_TABLE_STORAGE_KEY)
+      localStorage.removeItem(COMPARISON_RESULTS_STORAGE_KEY)
       setComparisonTable([])
     } catch (error) {
       console.error('Error clearing comparison table:', error)

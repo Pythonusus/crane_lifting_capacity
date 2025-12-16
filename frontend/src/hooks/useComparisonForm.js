@@ -7,6 +7,7 @@ import {
 import {
   COMPARISON_TABLE_STORAGE_KEY,
   COMPARISON_FORM_STORAGE_KEY,
+  COMPARISON_RESULTS_STORAGE_KEY,
 } from '@/src/config'
 import useHistoryAdd from '@/src/hooks/useHistoryAdd'
 import useHistoryState from '@/src/hooks/useHistoryState'
@@ -79,7 +80,35 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
   const [errors, setErrors] = useState({})
   const [validationErrors, setValidationErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [comparisonResults, setComparisonResults] = useState(null)
+
+  // Load comparison results from localStorage on mount
+  const [comparisonResults, setComparisonResults] = useState(() => {
+    try {
+      const storedResults = localStorage.getItem(COMPARISON_RESULTS_STORAGE_KEY)
+      if (storedResults) {
+        return JSON.parse(storedResults)
+      }
+    } catch (error) {
+      console.error('Error loading comparison results:', error)
+    }
+    return null
+  })
+
+  // Save comparison results to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      if (comparisonResults) {
+        localStorage.setItem(
+          COMPARISON_RESULTS_STORAGE_KEY,
+          JSON.stringify(comparisonResults),
+        )
+      } else {
+        localStorage.removeItem(COMPARISON_RESULTS_STORAGE_KEY)
+      }
+    } catch (error) {
+      console.error('Error saving comparison results:', error)
+    }
+  }, [comparisonResults])
 
   const handleInputChange = useCallback(
     (field, value) => {
@@ -452,6 +481,7 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
     // Clear from localStorage
     try {
       localStorage.removeItem(COMPARISON_FORM_STORAGE_KEY)
+      localStorage.removeItem(COMPARISON_RESULTS_STORAGE_KEY)
     } catch (error) {
       console.error('Error clearing comparison form data:', error)
     }

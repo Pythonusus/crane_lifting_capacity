@@ -35,6 +35,11 @@ export const HISTORY_STORAGE_KEY = 'crane_calculation_history'
 export const COMPARISON_FORM_STORAGE_KEY = 'crane_comparison_form_data'
 
 /**
+ * Storage key for comparison results (best cranes info)
+ */
+export const COMPARISON_RESULTS_STORAGE_KEY = 'crane_comparison_results'
+
+/**
  * Storage key for crane filters
  */
 export const FILTERS_STORAGE_KEY = 'crane_filters'
