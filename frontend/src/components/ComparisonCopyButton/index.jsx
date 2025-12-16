@@ -51,8 +51,8 @@ const formatCraneResult = (calcResult, index) => {
   const resultData = calcResult.result
   const craneName = `${crane.manufacturer} ${crane.model}`
   const boomLength = calcResult.boomLength || 'Н/Д'
-  const price = crane.price_per_hour
-    ? formatCalculationValue(crane.price_per_hour, '₽')
+  const price = crane.base_price
+    ? formatCalculationValue(crane.base_price, '₽')
     : 'Н/Д'
   const liftingCapacity = resultData.lifting_capacity
     ? formatCalculationValue(resultData.lifting_capacity, 'т')
@@ -185,8 +185,8 @@ const isValidResult = (r) => {
 
 const findCheapestCrane = (validResults) => {
   return validResults.reduce((min, current) => {
-    const minPrice = min.crane.price_per_hour || Infinity
-    const currentPrice = current.crane.price_per_hour || Infinity
+    const minPrice = min.crane.base_price || Infinity
+    const currentPrice = current.crane.base_price || Infinity
     return currentPrice < minPrice ? current : min
   })
 }
@@ -203,7 +203,7 @@ const formatCheapestCrane = (cheapestCrane) => {
   return {
     name: `${cheapestCrane.crane.manufacturer} ${cheapestCrane.crane.model}`,
     boomLength: cheapestCrane.boomLength,
-    price: cheapestCrane.crane.price_per_hour,
+    price: cheapestCrane.crane.base_price,
   }
 }
 

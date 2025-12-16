@@ -105,7 +105,7 @@ const CranesList = ({
                   {crane.resource_code}
                 </TableCell>
                 <TableCell className='hide-on-tablet'>
-                  {crane.price_per_hour.toLocaleString()}
+                  {crane.base_price.toLocaleString()}
                 </TableCell>
                 <TableCell>{crane.max_lifting_capacity}</TableCell>
                 <TableCell className='comparison-cell'>

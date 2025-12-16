@@ -270,8 +270,8 @@ const CalcHistory = () => {
                         </TableCell>
                         <TableCell>{chassisType}</TableCell>
                         <TableCell className='hide-on-tablet'>
-                          {entry.pricePerHour
-                            ? formatCalculationValue(entry.pricePerHour, '₽')
+                          {entry.basePrice
+                            ? formatCalculationValue(entry.basePrice, '₽')
                             : '-'}
                         </TableCell>
                         <TableCell>{boomLength}</TableCell>

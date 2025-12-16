@@ -370,8 +370,8 @@ const ComparisonTable = () => {
                           {crane.chassis_type || '-'}
                         </TableCell>
                         <TableCell className='price-cell'>
-                          {crane.price_per_hour
-                            ? formatCalculationValue(crane.price_per_hour, '₽')
+                          {crane.base_price
+                            ? formatCalculationValue(crane.base_price, '₽')
                             : '-'}
                         </TableCell>
                         <TableCell>

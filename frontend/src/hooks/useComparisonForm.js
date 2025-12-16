@@ -321,8 +321,8 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
             // Same priority: handle special cases
             if (aPriority === 0) {
               // Both successful: sort by price, then by boom length index
-              const aPrice = a.crane.price_per_hour || Infinity
-              const bPrice = b.crane.price_per_hour || Infinity
+              const aPrice = a.crane.base_price || Infinity
+              const bPrice = b.crane.base_price || Infinity
               const priceDiff = aPrice - bPrice
               if (priceDiff !== 0) {
                 return priceDiff
@@ -374,7 +374,7 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
               chassisType: result.crane.chassis_type || 'Unknown',
               maxLiftingCapacity:
                 result.crane.max_lifting_capacity || 'Unknown',
-              pricePerHour: result.crane.price_per_hour || null,
+              basePrice: result.crane.base_price || null,
               calculationMethod: 'safety_factor',
               result: result.result,
             })
@@ -393,10 +393,10 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
         let smallestSafetyFactorCrane = null
 
         if (validResults.length > 0) {
-          // Find cheapest crane (lowest price_per_hour)
+          // Find cheapest crane (lowest base_price)
           cheapestCrane = validResults.reduce((min, current) => {
-            const minPrice = min.crane.price_per_hour || Infinity
-            const currentPrice = current.crane.price_per_hour || Infinity
+            const minPrice = min.crane.base_price || Infinity
+            const currentPrice = current.crane.base_price || Infinity
             return currentPrice < minPrice ? current : min
           })
 
@@ -415,7 +415,7 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
             ? {
                 name: `${cheapestCrane.crane.manufacturer} ${cheapestCrane.crane.model}`,
                 boomLength: cheapestCrane.boomLength,
-                price: cheapestCrane.crane.price_per_hour,
+                price: cheapestCrane.crane.base_price,
               }
             : null,
           smallestSafetyFactorCrane: smallestSafetyFactorCrane

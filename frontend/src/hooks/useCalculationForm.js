@@ -161,7 +161,7 @@ const useCalculationForm = (
           country: crane.country || '',
           chassisType: crane.chassis_type || 'Unknown',
           maxLiftingCapacity: crane.max_lifting_capacity || 'Unknown',
-          pricePerHour: crane.price_per_hour || null,
+          basePrice: crane.base_price || null,
           calculationMethod: 'payload',
           result: result,
         })
@@ -186,7 +186,7 @@ const useCalculationForm = (
           country: crane.country || '',
           chassisType: crane.chassis_type || 'Unknown',
           maxLiftingCapacity: crane.max_lifting_capacity || 'Unknown',
-          pricePerHour: crane.price_per_hour || null,
+          basePrice: crane.base_price || null,
           calculationMethod: 'safety_factor',
           result: result,
         })

@@ -305,8 +305,8 @@ export const generateAndDownloadComparisonReport = async (
                 const calcResult = result.result
                 const craneName = `${crane.manufacturer} ${crane.model}`
                 const boomLength = result.boomLength || 'Н/Д'
-                const price = crane.price_per_hour
-                  ? `${crane.price_per_hour.toFixed(2)}`
+                const price = crane.base_price
+                  ? `${crane.base_price.toFixed(2)}`
                   : 'Н/Д'
                 const liftingCapacity = calcResult.lifting_capacity
                   ? calcResult.lifting_capacity.toFixed(2)

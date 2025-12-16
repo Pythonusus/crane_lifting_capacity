@@ -19,7 +19,7 @@ const useHistoryAdd = (history, setHistory) => {
    * @param {string} calculation.country - Country of the crane
    * @param {string} calculation.chassisType - Chassis type of the crane
    * @param {number} calculation.maxLiftingCapacity - Maximum lifting capacity of the crane
-   * @param {number} calculation.pricePerHour - Price per hour of the crane
+   * @param {number} calculation.basePrice - Base price of the crane
    * @param {Object} calculation.result - Calculation result from API (contains request data)
    * @param {string} calculation.calculationMethod - 'payload' or 'safety_factor'
    */
@@ -34,7 +34,7 @@ const useHistoryAdd = (history, setHistory) => {
           country: calculation.country || '',
           chassisType: calculation.chassisType,
           maxLiftingCapacity: calculation.maxLiftingCapacity,
-          pricePerHour: calculation.pricePerHour || null,
+          basePrice: calculation.basePrice || null,
           // Store calculation method and result (request data is in result)
           calculationMethod: calculation.calculationMethod,
           result: calculation.result,

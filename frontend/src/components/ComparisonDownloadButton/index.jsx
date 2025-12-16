@@ -63,8 +63,8 @@ const buildComparisonResultsFromTable = (comparisonTable) => {
 
   if (validResults.length > 0) {
     cheapestCrane = validResults.reduce((min, current) => {
-      const minPrice = min.crane.price_per_hour || Infinity
-      const currentPrice = current.crane.price_per_hour || Infinity
+      const minPrice = min.crane.base_price || Infinity
+      const currentPrice = current.crane.base_price || Infinity
       return currentPrice < minPrice ? current : min
     })
 
@@ -81,7 +81,7 @@ const buildComparisonResultsFromTable = (comparisonTable) => {
       ? {
           name: `${cheapestCrane.crane.manufacturer} ${cheapestCrane.crane.model}`,
           boomLength: cheapestCrane.boomLength,
-          price: cheapestCrane.crane.price_per_hour,
+          price: cheapestCrane.crane.base_price,
         }
       : null,
     smallestSafetyFactorCrane: smallestSafetyFactorCrane

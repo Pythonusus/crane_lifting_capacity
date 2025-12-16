@@ -36,7 +36,7 @@ const useComparisonTableAdd = (setComparisonTable) => {
           model: fullCrane.model,
           country: fullCrane.country || '',
           chassis_type: fullCrane.chassis_type || '',
-          price_per_hour: fullCrane.price_per_hour || 0,
+          base_price: fullCrane.base_price || 0,
           lc_tables: fullCrane.lc_tables || {},
           lc_tables_names: fullCrane.lc_tables_names || [],
         }

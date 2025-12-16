@@ -188,9 +188,9 @@ def filter_cranes_by_deep_filtering(
             # No crane in this group can lift the payload
             continue
 
-        # Find the cheapest crane (by price_per_hour = base_price + labor_cost)
+        # Find the cheapest crane (by base_price)
         cheapest_crane = min(
-            capable_cranes, key=lambda c: c.base_price + c.labor_cost
+            capable_cranes, key=lambda c: c.base_price
         )
         selected_crane_ids.append(cheapest_crane.id)
 

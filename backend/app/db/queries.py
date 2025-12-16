@@ -70,10 +70,10 @@ def _apply_sorting_to_cranes_query(query, sort_by: str | None = None):
         "maxCapacityAsc": [asc(CraneDbModel.max_lifting_capacity)],
         "maxCapacityDesc": [desc(CraneDbModel.max_lifting_capacity)],
         "pricePerHourAsc": [
-            asc(CraneDbModel.base_price + CraneDbModel.labor_cost)
+            asc(CraneDbModel.base_price)
         ],
         "pricePerHourDesc": [
-            desc(CraneDbModel.base_price + CraneDbModel.labor_cost)
+            desc(CraneDbModel.base_price)
         ],
     }
 
