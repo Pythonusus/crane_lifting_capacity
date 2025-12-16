@@ -41,7 +41,20 @@ const ClearComparisonTableButton = ({ onClear, className = '' }) => (
 )
 
 // Helper function to get radius range text for error message
-const getRadiusRangeText = (crane, boomLength) => {
+const getRadiusRangeText = (entry) => {
+  // Check if radiusMin and radiusMax are stored in results
+  if (
+    entry.results?.radiusMin !== null &&
+    entry.results?.radiusMin !== undefined &&
+    entry.results?.radiusMax !== null &&
+    entry.results?.radiusMax !== undefined
+  ) {
+    return `${entry.results.radiusMin} - ${entry.results.radiusMax}`
+  }
+
+  // Fallback: try to get from crane data
+  const crane = entry.crane
+  const boomLength = entry.selectedBoomLength || null
   if (!boomLength) return ''
   try {
     const radiusTable =
@@ -54,7 +67,7 @@ const getRadiusRangeText = (crane, boomLength) => {
     const radiusMin = radiusKeys.at(0)
     const radiusMax = radiusKeys.at(-1)
     if (radiusMin !== undefined && radiusMax !== undefined) {
-      return ` (доступный вылет: ${radiusMin}-${radiusMax} м)`
+      return `${radiusMin} - ${radiusMax}`
     }
   } catch (error) {
     console.error('Error getting radius range:', error)
@@ -311,7 +324,7 @@ const ComparisonTable = () => {
                     // Format result values or show error message
                     const hasError = !!entry.results?.error
                     const radiusRangeText = hasError
-                      ? getRadiusRangeText(crane, boomLengthToUse)
+                      ? getRadiusRangeText(entry)
                       : ''
 
                     const liftingCapacity = formatResultValue(
@@ -400,8 +413,12 @@ const ComparisonTable = () => {
                             className='comparison-result-error'
                             colSpan='3'
                           >
-                            <div>Невозможно выполнить расчет</div>
-                            <div>{radiusRangeText}</div>
+                            <div className='comparison-result-error-text'>
+                              {radiusRangeText
+                                ? `Невозможно выполнить расчет. Допустимый вылет стрелы для данной конфигурации ${radiusRangeText} м`
+                                : entry.results?.error ||
+                                  'Невозможно выполнить расчет'}
+                            </div>
                           </TableCell>
                         ) : (
                           <>

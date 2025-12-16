@@ -14,6 +14,53 @@ import useHistoryAdd from '@/src/hooks/useHistoryAdd'
 import useHistoryState from '@/src/hooks/useHistoryState'
 
 /**
+ * Validates if radius is valid for a crane's boom length
+ * @param {Object} crane - The crane object
+ * @param {string} boomLength - The boom length to check
+ * @param {number} radius - The radius value to validate
+ * @returns {Object} Object with isValid boolean and error message if invalid
+ */
+const validateRadiusForCrane = (crane, boomLength, radius) => {
+  if (!crane || !boomLength || radius === null || radius === undefined) {
+    return { isValid: false, error: 'Недостаточно данных для проверки' }
+  }
+
+  try {
+    const radiusTable =
+      // eslint-disable-next-line security/detect-object-injection
+      crane.lc_tables?.['Основная стрела']?.table?.[boomLength]
+    if (!radiusTable) {
+      return { isValid: false, error: 'Конфигурация стрелы не найдена' }
+    }
+
+    const radiusKeys = Object.keys(radiusTable)
+      .map(Number)
+      .toSorted((a, b) => a - b)
+
+    if (radiusKeys.length === 0) {
+      return { isValid: false, error: 'Нет доступных значений вылета' }
+    }
+
+    const radiusMin = radiusKeys.at(0)
+    const radiusMax = radiusKeys.at(-1)
+
+    if (radius < radiusMin || radius > radiusMax) {
+      return {
+        isValid: false,
+        error: `Невозможно выполнить расчет. Допустимый вылет для данной конфигурации ${radiusMin} - ${radiusMax}`,
+        radiusMin,
+        radiusMax,
+      }
+    }
+
+    return { isValid: true, error: null }
+  } catch (error) {
+    console.error('Error validating radius for crane:', error)
+    return { isValid: false, error: 'Ошибка при проверке вылета' }
+  }
+}
+
+/**
  * Get country priority for sorting (lower = higher priority)
  * 0 = Российская Федерация
  * 1 = Other friendly countries (ГДР, Китай)
@@ -215,7 +262,11 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
       setComparisonResults(null)
 
       try {
-        // Prepare all requests
+        const radius = Number.parseFloat(
+          normalizeNumericInput(formData.boomRadius),
+        )
+
+        // Prepare all requests and validate radius
         const prepareRequest = (entry) => {
           const crane = entry.crane
           const craneName = crane.name || `${crane.manufacturer}_${crane.model}`
@@ -228,9 +279,34 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
             (availableBoomLengths.length > 0 ? availableBoomLengths[0] : null)
 
           if (!boomLength) {
-            throw new Error(
-              `Кран ${craneName} не имеет доступных конфигураций стрелы`,
-            )
+            return {
+              entryId: entry.id,
+              crane,
+              craneName,
+              boomLength: null,
+              request: null,
+              radiusError: 'Кран не имеет доступных конфигураций стрелы',
+            }
+          }
+
+          // Validate radius for this crane and boom length
+          const radiusValidation = validateRadiusForCrane(
+            crane,
+            boomLength,
+            radius,
+          )
+
+          if (!radiusValidation.isValid) {
+            return {
+              entryId: entry.id,
+              crane,
+              craneName,
+              boomLength,
+              request: null,
+              radiusError: radiusValidation.error,
+              radiusMin: radiusValidation.radiusMin,
+              radiusMax: radiusValidation.radiusMax,
+            }
           }
 
           return {
@@ -241,7 +317,7 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
             request: createSafetyFactorRequest(
               craneName,
               boomLength,
-              Number.parseFloat(normalizeNumericInput(formData.boomRadius)),
+              radius,
               formData.equipmentWeight
                 ? Number.parseFloat(
                     normalizeNumericInput(formData.equipmentWeight),
@@ -249,6 +325,7 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
                 : 0,
               Number.parseFloat(normalizeNumericInput(formData.payload)),
             ),
+            radiusError: null,
           }
         }
 
@@ -261,7 +338,36 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
           craneName,
           boomLength,
           request,
+          radiusError,
+          radiusMin,
+          radiusMax,
         }) => {
+          // If radius is invalid, return error immediately without API call
+          if (radiusError) {
+            return {
+              entryId,
+              success: false,
+              error: radiusError,
+              crane,
+              craneName,
+              boomLength,
+              radiusMin,
+              radiusMax,
+            }
+          }
+
+          // If no request (e.g., no boom length), return error
+          if (!request) {
+            return {
+              entryId,
+              success: false,
+              error: 'Невозможно выполнить расчет',
+              crane,
+              craneName,
+              boomLength,
+            }
+          }
+
           try {
             const result = await calculateSafetyFactor(request)
 
@@ -314,36 +420,43 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
                 safety_factor: result.result.safety_factor,
                 remaining_lc: result.result.remaining_lc,
                 error: null,
+                radiusMin: null,
+                radiusMax: null,
               },
             }
           }
           if (result && !result.success) {
+            // Use the error message from result, which includes radius range if available
+            const errorMessage = result.error || 'невозможно выполнить расчет'
             return {
               ...entry,
               results: {
                 lifting_capacity: null,
                 safety_factor: null,
                 remaining_lc: null,
-                error: 'невозможно выполнить расчет с указанным вылетом стрелы',
+                error: errorMessage,
+                radiusMin: result.radiusMin || null,
+                radiusMax: result.radiusMax || null,
               },
             }
           }
           return entry
         }
 
-        // Helper: Get entry priority (0=successful, 1=unsafe, 2=error, 3=other)
+        // Helper: Get entry priority (0=successful, 1=unsafe, 2=other, 3=error)
+        // Errors should be last, so they get the highest priority number
         const getEntryPriority = (entry) => {
           const hasError = !!entry.results?.error
           const safetyFactor = entry.results?.safety_factor
 
-          if (hasError) return 2
+          if (hasError) return 3 // Errors last
           if (typeof safetyFactor === 'number' && safetyFactor >= 1) {
-            return 0
+            return 0 // Successful first
           }
           if (typeof safetyFactor === 'number' && safetyFactor < 1) {
-            return 1
+            return 1 // Unsafe second
           }
-          return 3
+          return 2 // Other (no results) third
         }
 
         const updateTableWithResults = (prevTable, calculationResults) => {
@@ -433,6 +546,7 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
         }
 
         // Calculate best cranes from successful results with safety factor >= 1
+        // Exclude cranes with radius validation errors or other errors
         const successfulResults = results.filter((r) => r.success)
         const validResults = successfulResults.filter(
           (r) =>

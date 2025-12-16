@@ -26,7 +26,8 @@ export const generateAndDownloadComparisonReport = async (
   }
 
   const results = comparisonResults.results || []
-  const validResults = results.filter((r) => r.success)
+  // Filter out cranes with errors (including radius validation errors)
+  const validResults = results.filter((r) => r.success && !r.error)
 
   if (validResults.length === 0) {
     console.error('No valid results to export')
