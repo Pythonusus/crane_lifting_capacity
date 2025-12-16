@@ -266,7 +266,7 @@ const ComparisonTable = () => {
                       Стоимость <br /> маш.-ч (₽)
                     </TableHeaderCell>
                     <TableHeaderCell className='boom-column'>
-                      Тип стрелы
+                      Конфигурация стрелы
                     </TableHeaderCell>
                     <TableHeaderCell className='result-column'>
                       Г/П на вылете

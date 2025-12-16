@@ -244,7 +244,7 @@ export const generateAndDownloadReport = async (
                       new Paragraph({
                         children: [
                           new TextRun({
-                            text: 'Тип стрелы',
+                            text: 'Конфигурация стрелы',
                             bold: true,
                             size: 22,
                           }),

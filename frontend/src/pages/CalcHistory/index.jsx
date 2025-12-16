@@ -149,13 +149,13 @@ const CalcHistory = () => {
                       Стоимость <br /> маш.-ч (₽)
                     </TableHeaderCell>
                     <TableHeaderCell className='history-boom-column'>
-                      Тип <br /> стрелы
+                      Конфигурация <br /> стрелы
                     </TableHeaderCell>
                     <TableHeaderCell className='history-method-column hide-on-tablet'>
                       Метод <br /> расчета
                     </TableHeaderCell>
                     <TableHeaderCell className='history-radius-column'>
-                      Вылет
+                      Вылет <br /> стрелы
                     </TableHeaderCell>
                     <TableHeaderCell className='history-equipment-column'>
                       Вес <br /> оборуд.
