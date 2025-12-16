@@ -366,7 +366,7 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
           <Header as='h4' size='small' className='mb-5'>
             Макс грузоподъемность (т)
           </Header>
-          <div className='filter-section-inputs'>
+          <div className='filter-section-inputs filter-section-inputs-inline'>
             <Popup
               content={validationErrors.min_max_lc}
               open={!!validationErrors.min_max_lc}
@@ -397,7 +397,6 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
               }
               trigger={
                 <Input
-                  className='m-top'
                   fluid
                   placeholder='Не более'
                   value={filters.max_max_lc || ''}
