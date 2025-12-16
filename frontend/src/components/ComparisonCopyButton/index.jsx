@@ -33,7 +33,11 @@ const copyWithFallback = async (text) => {
 }
 
 const buildParametersSection = (formData, result) => {
-  result.push('Результаты сравнения кранов', '', 'ПАРАМЕТРЫ РАСЧЕТА')
+  result.push(
+    'ОТЧЕТ О ТЕХНИКО-ЭКОНОМИЧЕСКОМ СРАВНЕНИИ КРАНОВ',
+    '',
+    'ПАРАМЕТРЫ РАСЧЕТА',
+  )
   if (formData.boomRadius) {
     result.push(`Вылет стрелы: ${formData.boomRadius} м`)
   }
@@ -141,7 +145,10 @@ const buildComparisonCopyText = (comparisonResults, formData) => {
   const result = []
   buildParametersSection(formData, result)
 
-  const validResults = comparisonResults.results.filter((r) => r.success)
+  // Filter out cranes with errors (including radius validation errors)
+  const validResults = comparisonResults.results.filter(
+    (r) => r.success && !r.error,
+  )
   buildCraneResultsSection(validResults, result)
 
   buildBestCranesSection(comparisonResults, result)
@@ -185,12 +192,16 @@ const mapEntryToResult = (entry) => {
     },
     crane,
     boomLength,
+    error: entry.results.error || null,
   }
 }
 
 const isValidResult = (r) => {
   return (
-    r.success && r.result.safety_factor !== null && r.result.safety_factor >= 1
+    r.success &&
+    !r.error &&
+    r.result.safety_factor !== null &&
+    r.result.safety_factor >= 1
   )
 }
 
