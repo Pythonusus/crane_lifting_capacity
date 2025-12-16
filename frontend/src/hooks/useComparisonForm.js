@@ -8,9 +8,23 @@ import {
   COMPARISON_TABLE_STORAGE_KEY,
   COMPARISON_FORM_STORAGE_KEY,
   COMPARISON_RESULTS_STORAGE_KEY,
+  FRIENDLY_COUNTRIES,
 } from '@/src/config'
 import useHistoryAdd from '@/src/hooks/useHistoryAdd'
 import useHistoryState from '@/src/hooks/useHistoryState'
+
+/**
+ * Get country priority for sorting (lower = higher priority)
+ * 0 = Российская Федерация
+ * 1 = Other friendly countries (ГДР, Китай)
+ * 2 = All other countries
+ */
+const getCountryPriority = (country) => {
+  if (!country) return 2
+  if (country === 'Российская Федерация') return 0
+  if (FRIENDLY_COUNTRIES.includes(country)) return 1
+  return 2
+}
 
 // Helper function to normalize numeric input (convert comma to dot for parsing)
 const normalizeNumericInput = (value) => {
@@ -349,14 +363,22 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
 
             // Same priority: handle special cases
             if (aPriority === 0) {
-              // Both successful: sort by price, then by boom length index
+              // Both successful: sort by price, then by country, then by boom length index
               const aPrice = a.crane.base_price || Infinity
               const bPrice = b.crane.base_price || Infinity
               const priceDiff = aPrice - bPrice
               if (priceDiff !== 0) {
                 return priceDiff
               }
-              // Same price: sort by boom length index (smaller indexes first)
+              // Same price: sort by country priority
+              // (Российская Федерация first, then other friendly countries, then others)
+              const aCountryPriority = getCountryPriority(a.crane.country)
+              const bCountryPriority = getCountryPriority(b.crane.country)
+              const countryDiff = aCountryPriority - bCountryPriority
+              if (countryDiff !== 0) {
+                return countryDiff
+              }
+              // Same price and country: sort by boom length index (smaller indexes first)
               const aBoomLengths =
                 a.crane.lc_tables['Основная стрела']?.boom_lengths || []
               const bBoomLengths =
@@ -422,11 +444,25 @@ const useComparisonForm = (comparisonTable, setComparisonTable) => {
         let smallestSafetyFactorCrane = null
 
         if (validResults.length > 0) {
-          // Find cheapest crane (lowest base_price)
+          // Find cheapest crane (lowest base_price, with country preference on tie)
           cheapestCrane = validResults.reduce((min, current) => {
             const minPrice = min.crane.base_price || Infinity
             const currentPrice = current.crane.base_price || Infinity
-            return currentPrice < minPrice ? current : min
+
+            // If prices differ, prefer cheaper one
+            if (currentPrice < minPrice) return current
+            if (currentPrice > minPrice) return min
+
+            // Same price: prefer by country (Российская Федерация > friendly > others)
+            const minCountryPriority = getCountryPriority(min.crane.country)
+            const currentCountryPriority = getCountryPriority(
+              current.crane.country,
+            )
+            if (currentCountryPriority < minCountryPriority) return current
+            if (currentCountryPriority > minCountryPriority) return min
+
+            // Same price and country: keep current min
+            return min
           })
 
           // Find crane with smallest safety factor

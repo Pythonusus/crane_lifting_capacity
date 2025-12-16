@@ -48,3 +48,12 @@ export const FILTERS_STORAGE_KEY = 'crane_filters'
  * Timeout for popup messages
  */
 export const POPUP_TIMEOUT = 3000
+
+/**
+ * Friendly countries for sorting preference
+ * Ordered list of countries that should be preferred when sorting cranes with the same price:
+ * 1. Российская Федерация (highest priority)
+ * 2. Other friendly countries (ГДР, Китай)
+ * 3. All other countries (lowest priority)
+ */
+export const FRIENDLY_COUNTRIES = ['Российская Федерация', 'ГДР', 'Китай']
