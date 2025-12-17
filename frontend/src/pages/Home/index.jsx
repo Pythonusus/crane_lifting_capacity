@@ -173,13 +173,13 @@ const Home = () => {
   return (
     <div className='home-container'>
       {/* Cranes list header */}
-      <Header as='h1' className='main-header m-top center-content'>
+      <Header as='h1' className='main-header center-content'>
         <img
           src={logo}
           alt='Crane lifting capacity calculator logo'
           className='crane-list-icon'
         />
-        <Header.Content className='resize-text-on-tablet'>
+        <Header.Content className='font-size-1'>
           Доступные краны
           <Header.Subheader>
             Показано: {cranes.length} из {totalCount}

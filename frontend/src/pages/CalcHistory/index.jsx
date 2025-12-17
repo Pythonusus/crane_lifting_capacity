@@ -133,25 +133,25 @@ const CalcHistory = () => {
               >
                 <TableHeader>
                   <TableRow>
-                    <TableHeaderCell className='timestamp-column hide-on-tablet'>
+                    <TableHeaderCell className='history-timestamp-column'>
                       Дата
                     </TableHeaderCell>
                     <TableHeaderCell className='history-crane-column'>
                       Кран
                     </TableHeaderCell>
-                    <TableHeaderCell className='history-country-column hide-on-tablet'>
+                    <TableHeaderCell className='history-country-column'>
                       Страна
                     </TableHeaderCell>
                     <TableHeaderCell className='history-chassis-column'>
                       Тип <br /> шасси
                     </TableHeaderCell>
-                    <TableHeaderCell className='history-price-column hide-on-tablet'>
+                    <TableHeaderCell className='history-price-column'>
                       Стоимость <br /> маш.-ч (₽)
                     </TableHeaderCell>
                     <TableHeaderCell className='history-boom-column'>
-                      Конфигурация <br /> стрелы
+                      Стрела
                     </TableHeaderCell>
-                    <TableHeaderCell className='history-method-column hide-on-tablet'>
+                    <TableHeaderCell className='history-method-column'>
                       Метод <br /> расчета
                     </TableHeaderCell>
                     <TableHeaderCell className='history-radius-column'>
@@ -225,7 +225,7 @@ const CalcHistory = () => {
 
                     return (
                       <TableRow key={entry.id} className='table-row-hover'>
-                        <TableCell className='history-timestamp hide-on-tablet'>
+                        <TableCell className='history-timestamp-cell'>
                           <span>
                             {timestamp.date}
                             <br />
@@ -265,17 +265,17 @@ const CalcHistory = () => {
                             }
                           />
                         </TableCell>
-                        <TableCell className='hide-on-tablet'>
+                        <TableCell className='history-country-cell'>
                           {entry.country || ''}
                         </TableCell>
                         <TableCell>{chassisType}</TableCell>
-                        <TableCell className='hide-on-tablet'>
+                        <TableCell className='history-price-cell'>
                           {entry.basePrice
                             ? formatCalculationValue(entry.basePrice, '₽')
                             : '-'}
                         </TableCell>
                         <TableCell>{boomLength}</TableCell>
-                        <TableCell className='hide-on-tablet'>
+                        <TableCell className='history-method-cell'>
                           {entry.calculationMethod === 'payload' ? (
                             <span className='history-method-label font-size-5'>
                               Коэф. запаса

@@ -492,33 +492,35 @@ const ComparisonTable = () => {
             </>
           )}
         </div>
-        <div className='comparison-table-form-and-result-container'>
-          <hr className='comparison-table-divider' />
-          <Header
-            as='h2'
-            textAlign='center'
-            className='comparison-result-header font-size-3'
-          >
-            Выполнить сравнение кранов
-          </Header>
-          <hr className='comparison-table-divider' />
-          <div className='comparison-input-and-result-container'>
-            <ComparisonForm
-              formData={formData}
-              errors={formErrors}
-              validationErrors={validationErrors}
-              isSubmitting={isSubmitting}
-              onInputChange={handleInputChange}
-              onSubmit={handleSubmit}
-              onClear={handleClearForm}
-            />
-            <ComparisonResult
-              comparisonResults={comparisonResults}
-              comparisonTable={comparisonTable}
-              formData={formData}
-            />
+        {comparisonTable.length > 0 && (
+          <div className='comparison-table-form-and-result-container'>
+            <hr className='comparison-table-divider' />
+            <Header
+              as='h2'
+              textAlign='center'
+              className='comparison-result-header font-size-3'
+            >
+              Выполнить сравнение кранов
+            </Header>
+            <hr className='comparison-table-divider' />
+            <div className='comparison-input-and-result-container'>
+              <ComparisonForm
+                formData={formData}
+                errors={formErrors}
+                validationErrors={validationErrors}
+                isSubmitting={isSubmitting}
+                onInputChange={handleInputChange}
+                onSubmit={handleSubmit}
+                onClear={handleClearForm}
+              />
+              <ComparisonResult
+                comparisonResults={comparisonResults}
+                comparisonTable={comparisonTable}
+                formData={formData}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </main>
     )
   } catch (error) {

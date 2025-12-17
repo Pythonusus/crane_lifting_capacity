@@ -6,12 +6,7 @@
 }
 
 .comparison-table-container {
-  margin: 1rem;
   height: fit-content;
-}
-
-.comparison-table {
-  margin-top: 1rem;
 }
 
 .crane-column {
@@ -106,7 +101,8 @@
   display: flex;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 1rem;
+  margin-top: 12px !important;
+  margin-bottom: 12px !important;
 }
 
 .comparison-clear-button,
@@ -129,6 +125,12 @@
 
 .comparison-result-header {
   margin: 0.4rem 0 !important;
+}
+
+@media (max-width: 1600px) {
+  .comparison-table-divider {
+    margin: 0.25rem auto !important;
+  }
 }
 
 @media (max-width: 991px) {

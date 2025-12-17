@@ -5,6 +5,7 @@ import {
   Header,
   Icon,
   Input,
+  Message,
   Popup,
   Segment,
 } from 'semantic-ui-react'
@@ -456,6 +457,13 @@ const CranesFilterSidebar = ({ filters, onFiltersChange, onClearFilters }) => {
               }
             />
           </div>
+          {(filters.radius && !filters.payload) ||
+          (!filters.radius && filters.payload) ? (
+            <Message size='small' className='mt-2' info>
+              <Icon name='info circle' />
+              Для подбора крана необходимо заполнить оба поля
+            </Message>
+          ) : null}
         </div>
 
         {/* Sort By Filter */}

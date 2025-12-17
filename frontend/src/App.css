@@ -17,7 +17,8 @@
 }
 
 .custom-header {
-  margin: 5px !important;
+  height: 56px !important;
+  margin: 20px 24px !important;
 }
 
 .header-content {
@@ -25,14 +26,19 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  height: 56px;
 }
 
 /* For tablets and mobile */
 @media (max-width: 1600px) {
+  .custom-header {
+    height: fit-content !important;
+  }
+
   .header-content {
     flex-direction: column;
     justify-content: center;
-    gap: 14px;
+    height: auto;
   }
 
   .navbar-section {

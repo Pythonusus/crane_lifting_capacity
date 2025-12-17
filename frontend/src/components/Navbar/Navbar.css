@@ -1,10 +1,11 @@
 .custom-navbar {
   display: flex;
-
   align-items: center;
+  justify-content: center;
   background-color: #16181d;
-  border-radius: 14px;
-  padding: 5px;
+  height: 56px;
+  border-radius: 12px;
+  padding: 4px;
 }
 
 .custom-navbar a {

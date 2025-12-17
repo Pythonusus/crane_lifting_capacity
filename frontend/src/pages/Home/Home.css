@@ -24,32 +24,28 @@
 
 .home-sidebar {
   position: fixed;
-  top: 172px;
+  top: 171px;
   left: 0;
-  height: calc(100vh - 172px);
+  height: calc(100vh - 171px);
   overflow-y: auto;
   z-index: 100;
 }
 
 .home-main-content {
   margin-left: 265px;
-  margin-right: 1rem;
+  margin-right: 24px;
 }
 
 @media (max-width: 1600px) {
   .home-sidebar {
-    top: 256px;
-    height: calc(100vh - 256px);
+    top: 225px;
+    height: calc(100vh - 225px);
   }
 }
 
 @media (max-width: 991px) {
   .home-main-content {
-    margin-left: 210px;
-  }
-
-  .home-sidebar {
-    top: 230px;
-    height: calc(100vh - 230px);
+    margin-left: 200px;
+    margin-right: 8px;
   }
 }

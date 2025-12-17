@@ -5,8 +5,8 @@
 }
 
 .calc-history-container {
-  margin: 1rem;
   height: fit-content;
+  margin-bottom: 12px !important;
 }
 
 .history-chassis-column {
@@ -22,12 +22,12 @@
 }
 
 .history-price-column {
-  width: 100px !important;
+  width: 90px !important;
   text-align: center !important;
 }
 
 .history-boom-column {
-  width: 110px !important;
+  width: 80px !important;
 }
 
 .crane-name-link:hover {
@@ -68,4 +68,38 @@
 .error-message-container {
   text-align: center;
   margin-top: 20px;
+}
+
+@media (max-width: 1200px) {
+  .history-timestamp-column {
+    display: none;
+  }
+
+  .history-price-column {
+    display: none;
+  }
+
+  .history-method-column {
+    display: none;
+  }
+
+  .history-country-column {
+    display: none;
+  }
+
+  .history-timestamp-cell {
+    display: none;
+  }
+
+  .history-price-cell {
+    display: none;
+  }
+
+  .history-method-cell {
+    display: none;
+  }
+
+  .history-country-cell {
+    display: none;
+  }
 }

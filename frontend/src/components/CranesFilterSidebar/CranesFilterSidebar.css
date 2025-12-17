@@ -2,7 +2,7 @@
   max-width: 230px;
   display: flex;
   flex-direction: column;
-  margin: 0 0.25em 0 1em !important;
+  margin: 0 24px 0 !important;
 }
 
 .filter-section {
@@ -56,8 +56,15 @@
   font-size: 12px;
 }
 
+@media (max-width: 1600px) {
+  .cranes-filter-sidebar {
+    margin-right: 0 !important;
+  }
+}
+
 @media (max-width: 991px) {
   .cranes-filter-sidebar {
     max-width: 180px;
+    margin: 0 0 0 8px !important;
   }
 }
