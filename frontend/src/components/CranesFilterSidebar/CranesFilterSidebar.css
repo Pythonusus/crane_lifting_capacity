@@ -2,7 +2,7 @@
   max-width: 230px;
   display: flex;
   flex-direction: column;
-  margin: 0 24px 0 !important;
+  margin: 0 0 0 24px !important;
 }
 
 .filter-section {
