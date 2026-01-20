@@ -250,7 +250,7 @@ def extract_lc_table_from_xlsx(df: pd.DataFrame) -> Tuple[str, LcTable]:
                     continue
 
                 try:
-                    capacity = float(capacity)
+                    capacity = round(float(capacity), 2)
                     table[boom_length][radius] = capacity
                 except (ValueError, TypeError):
                     continue
