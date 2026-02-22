@@ -51,7 +51,7 @@ def cranes_test_data():
     if not crane_data:
         raise FileNotFoundError(
             f"No crane JSON files found in {cranes_test_data_dir}. "
-            "Please run 'make dump-cranes' first to generate test data."
+            "Please run 'make dump-test-cranes' first to generate test data."
         )
 
     return crane_data
