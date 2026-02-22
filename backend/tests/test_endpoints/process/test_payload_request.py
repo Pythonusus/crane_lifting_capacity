@@ -45,7 +45,7 @@ class TestSinglePayloadRequest:
     def test_radius_in_lc_table(self, client, calc_accuracy):
         payload_request = PayloadCalcRequest(
             crane_name="Takraf_РДК400",
-            boom_len="36.0м",
+            boom_len="36м",
             radius=16,
             equipment_weight=2,
             safety_factor=1.8,
@@ -62,7 +62,7 @@ class TestSinglePayloadRequest:
 
         # Assert request data in response
         assert payload_response.request.crane_name == "Takraf_РДК400"
-        assert payload_response.request.boom_len == "36.0м"
+        assert payload_response.request.boom_len == "36м"
         assert payload_response.request.radius == 16
         assert payload_response.request.equipment_weight == 2
         assert payload_response.request.safety_factor == 1.8
