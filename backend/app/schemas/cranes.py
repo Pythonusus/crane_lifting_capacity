@@ -214,7 +214,7 @@ class CraneFilterRequest(BaseModel):
         0, ge=0, description="Number of items to skip"
     )
     limit: Optional[int] = Field(
-        15, ge=1, le=100, description="Number of items to return"
+        30, ge=1, le=100, description="Number of items to return"
     )
 
 
