@@ -2,6 +2,9 @@
 
 # Include .env file if it exists (optional)
 -include .env
+
+# If .env exists, export all vars
+# so each target can see them
 ifneq (,$(wildcard .env))
 export $(shell sed 's/=.*//' .env)
 endif
@@ -54,17 +57,16 @@ populate-db:
 dump-cranes:
 	cd backend && uv run python manage.py dump-cranes
 
+dump-test-cranes:
+	cd backend && uv run python manage.py dump-cranes --database-url sqlite:///tests/test.db --output-dir ./tests/cranes_test_data
+
 # Print prod cranes summary only (no JSON files)
 show-prod-cranes-summary:
 	cd backend && uv run python manage.py show-cranes-summary
 
 # Print test cranes summary only (no JSON files)
 show-test-cranes-summary:
-	cd backend && uv run python manage.py show-cranes-summary --database-url sqlite:///$(shell pwd)/backend/tests/test.db
-
-# Dump cranes data to custom directory
-dump-cranes-custom:
-	cd backend && uv run python manage.py dump-cranes --output-dir "$(dir)"
+	cd backend && uv run python manage.py show-cranes-summary --database-url sqlite:///tests/test.db
 
 # Run pytest on backend app with verbose test output and showing all prints.
 # DEVELOPMENT=true is needed to avoid mounting frontend dist directory.
@@ -180,10 +182,12 @@ docker-shell:
 	docker compose exec crane-lifting-capacity-production sh
 
 .PHONY: pre-commit-install pre-commit \
-        install-backend-dev install-backend-prod lint-backend format-backend test-backend \
-        start-backend-dev start-backend populate-db dump-cranes dump-cranes-with-attachments \
-        dump-cranes-summary dump-cranes-custom show-prod-cranes-summary show-test-cranes-summary \
+        install-backend-dev install-backend-prod lint-backend format-backend \
+        create-migration migrate test-backend test-backend-coverage \
+        start-backend-dev start-backend populate-db dump-cranes dump-test-cranes \
+        show-prod-cranes-summary show-test-cranes-summary \
         install-frontend-dev install-frontend-prod build-frontend lint-frontend \
         format-frontend test-frontend test-frontend-watch test-frontend-coverage \
         preview-frontend start-frontend-dev \
-				docker-build docker-start docker-stop docker-down docker-shell
+        freeze-deps build-render-com start-render-com \
+        docker-build docker-start docker-stop docker-down docker-shell
