@@ -2,6 +2,7 @@
 Utility functions for lifting capacity calculations.
 """
 
+from app.db.models import CraneDbModel
 from utils.math import get_nearest_greater, get_nearest_lesser, interpolate_1d
 
 
@@ -55,14 +56,41 @@ def get_lifting_capacity_at_radius(
                     nearest_greater,
                     lc_greater,
                 )
+            # interpolate_1d raises value error only if x1 == x2
             except ValueError:
                 return None
 
-    # Fallback to nearest value if only one bound available
-    if nearest_lesser is not None:
-        return radius_capacity_map.get(float_to_str_map[nearest_lesser])
-
-    if nearest_greater is not None:
-        return radius_capacity_map.get(float_to_str_map[nearest_greater])
-
     return None
+
+
+def can_crane_lift_payload_at_radius(
+    crane: CraneDbModel, radius: float, payload: float
+) -> bool:
+    """
+    Check if a crane can lift the given payload at the specified radius.
+
+    This function checks all lc_tables and all boom lengths to find the
+    maximum lifting capacity at the given radius. If any configuration
+    can lift the payload, the crane is considered capable.
+
+    Args:
+        crane: Crane database model
+        radius: Radius in meters
+        payload: Required payload in tons
+
+    Returns:
+        True if the crane can lift the payload at the radius, False otherwise
+    """
+    # Check all lc_tables
+    for lc_table_data in crane.lc_tables.values():
+        table = lc_table_data.get("table", {})
+
+        # Check all boom lengths
+        for radius_capacity_map in table.values():
+            lifting_capacity = get_lifting_capacity_at_radius(
+                radius_capacity_map, radius
+            )
+            if lifting_capacity is not None and lifting_capacity >= payload:
+                return True
+
+    return False
