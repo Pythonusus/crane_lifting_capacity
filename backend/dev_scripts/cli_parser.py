@@ -43,6 +43,7 @@ Error Handling:
 
 import argparse
 
+from .check_cranes_urls import check_cranes_urls
 from .dump_cranes_data import dump_cranes_to_json
 from .populate_db_with_cranes.main import populate_db
 from .show_cranes_summary import show_cranes_summary
@@ -85,8 +86,7 @@ def create_parser():
     )
     dump_cranes_parser.add_argument(
         "--output-dir",
-        help="Output directory path (default: cranes_dump in script "
-        "directory)",
+        help="Output directory path (default: cranes_dump in script directory)",
     )
     dump_cranes_parser.add_argument(
         "--database-url",
@@ -105,6 +105,16 @@ def create_parser():
         "settings)",
     )
 
+    # Add check-cranes-urls command
+    show_summary_parser = subparsers.add_parser(
+        "check-cranes-urls",
+        help="Check all crane URLS in DB",
+    )
+    show_summary_parser.add_argument(
+        "--database-url",
+        help="Database URL (if not provided, will use DATABASE_URL from "
+        "settings)",
+    )
     return parser
 
 
@@ -141,6 +151,16 @@ def handle_show_cranes_summary(args):
     show_cranes_summary(database_url=args.database_url)
 
 
+def handle_check_cranes_urls(args):
+    """
+    Handle the check_cranes_urls command.
+
+    Args:
+        args: Parsed arguments containing database_url option
+    """
+    check_cranes_urls(database_url=args.database_url)
+
+
 def parse_and_execute():
     """
     Parse command line arguments and execute the appropriate command.
@@ -158,6 +178,8 @@ def parse_and_execute():
         handle_dump_cranes(args)
     elif args.command == "show-cranes-summary":
         handle_show_cranes_summary(args)
+    elif args.command == "check-cranes-urls":
+        handle_check_cranes_urls(args)
     elif not args.command:
         parser.print_help()
     else:

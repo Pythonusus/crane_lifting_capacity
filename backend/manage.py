@@ -11,6 +11,7 @@ Available Commands:
                  database
     dump-cranes: Export crane data from database to JSON files
     show-cranes-summary: Display summary of all cranes in database
+    check-cranes-urls: Checks all crane URLs in DB
 
 Usage Examples:
     # Populate database from default data directory
@@ -36,6 +37,9 @@ Usage Examples:
 
     # Export with custom database URL
     python manage.py dump-cranes --database-url postgresql://user:pass@localhost/cranes
+
+    # Check all crane URLs in DB
+    python manage.py check-cranes-url --database-url postgresql://user:pass@localhost/cranes
 
     # Show help for all commands
     python manage.py

@@ -68,6 +68,10 @@ show-prod-cranes-summary:
 show-test-cranes-summary:
 	cd backend && uv run python manage.py show-cranes-summary --database-url sqlite:///tests/test.db
 
+# Check crane URLs in DB
+check-cranes-urls:
+	cd backend && uv run python manage.py check-cranes-urls
+
 # Run pytest on backend app with verbose test output and showing all prints.
 # DEVELOPMENT=true is needed to avoid mounting frontend dist directory.
 # DATABASE_URL is set to use a test database in the tests directory.
@@ -185,7 +189,7 @@ docker-shell:
         install-backend-dev install-backend-prod lint-backend format-backend \
         create-migration migrate test-backend test-backend-coverage \
         start-backend-dev start-backend populate-db dump-cranes dump-test-cranes \
-        show-prod-cranes-summary show-test-cranes-summary \
+        show-prod-cranes-summary show-test-cranes-summary check-cranes-urls \
         install-frontend-dev install-frontend-prod build-frontend lint-frontend \
         format-frontend test-frontend test-frontend-watch test-frontend-coverage \
         preview-frontend start-frontend-dev \
