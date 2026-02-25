@@ -1,0 +1,2 @@
+backend/data/app.db.sqlite3 filter=lfs diff=lfs merge=lfs -text
+data/app.db.sqlite3 filter=lfs diff=lfs merge=lfs -text

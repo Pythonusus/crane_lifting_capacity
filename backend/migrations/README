@@ -1,0 +1,17 @@
+# Database Migrations Directory
+
+This directory contains database migrations managed by Alembic.
+
+## Directory Structure
+- `versions/`: Contains individual migration files
+- `env.py`: Alembic environment configuration
+- `script.py.mako`: Template for migration files
+
+## Migration Conventions
+- Use meaningful descriptions for migration files
+- One logical change per migration
+- Always test migrations can be rolled back
+
+## Note
+Do not modify existing migration files after they've been applied to any database.
+New changes should be made through new migrations.

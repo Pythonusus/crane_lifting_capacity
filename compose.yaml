@@ -1,0 +1,39 @@
+services:
+
+  crane-lifting-capacity-production:
+    image: crane-lifting-capacity-production
+
+    build:
+      context: .
+      target: crane-lifting-capacity-production
+
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+
+    environment:
+      - TZ=${TZ:-Europe/Moscow}
+
+    # Format: host_path:container_path
+    volumes:
+
+      # Bind mount data directory containing your app.db.sqlite3
+      - ${DATA_DIR:-./data}:/crane_lifting_capacity/data
+
+      # Bind mount logs from container to host LOGS_DIR directory.
+      # LOGS_DIR directory is created by make docker-start automatically.
+      # Avoid creating it manually due to permission issues.
+
+      # Avoid using just "logs" as logs directory due to permission issues.
+      # Running app without container automatically creates "logs" directory on host.
+      # Starting container after "logs" directory is created on host
+      # will cause permission issues.
+      - ${LOGS_DIR:-./app_logs}:/crane_lifting_capacity/logs
+
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+    restart: unless-stopped
+
