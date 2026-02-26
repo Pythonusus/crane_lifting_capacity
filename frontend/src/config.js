@@ -50,6 +50,11 @@ export const FILTERS_STORAGE_KEY = 'crane_filters'
 export const POPUP_TIMEOUT = 3000
 
 /**
+ * Timeout in ms since last filters change before calling the API
+ */
+export const FILTERS_API_TIMEOUT = 800
+
+/**
  * Friendly countries for sorting preference
  * Ordered list of countries that should be preferred when sorting cranes with the same price:
  * 1. Российская Федерация (highest priority)

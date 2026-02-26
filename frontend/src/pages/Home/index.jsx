@@ -5,7 +5,11 @@ import { fetchFilteredCranes } from '@/src/api/cranes'
 import logo from '@/src/assets/crane_list_icon.png'
 import CranesFilterSidebar from '@/src/components/CranesFilterSidebar'
 import CranesList from '@/src/components/CranesList'
-import { FILTERS_STORAGE_KEY, PAGINATION_SIZE } from '@/src/config'
+import {
+  FILTERS_API_TIMEOUT,
+  FILTERS_STORAGE_KEY,
+  PAGINATION_SIZE,
+} from '@/src/config'
 import './Home.css'
 
 /**
@@ -112,8 +116,8 @@ const Home = () => {
     }
 
     // Debounce the API call to avoid excessive requests while user is typing
-    // Waits 400ms after last filter change before making API call
-    const timeoutId = setTimeout(loadCranes, 400)
+    // Waits FILTERS_API_TIMEOUT ms after last filter change before making API call
+    const timeoutId = setTimeout(loadCranes, FILTERS_API_TIMEOUT)
 
     // Cleanup function to cancel pending API call if filters change again
     return () => clearTimeout(timeoutId)
