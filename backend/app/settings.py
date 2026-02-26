@@ -12,7 +12,7 @@ load_dotenv()
 # APP Settings
 APP_TITLE = "Crane Lifting Capacity"
 APP_DESCRIPTION = "Lifting capacity calculator for cranes"
-APP_VERSION = "0.1.0"
+APP_VERSION = "1.0.1"
 
 # Mode in which the application is running
 # If DEVELOPMENT is not set, it defaults to false
