@@ -89,6 +89,7 @@ ipython_config.py
 /attachments
 /cranes
 /backend/dev_scripts/cranes_dump
+/data/app.db.sqlite3
 
 # ===== FRONTEND =====
 

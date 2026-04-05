@@ -51,7 +51,6 @@
 
 - Docker
 - Docker Compose
-- Git LFS
 - Make (опционально, для удобства)
 
 ### Запуск приложения
@@ -77,19 +76,7 @@ cp .env.example .env
 # Подробнее про настройку окружения смотри в разделе "Переменные окружения" ниже
 ```
 
-4. **Подгрузите предзаполненную базу данных кранов из Git LFS (https://git-lfs.com/)**
-
-Если пропустить данный пункт, вместо базы данных в проекте будет лежать лишь его ссылка на LFS
-```bash
-sudo apt install git-lfs # Установить git LFS (Ubuntu/Debian)
-git lfs install # Инициализировать git LFS в репозитории
-git lfs pull # Подтянуть файлы, хранящиеся в LFS
-```
-*Альтренативно:*
-- Скачать базу данных кранов c google диска по [ссылке](https://drive.google.com/drive/folders/1vIi2VHQPuWWlGUC3OpZk_9Z8Je3Hv6pe?usp=sharing)
-- Заменить файл-указатель на  БД в LFS на настоящую базу данных в ```crane_lifting_capacity/data/app.db.sqlite3```
-- На google диске база данных обновляется с задержкой, может лежать не финальная версия
-
+4. **Подгрузите предзаполненную базу данных в ```crane_lifting_capacity/data/app.db.sqlite3```
 
 5. **Запустите приложение:**
 ```bash
