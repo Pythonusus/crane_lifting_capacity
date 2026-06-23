@@ -1,0 +1,68 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile-VPS-backend
+    container_name: cranes-backend
+    environment:
+      - PORT=8080
+      - DEVELOPMENT=true
+      - HOT_RELOAD=false
+      - LICENSE_CHECK=false
+    volumes:
+      - ${HOME}/projects/crane_lifting_capacity_data:/crane_lifting_capacity/data
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+    # Logging configuration for backend service
+    # Without this block Docker uses default settings:
+    #   - logs are stored indefinitely
+    #   - log files can fill up the disk
+    logging:
+      # Keep logs in JSON format
+      # They are stored on host in /var/lib/docker/containers/<container-id>
+      driver: "json-file"
+
+      options:
+        # Maximum size of one log file
+        max-size: "10m"
+        # Maximum number of log files
+        max-file: "3"
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-VPS-frontend
+    container_name: cranes-nginx
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${VPS_PORT:-8102}:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+
+    # Logging configuration for nginx service
+    # Without this block Docker uses default settings:
+    #   - logs are stored indefinitely
+    #   - log files can fill up the disk
+    logging:
+      # Keep logs in JSON format
+      # They are stored on host in /var/lib/docker/containers/<container-id>
+      driver: "json-file"
+
+      options:
+        # Maximum size of one log file
+        max-size: "10m"
+        # Maximum number of log files
+        max-file: "3"

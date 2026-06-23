@@ -1,0 +1,42 @@
+# BUILDER STAGE
+FROM python:3.13-alpine AS builder
+
+# Copy uv binary from official image
+COPY --from=ghcr.io/astral-sh/uv:0.8.11 /uv /usr/local/bin/uv
+
+WORKDIR /app
+
+# Copy dependency files first for better caching
+COPY backend/pyproject.toml backend/uv.lock ./backend/
+
+# Install backend production dependencies
+RUN cd backend && uv sync --no-dev
+
+# Copy backend code
+COPY backend/ ./backend/
+
+
+FROM python:3.13-alpine
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+# Adding virtual environment to PATH to run commands
+# Otherwise you would need to use uv in production image too
+ENV PATH="/app/backend/.venv/bin:${PATH}"
+
+WORKDIR /crane_lifting_capacity
+
+# Copy ready-to-run backend with virtual environment
+COPY --from=builder /app/backend ./backend
+
+# Run as non-root user
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -S appuser -u 1001 -G appgroup && \
+    chown -R appuser:appgroup /crane_lifting_capacity
+
+USER appuser
+
+EXPOSE 8080
+
+# Start backend from backend directory to preserve relative log paths
+CMD ["sh", "-c", "cd backend && python main.py"]
