@@ -18,7 +18,13 @@ APP_VERSION = "1.0.1"
 # If DEVELOPMENT is not set, it defaults to false
 DEVELOPMENT = os.getenv("DEVELOPMENT", "false").lower() == "true"
 
+# Hot reload settings
+# If HOT_RELOAD is not set, it defaults to false
+# Used to enable uvicorn restart on code changes in development mode
+HOT_RELOAD = os.getenv("HOT_RELOAD", "false").lower() == "true"
+
 # License check settings for Midas license checker
+# If LICENSE_CHECK is not set, it defaults to true
 LICENSE_CHECK = os.getenv("LICENSE_CHECK", "true").lower() == "true"
 
 # Port Settings

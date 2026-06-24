@@ -1,6 +1,6 @@
 import uvicorn
 
-from app.settings import DEVELOPMENT, PORT
+from app.settings import HOT_RELOAD, PORT
 
 
 def main():
@@ -9,7 +9,7 @@ def main():
         "app.api:app",
         host="0.0.0.0",
         port=PORT,
-        reload=DEVELOPMENT,  # Auto-reload only in development mode
+        reload=HOT_RELOAD,  # Auto-reload only in development mode
     )
 
 
