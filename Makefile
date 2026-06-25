@@ -145,22 +145,6 @@ start-frontend-dev:
 	cd frontend && npm run dev
 
 
-# ===== RENDER.COM SPECIFIC COMMANDS =====
-# Runs locally all commands required to run the app, without Docker.
-# Test, build, start backend and frontend in production mode.
-
-# Freeze dependencies to requirements.txt
-freeze-deps:
-	cd backend && uv pip freeze > requirements_for_render.txt
-
-build-render-com:
-	make install-frontend-dev
-	make build-frontend
-	cd backend && pip install -r requirements_for_render.txt
-
-start-render-com:
-	cd backend && python -m main
-
 # ===== DOCKER =====
 
 # Build all services
